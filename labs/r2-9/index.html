@@ -1,0 +1,2463 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab virtuel R 2-9 — Transferts thermiques et hydriques | IUT Mantes</title>
+<style>
+  :root {
+    --sidebar-w: 292px;
+    --credit-h: 3.4rem;
+    --radius: 16px;
+    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "DM Sans", "Segoe UI", sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --bg0: #160e0a;
+    --bg1: #1f1510;
+    --bg-glow1: rgba(196, 92, 38, 0.28);
+    --bg-glow2: rgba(224, 168, 90, 0.12);
+    --ink: #f3ebe3;
+    --muted: #c4b5a5;
+    --line: rgba(224, 196, 168, 0.14);
+    --panel: rgba(42, 32, 24, 0.62);
+    --panel-solid: #2a2018;
+    --panel-brd: rgba(224, 196, 168, 0.16);
+    --water: #e08a5a;
+    --water-deep: #c45c26;
+    --water-soft: rgba(224, 138, 90, 0.14);
+    --accent: #e0c4a8;
+    --ok: #3ecf8e;
+    --warn: #f2b73f;
+    --danger: #f47d7d;
+    --ok-soft: rgba(62, 207, 142, 0.14);
+    --warn-soft: rgba(242, 183, 63, 0.14);
+    --danger-soft: rgba(244, 125, 125, 0.14);
+    --steel: #d2c4b6;
+    --track: rgba(224, 196, 168, 0.18);
+    --cv-bg: linear-gradient(180deg, #2c2118, #1a140f);
+    --cv-brd: rgba(224, 196, 168, 0.18);
+    --shadow: 0 18px 40px rgba(12, 6, 2, 0.5);
+    --glow: 0 0 24px rgba(224, 138, 90, 0.14);
+    --hero-grad: linear-gradient(92deg, #f3ebe3 0%, #e08a5a 62%, #c45c26 130%);
+    --tok-coude: #e08a5a;
+    --tok-te: #9aa3a8;
+    --tok-vanne: #3ecf8e;
+    --fx1: rgba(224, 138, 90, 0.16);
+    --fx2: rgba(196, 92, 38, 0.22);
+    --fx3: rgba(224, 196, 168, 0.10);
+    --note-bg: rgba(224, 138, 90, 0.08);
+    --step-bg: rgba(224, 138, 90, 0.05);
+    --gold: #ffd166;
+  }
+  :root[data-theme="light"] {
+    --bg0: #f6f3ee;
+    --bg1: #faf8f5;
+    --bg-glow1: rgba(235, 228, 216, 0.9);
+    --bg-glow2: rgba(240, 217, 200, 0.8);
+    --ink: #1f1a16;
+    --muted: #6a5f55;
+    --line: rgba(31, 26, 22, 0.12);
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-solid: #ffffff;
+    --panel-brd: rgba(31, 26, 22, 0.10);
+    --water: #c45c26;
+    --water-deep: #c45c26;
+    --water-soft: #f0e4d8;
+    --accent: #8a5a32;
+    --ok: #1f7a4c;
+    --warn: #a15c00;
+    --danger: #9b1c1c;
+    --ok-soft: #e5f6ec;
+    --warn-soft: #fff3d9;
+    --danger-soft: #fde8e8;
+    --steel: #3d4f5f;
+    --track: #e5ddd4;
+    --cv-bg: linear-gradient(180deg, #f2efe9, #faf8f5);
+    --cv-brd: rgba(31, 26, 22, 0.12);
+    --shadow: 0 10px 30px rgba(31, 26, 22, 0.08);
+    --glow: none;
+    --hero-grad: linear-gradient(92deg, #1f1a16 0%, #c45c26 95%);
+    --tok-coude: #c45c26;
+    --tok-te: #5c5346;
+    --tok-vanne: #1f7a4c;
+    --fx1: rgba(196, 92, 38, 0.10);
+    --fx2: rgba(224, 168, 90, 0.12);
+    --fx3: rgba(92, 83, 70, 0.08);
+    --note-bg: #fff7f1;
+    --step-bg: #ffffff;
+    --gold: #c98a12;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -12%, var(--bg-glow1) 0%, transparent 55%),
+      radial-gradient(900px 520px at 100% 0%, var(--bg-glow2) 0%, transparent 45%),
+      linear-gradient(180deg, var(--bg1), var(--bg0));
+    background-attachment: fixed;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  ::selection { background: var(--water); color: #2a1208; }
+
+  .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bg-fx b { position: absolute; width: 46vw; height: 46vw; border-radius: 50%; filter: blur(90px); opacity: 0.8; }
+  .bg-fx b:nth-child(1) { background: var(--fx1); top: -18vw; left: 22vw; animation: drift1 26s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(2) { background: var(--fx2); bottom: -22vw; right: -10vw; animation: drift2 32s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(3) { background: var(--fx3); top: 30vh; left: -18vw; animation: drift3 38s ease-in-out infinite alternate; }
+  @keyframes drift1 { to { transform: translate(6vw, 8vh) scale(1.12); } }
+  @keyframes drift2 { to { transform: translate(-8vw, -6vh) scale(1.08); } }
+  @keyframes drift3 { to { transform: translate(9vw, -8vh); } }
+  :root[data-theme="dark"] .bg-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(224, 196, 168, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224, 196, 168, 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 80%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-fx b { animation: none !important; }
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  .app { position: relative; z-index: 1; display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+  .sidebar {
+    background: linear-gradient(180deg, #3a322a 0%, #1c1814 100%);
+    border-right: 1px solid rgba(224, 196, 168, 0.12);
+    color: #f3ebe3;
+    padding: 1.15rem 0.9rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(224, 196, 168, 0.3) transparent;
+  }
+  .brand { display: flex; gap: 0.65rem; align-items: center; padding: 0.25rem 0.4rem 0.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+  .logo {
+    width: 42px; height: 42px; flex: none; display: grid; place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(224, 138, 90, 0.28), rgba(196, 92, 38, 0.32));
+    border: 1px solid rgba(224, 138, 90, 0.40);
+    box-shadow: 0 0 18px rgba(224, 138, 90, 0.20);
+  }
+  .logo svg { width: 22px; height: 22px; }
+  .brand .code { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: #e0c4a8; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
+  .vtag { font-size: 0.6rem; padding: 0.08rem 0.35rem; border-radius: 999px; background: rgba(224, 138, 90, 0.18); border: 1px solid rgba(224, 138, 90, 0.45); color: #f0b48d; letter-spacing: 0.05em; }
+  .brand h1 { margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 800; line-height: 1.2; }
+  .brand-sub { margin: 0.55rem 0.4rem 0.35rem; font-size: 0.78rem; color: rgba(243, 235, 227, 0.6); line-height: 1.45; }
+  nav.ateliers { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.2rem; }
+  .nav-btn {
+    appearance: none; position: relative; border: 1px solid transparent; background: transparent;
+    color: inherit; text-align: left; padding: 0.55rem 0.65rem; border-radius: 12px; cursor: pointer;
+    font: inherit; display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .nav-btn:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(2px); }
+  .nav-btn:focus-visible { outline: 2px solid #e08a5a; outline-offset: 2px; }
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(224, 138, 90, 0.18), rgba(224, 138, 90, 0.04));
+    border-color: rgba(224, 138, 90, 0.38);
+    box-shadow: 0 0 20px rgba(224, 138, 90, 0.10);
+  }
+  .nav-btn.active::before {
+    content: ""; position: absolute; left: -1px; top: 18%; bottom: 18%; width: 3px; border-radius: 3px;
+    background: #e08a5a; box-shadow: 0 0 10px rgba(224, 138, 90, 0.8);
+  }
+  .nav-btn .ic {
+    width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); color: #e0c4a8;
+  }
+  .nav-btn.active .ic { color: #f7e6d6; background: rgba(224, 138, 90, 0.16); border-color: rgba(224, 138, 90, 0.32); }
+  .nav-btn .ic svg { width: 16px; height: 16px; }
+  .nav-btn .label { font-size: 0.88rem; font-weight: 650; display: block; }
+  .nav-btn .sub { display: block; font-size: 0.72rem; font-weight: 400; color: rgba(243, 235, 227, 0.5); margin-top: 0.1rem; }
+  .nav-btn .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
+  .nav-btn .idx { font-family: var(--mono); font-size: 0.66rem; color: rgba(224, 196, 168, 0.75); }
+  .nav-btn .marks { display: flex; align-items: center; gap: 0.28rem; }
+  .nav-btn .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 1.5px solid rgba(224, 196, 168, 0.45); background: transparent;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-btn .dot.done { background: #3ecf8e; border-color: #3ecf8e; box-shadow: 0 0 8px rgba(62, 207, 142, 0.7); }
+  .nav-btn .star-ic { width: 12px; height: 12px; color: #ffd166; display: none; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.7)); }
+  .nav-btn .star-ic.on { display: block; }
+  .side-tools { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.10); display: flex; flex-direction: column; gap: 0.6rem; }
+  .progress { padding: 0 0.3rem; }
+  .progress-top { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(243, 235, 227, 0.6); margin-bottom: 0.35rem; }
+  .progress-top b { font-family: var(--mono); color: #e0c4a8; font-weight: 600; }
+  .progress-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .progress-bar i {
+    display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #c45c26, #e08a5a);
+    box-shadow: 0 0 10px rgba(224, 138, 90, 0.55);
+    transition: width 0.4s ease;
+  }
+  .progress-bar.gold i { background: linear-gradient(90deg, #b8860b, #ffd166); box-shadow: 0 0 10px rgba(255, 209, 102, 0.55); }
+  .rank { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.72rem; color: rgba(243, 235, 227, 0.6); }
+  .rank b { color: #ffd166; font-size: 0.74rem; font-weight: 700; text-align: right; line-height: 1.3; }
+  .theme-btn {
+    appearance: none; font: inherit; display: flex; align-items: center; gap: 0.55rem;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid rgba(224, 196, 168, 0.28); background: rgba(224, 138, 90, 0.10);
+    color: #f3e6d8; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+    transition: background 0.18s ease;
+  }
+  .theme-btn:hover { background: rgba(224, 138, 90, 0.18); }
+  .theme-btn:focus-visible { outline: 2px solid #e08a5a; outline-offset: 2px; }
+  .theme-btn svg { width: 16px; height: 16px; flex: none; }
+  .kbd-hint { margin: 0; padding: 0 0.3rem; font-size: 0.7rem; color: rgba(243, 235, 227, 0.42); line-height: 1.45; }
+  .kbd-hint kbd { font-family: var(--mono); font-size: 0.66rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 5px; padding: 0.05rem 0.3rem; }
+
+  .main { padding: 1.5rem 1.75rem calc(2.6rem + var(--credit-h)); max-width: 1240px; width: 100%; margin-inline: auto; position: relative; }
+  .atelier { display: none; }
+  .atelier.active { display: block; animation: rise 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .atelier.active { animation: none; } }
+
+  .hero { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; justify-content: space-between; margin-bottom: 1.1rem; }
+  .eyebrow { margin: 0 0 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--water); }
+  .hero h2 {
+    margin: 0; font-size: clamp(1.5rem, 2.6vw, 1.95rem); font-weight: 800; letter-spacing: -0.01em;
+    background: var(--hero-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin: 0.45rem 0 0; color: var(--muted); max-width: 46rem; line-height: 1.5; font-size: 0.94rem; }
+  .mission {
+    margin: 0.5rem 0 0; display: flex; gap: 0.45rem; align-items: flex-start;
+    font-size: 0.85rem; color: var(--water); max-width: 46rem; line-height: 1.45; font-weight: 550;
+  }
+  .mission svg { width: 14px; height: 14px; flex: none; margin-top: 0.2rem; }
+  .tag {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--water); background: var(--water-soft);
+    border: 1px solid var(--panel-brd); padding: 0.32rem 0.6rem; border-radius: 999px; white-space: nowrap;
+  }
+
+  .grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 1rem; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .viz-stack { display: grid; gap: 0.85rem; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--panel-brd); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    backdrop-filter: blur(16px) saturate(1.15); -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.35s ease;
+  }
+  .viz-stack .card:hover, .grid > .card:hover { transform: translateY(-2px); }
+  .card .hd { padding: 0.8rem 1.05rem; border-bottom: 1px solid var(--line); font-weight: 700; line-height: 1.45; font-size: 0.95rem; }
+  .card .bd { padding: 1rem 1.05rem 1.05rem; }
+  .card .hd-hint { float: right; font-weight: 500; color: var(--muted); font-size: 0.78rem; margin-left: 0.75rem; max-width: 50%; text-align: right; line-height: 1.35; }
+  .coach-ic { width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; color: var(--water); }
+  canvas { width: 100%; height: auto; display: block; background: var(--cv-bg); border-radius: 12px; border: 1px solid var(--cv-brd); }
+  .viz-cap { margin: 0.55rem 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .viz-cap.above { margin: 0 0 0.45rem; }
+  .viz-cap.below { margin: 0.45rem 0 0; }
+  .viz-cap strong { color: var(--ink); font-weight: 650; }
+  .eq-list {
+    margin: 0.55rem 0 0; padding: 0; list-style: none;
+    font-size: 0.82rem; color: var(--muted); line-height: 1.55;
+  }
+  .eq-list li { margin: 0.25rem 0; }
+
+  .controls-card .hd { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .reset-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; color: var(--muted); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.28rem 0.6rem; cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease; white-space: nowrap;
+  }
+  .reset-btn:hover { color: var(--water); border-color: var(--water); }
+  .reset-btn:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .reset-btn svg { width: 12px; height: 12px; }
+  .controls { display: grid; gap: 0.9rem; }
+  .ctrl label { display: block; font-size: 0.86rem; color: var(--muted); margin-bottom: 0.3rem; line-height: 1.45; overflow: hidden; }
+  .ctrl label strong {
+    float: right; color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 0.82rem;
+    white-space: nowrap; margin-left: 0.75rem;
+    background: var(--water-soft); border: 1px solid var(--panel-brd); border-radius: 7px; padding: 0.1rem 0.45rem;
+  }
+  .ctrl .hint { display: block; font-size: 0.75rem; color: var(--muted); margin: -0.1rem 0 0.4rem; line-height: 1.35; opacity: 0.85; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: pointer; --p: 50%; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--water) var(--p), var(--track) var(--p)); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel-solid); border: 2.5px solid var(--water); margin-top: -6px;
+    box-shadow: 0 0 0 4px var(--water-soft), 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: var(--track); }
+  input[type="range"]::-moz-range-progress { height: 6px; border-radius: 999px; background: var(--water); }
+  input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--panel-solid); border: 2.5px solid var(--water); box-shadow: 0 0 0 4px var(--water-soft); }
+  input[type="range"]:focus-visible { outline: 2px solid var(--water); outline-offset: 4px; border-radius: 8px; }
+  select {
+    font: inherit; font-size: 0.86rem; border-radius: 10px; border: 1px solid var(--panel-brd);
+    padding: 0.55rem 0.7rem; background: var(--panel-solid); color: var(--ink); width: 100%; cursor: pointer;
+  }
+  select:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+  .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .kpi { border: 1px solid var(--panel-brd); border-radius: 12px; padding: 0.6rem 0.7rem; background: linear-gradient(160deg, var(--water-soft), transparent 65%); position: relative; }
+  .kpi .k { font-size: 0.76rem; color: var(--muted); letter-spacing: 0.01em; line-height: 1.35; }
+  .kpi .k .katex { font-size: 0.95em; }
+  .kpi .v { font-family: var(--mono); font-size: 1.06rem; font-weight: 650; margin-top: 0.25rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .kpi .v .katex { font-size: 1em; }
+  .kpi.wide { grid-column: 1 / -1; }
+  .kpi.wide .v:has(strong), .kpi.wide .v:has(span) { font-family: var(--sans); font-size: 0.87rem; font-weight: 500; line-height: 1.45; color: var(--steel); }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+  .badge .katex { font-size: 0.95em !important; color: inherit; }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.bad { background: var(--danger-soft); color: var(--danger); }
+
+  .pedago { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .pedago { grid-template-columns: 1fr; } }
+  .pedago .card .hd { display: flex; align-items: center; gap: 0.5rem; }
+  .pedago .card .hd svg { width: 15px; height: 15px; flex: none; }
+  .pedago .card.retenir .hd { color: var(--water); }
+  .pedago .card.challenge .hd { color: var(--accent); }
+  .pedago .card.retenir { border-top: 2px solid var(--water); }
+  .pedago .card.challenge { border-top: 2px solid var(--accent); }
+  .pedago .card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .pedago ul { margin: 0.1rem 0 0; padding-left: 1.1rem; }
+  .pedago li { margin-bottom: 0.4rem; }
+  .pedago li:last-child { margin-bottom: 0; }
+
+  .note {
+    margin-top: 1rem; padding: 0.85rem 1rem; display: flex; gap: 0.65rem; align-items: flex-start;
+    border-left: 3px solid var(--accent); background: var(--note-bg); border-radius: 0 12px 12px 0;
+    font-size: 0.87rem; color: var(--steel); line-height: 1.5;
+  }
+  .note svg { width: 16px; height: 16px; flex: none; margin-top: 0.15rem; color: var(--accent); }
+
+  .quiz-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .quiz-card > .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-card > .hd svg.trophy { width: 15px; height: 15px; flex: none; }
+  .quiz-q { padding: 0.85rem 0; border-bottom: 1px dashed var(--line); }
+  .quiz-q:first-child { padding-top: 0; }
+  .quiz-q:last-child { border-bottom: none; padding-bottom: 0; }
+  .q-txt { margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink); font-weight: 600; }
+  .q-num {
+    display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px;
+    background: var(--water-soft); color: var(--water); font-family: var(--mono); font-size: 0.72rem;
+    margin-right: 0.5rem; vertical-align: -3px;
+  }
+  .quiz-q.solved .q-num { background: var(--ok-soft); color: var(--ok); }
+  .q-opts { display: grid; gap: 0.45rem; }
+  .opt {
+    appearance: none; font: inherit; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: center;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid var(--panel-brd); background: var(--panel-solid);
+    color: var(--steel); font-size: 0.88rem; line-height: 1.4;
+    transition: border-color 0.15s ease, transform 0.12s ease, background 0.2s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--water); transform: translateX(2px); }
+  .opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .opt .letter {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+    background: var(--water-soft); color: var(--water); flex: none;
+  }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ink); }
+  .opt.correct .letter { background: var(--ok); color: #06281a; }
+  .opt.wrong { border-color: var(--danger); background: var(--danger-soft); opacity: 0.85; animation: shake 0.3s ease; }
+  .opt.wrong .letter { background: var(--danger); color: #2b0a0a; }
+  .opt.dim { opacity: 0.5; }
+  .opt:disabled { cursor: default; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+  .q-fb { margin-top: 0.55rem; padding: 0.6rem 0.75rem; border-radius: 0 10px 10px 0; font-size: 0.84rem; line-height: 1.5; color: var(--steel); }
+  .q-fb.good { border-left: 3px solid var(--ok); background: var(--ok-soft); }
+  .q-fb.bad { border-left: 3px solid var(--danger); background: var(--danger-soft); }
+  .q-apply {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.78rem; font-weight: 650; transition: background 0.15s ease;
+  }
+  .q-apply:hover { background: var(--water-soft); }
+  .q-apply svg { width: 12px; height: 12px; }
+  .quiz-status { margin-top: 0.8rem; font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-status .star-ic { width: 15px; height: 15px; color: var(--gold); }
+  .score-panel {
+    margin-top: 1rem; padding: 1rem 1.1rem; border-radius: 13px;
+    border: 1px solid var(--panel-brd); background: linear-gradient(160deg, var(--water-soft), transparent 70%);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem;
+  }
+  .score-big { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+  .score-lab { font-size: 0.8rem; color: var(--muted); }
+  .score-rank { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
+  .replay-btn {
+    appearance: none; font: inherit; margin-left: auto; padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.8rem; font-weight: 650; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .replay-btn:hover { background: var(--water-soft); }
+  .replay-btn svg { width: 12px; height: 12px; }
+
+  .wipe-card { margin-top: 1rem; border-top: 2px solid var(--danger); }
+  .wipe-card .hd { color: var(--danger); display: flex; align-items: center; gap: 0.5rem; }
+  .wipe-card .hd svg { width: 15px; height: 15px; }
+  .wipe-card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .wipe-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.45rem;
+    margin-top: 0.75rem; padding: 0.55rem 1rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--danger); background: var(--danger-soft); color: var(--danger);
+    font-size: 0.86rem; font-weight: 700;
+  }
+  .wipe-btn:hover { filter: brightness(1.05); }
+  .wipe-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+  .wipe-btn svg { width: 14px; height: 14px; }
+  .toast {
+    position: fixed; z-index: 70; left: 50%; bottom: calc(var(--credit-h) + 1.2rem);
+    transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none;
+    background: var(--panel-solid); color: var(--ink); border: 1px solid var(--ok);
+    border-radius: 12px; padding: 0.7rem 1.1rem; font-size: 0.88rem; font-weight: 650;
+    box-shadow: var(--shadow); transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .quiz-banner {
+    margin: 0 0 0.85rem; font-size: 0.8rem; color: var(--muted); line-height: 1.45;
+    padding: 0.5rem 0.7rem; border-radius: 10px; background: var(--water-soft);
+    border: 1px dashed var(--panel-brd);
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.9rem; }
+  .chip { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid var(--panel-brd); background: var(--water-soft); color: var(--water); }
+  .chip.gold { color: var(--gold); background: var(--warn-soft); }
+  .welcome .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+  @media (max-width: 1100px) { .welcome .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .welcome .steps { grid-template-columns: 1fr; } }
+  .welcome .step { border: 1px solid var(--panel-brd); border-radius: 13px; padding: 0.9rem; background: var(--step-bg); line-height: 1.5; font-size: 0.88rem; color: var(--steel); }
+  .welcome .step b { display: block; margin-bottom: 0.3rem; color: var(--water); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; }
+  .mission-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .mission-card .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; }
+  .mission-card .hd svg { width: 15px; height: 15px; }
+  .mission-card .bd { font-size: 0.92rem; line-height: 1.55; color: var(--steel); }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; margin-top: 0.65rem; font-size: 0.82rem; color: var(--steel); }
+  .legend-row span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .sw-iso { background: #d9c4a8; }
+  .sw-bet { background: #9aa3a8; }
+  .sw-heat { background: var(--water); }
+
+  .gloss-overlay {
+    position: fixed; inset: 0; z-index: 40; display: grid; place-items: center;
+    background: rgba(12, 8, 4, 0.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 1.2rem;
+  }
+  .gloss-overlay[hidden] { display: none; }
+  .gloss-panel {
+    background: var(--panel-solid); color: var(--ink);
+    border: 1px solid var(--panel-brd); border-radius: 18px; box-shadow: var(--shadow);
+    max-width: 680px; width: 100%; max-height: 82vh; overflow-y: auto; padding: 1.3rem 1.5rem 1.5rem;
+  }
+  .gloss-panel h3 { margin: 0 0 0.2rem; font-size: 1.2rem; font-weight: 800; color: var(--water); display: flex; align-items: center; gap: 0.5rem; }
+  .gloss-panel h3 svg { width: 18px; height: 18px; }
+  .gloss-panel .gloss-sub { margin: 0 0 1rem; font-size: 0.82rem; color: var(--muted); }
+  .gloss-panel dl { margin: 0; display: grid; gap: 0.75rem; }
+  .gloss-panel dt { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+  .gloss-panel dd { margin: 0.15rem 0 0; font-size: 0.86rem; line-height: 1.5; color: var(--steel); padding-bottom: 0.6rem; border-bottom: 1px dashed var(--line); }
+  .gloss-panel dd:last-child { border-bottom: none; }
+  .gloss-close {
+    appearance: none; font: inherit; float: right; margin: -0.2rem -0.4rem 0 0;
+    width: 32px; height: 32px; display: grid; place-items: center;
+    border-radius: 50%; border: 1px solid var(--panel-brd); background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 1rem;
+  }
+  .gloss-close:hover { color: var(--danger); border-color: var(--danger); }
+
+  #fx-confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: transparent; border: none; border-radius: 0; width: 100vw; height: 100vh; display: none; }
+
+  .credit-bar {
+    position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; z-index: 20;
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1px;
+    background: rgba(196, 148, 96, 0.16);
+    border-top: 1px solid rgba(224, 196, 168, 0.16);
+    box-shadow: 0 -8px 24px rgba(12, 6, 2, 0.35);
+    min-height: var(--credit-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .credit-cell { background: rgba(32, 24, 18, 0.94); color: #efe6dc; padding: 0.55rem 0.9rem; display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; min-width: 0; }
+  .credit-cell .who { font-size: 0.82rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .credit-cell .role { font-size: 0.68rem; color: rgba(239, 230, 220, 0.68); line-height: 1.3; }
+  .credit-cell.module { background: linear-gradient(135deg, #8a3d18, #c45c26); text-align: center; align-items: center; }
+  .credit-cell.module .who { font-size: 0.88rem; letter-spacing: 0.01em; white-space: normal; }
+  .credit-cell.iut { text-align: right; align-items: flex-end; }
+
+  .tex, .tex-inline { display: inline; white-space: nowrap; }
+  .tex .katex, .tex-inline .katex, .kpi .k .katex, .hint .katex,
+  .pedago .katex, .card .hd .katex, .ctrl label .katex,
+  .legend-row .katex, .viz-cap .katex, .eq-list .katex, .q-txt .katex, .opt .katex,
+  .q-fb .katex, .gloss-panel .katex {
+    font-size: 1.02em !important; line-height: 1; vertical-align: -0.12em;
+  }
+  .katex-display { display: inline !important; margin: 0 !important; text-align: left !important; }
+
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: sticky; top: 0; z-index: 10; height: auto; overflow: visible; padding-bottom: 0.7rem; }
+    nav.ateliers { flex-direction: row; overflow-x: auto; padding-bottom: 0.3rem; }
+    .nav-btn { flex: none; grid-template-columns: auto auto; }
+    .nav-btn .meta, .nav-btn .sub { display: none; }
+    .side-tools { margin-top: 0.4rem; flex-direction: row; align-items: center; }
+    .progress, .kbd-hint, .brand-sub { display: none; }
+    .credit-bar { left: 0; grid-template-columns: 1fr; }
+    :root { --credit-h: auto; }
+    .credit-cell.iut { text-align: left; align-items: flex-start; }
+    .main { padding: 1.1rem 1rem calc(2rem + 8rem); }
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--track); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+</head>
+<body>
+<div class="bg-fx" aria-hidden="true"><b></b><b></b><b></b></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f0c8a8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="code">R 2-9 · Lab virtuel <span class="vtag">v4</span></div>
+        <h1>Parois hygrothermiques</h1>
+      </div>
+    </div>
+    <p class="brand-sub">Ateliers pour sentir conduction, surfaces, ponts, Glaser et dynamique — sans les chiffres du projet noté.</p>
+
+    <nav class="ateliers" aria-label="Ateliers du laboratoire virtuel">
+      <button class="nav-btn active" data-atelier="home" aria-current="page">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></span>
+        <span class="txt"><span class="label">Accueil</span><span class="sub">Mode d’emploi &amp; mission</span></span>
+        <span class="meta"><span class="idx">00</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="cond">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="7" height="14" rx="1"/><rect x="14" y="5" width="7" height="14" rx="1"/></svg></span>
+        <span class="txt"><span class="label">Conduction &amp; R</span><span class="sub">Profil de température</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="cond" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="cond"></span></span><span class="idx">01</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="surf">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 15.5a4 4 0 1 0 8 0"/><path d="M9 7h6"/></svg></span>
+        <span class="txt"><span class="label">Surfaces &amp; confort</span><span class="sub">Flux, rosée, facteur de surface</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="surf" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="surf"></span></span><span class="idx">02</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="bilan">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-8"/><path d="M3 20h18"/></svg></span>
+        <span class="txt"><span class="label">U &amp; ponts</span><span class="sub">Surfaces, ponts, saison</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="bilan" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="bilan"></span></span><span class="idx">03</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="glaser">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 6 7 9.2 7 12.2A7 7 0 1 1 5 15.2C5 12.2 8 9 12 3Z"/></svg></span>
+        <span class="txt"><span class="label">Hygrothermie</span><span class="sub">Glaser · vapeur vs saturante</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="glaser" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="glaser"></span></span><span class="idx">04</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="dyn">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c3-8 6 8 9 0s6 8 9 0"/></svg></span>
+        <span class="txt"><span class="label">Dynamique d’été</span><span class="sub">Déphasage &amp; amortissement</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="dyn" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="dyn"></span></span><span class="idx">05</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="rehab">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V8l8-4 8 4v12"/><path d="M12 20V10"/></svg></span>
+        <span class="txt"><span class="label">ITI vs ITE</span><span class="sub">Où placer l’isolant ?</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="rehab" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="rehab"></span></span><span class="idx">06</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="defi">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg></span>
+        <span class="txt"><span class="label">Grand contrôle</span><span class="sub">Quiz de synthèse</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="final" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg></span><span class="idx">07</span></span>
+      </button>
+    </nav>
+
+    <div class="side-tools">
+      <div class="progress">
+        <div class="progress-top"><span>Exploration</span><b id="prog-count">0/6</b></div>
+        <div class="progress-bar"><i id="prog-fill"></i></div>
+        <div class="progress-top" style="margin-top:0.5rem;"><span>Étoiles de défi</span><b id="star-count">0/6</b></div>
+        <div class="progress-bar gold"><i id="star-fill"></i></div>
+        <div class="rank"><span>Rang bureau d’études</span><b id="rank-name">Stagiaire pathologie</b></div>
+      </div>
+      <button class="theme-btn" id="gloss-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>Lexique express</span>
+      </button>
+      <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false">
+        <svg id="theme-ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+        <svg id="theme-ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>
+        <span id="theme-label">Passer en mode clair</span>
+      </button>
+      <p class="kbd-hint">Naviguez avec <kbd>←</kbd> <kbd>→</kbd> ou <kbd>0</kbd>–<kbd>7</kbd> · <kbd>L</kbd> = lexique. Accueil : bouton « tout recommencer ». Point vert = exploré, étoile = défi réussi.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="atelier active" id="atelier-home">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">R 2-9 · Transferts thermiques et hydriques</p>
+          <h2>Bienvenue dans le laboratoire virtuel</h2>
+          <p class="lede">Explorez des parois génériques : chaleur, surfaces froides, ponts, condensation interstitielle, onde d’été. Le projet noté reste le dossier + l’oral.</p>
+        </div>
+        <span class="tag">Fichier HTML autonome</span>
+      </div>
+      <div class="viz-stack">
+        <div class="card">
+          <div class="hd">Coupe de la halle de Valvert <span class="hd-hint">décor animé — la physique sérieuse commence à l’atelier 01</span></div>
+          <div class="bd">
+            <canvas id="cv-hero" width="1440" height="400"></canvas>
+            <p class="viz-cap">Une halle communale en miniature : l’<strong>intérieur</strong> chauffé, une <strong>paroi</strong> (isolant + béton) et l’<strong>extérieur</strong> froid. Chaque atelier isole un maillon — conduction, surface, ponts, vapeur, dynamique, position de l’isolant.</p>
+            <div class="legend-row">
+              <span><i class="swatch sw-iso"></i> Isolant</span>
+              <span><i class="swatch sw-bet"></i> Béton</span>
+              <span><i class="swatch sw-heat"></i> Flux de chaleur</span>
+            </div>
+          </div>
+        </div>
+        <div class="card mission-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Votre mission : la halle de Valvert</div>
+          <div class="bd">
+            <p style="margin:0 0 0.55rem;">La commune <strong>imaginaire</strong> de Valvert rénove sa halle polyvalente. Moisissures au nord, paroi froide, isolation intérieure d’origine : le bureau d’études vous recrute comme stagiaire en pathologie du bâtiment. Au fil des ateliers, vous remontez toute la chaîne — de la conduction au choix ITI / ITE :</p>
+            <ul style="margin:0 0 0.55rem;padding-left:1.1rem;">
+              <li>chaque atelier se termine par un <strong>Défi express</strong> : réussissez toutes ses questions pour décrocher une <strong>étoile</strong> ;</li>
+              <li>les étoiles font grimper votre <strong>rang</strong> dans la barre de gauche (de Stagiaire pathologie à Chef·fe de projet TTH) ;</li>
+              <li>terminez par le <strong>Grand contrôle</strong> (atelier 07) : 8 questions toutes thématiques, votre première réponse compte pour le score.</li>
+            </ul>
+            <p style="margin:0;">Valvert est un terrain d’entraînement : <strong>aucune donnée du vrai sujet</strong> ne s’y cache. Les Défis express sont <strong>formatifs</strong> — ils testent un réflexe physique, pas le chiffre que vous calculerez dans les notes de projet.</p>
+          </div>
+        </div>
+        <div class="card welcome">
+          <div class="bd">
+            <div class="chip-row">
+              <span class="chip">6 ateliers guidés</span>
+              <span class="chip gold">Défis à étoiles</span>
+              <span class="chip">Lexique intégré</span>
+              <span class="chip">100 % hors-ligne</span>
+              <span class="chip">Anti-spoil garanti</span>
+            </div>
+            <p style="margin:0;"><strong>Comment travailler :</strong> choisissez un atelier à gauche, bougez les curseurs, observez le schéma, puis répondez aux Défis express. Ce n’est <em>pas</em> un QCM de projet : réussir ici ne donne aucune valeur à recopier dans vos notes de calcul.</p>
+            <div class="steps">
+              <div class="step"><b>1 · OBSERVER</b>Changez un paramètre. Que se passe-t-il sur le dessin et sur les indicateurs ?</div>
+              <div class="step"><b>2 · NOMMER</b>Associez l’effet à la grandeur (<span class="tex" data-tex="R"></span>, <span class="tex" data-tex="U"></span>, <span class="tex" data-tex="f_{Rsi}"></span>…). Relisez la boîte à outils du sujet.</div>
+              <div class="step"><b>3 · VALIDER</b>Tentez le Défi express : prédisez avant de cliquer, l’explication tombe tout de suite.</div>
+              <div class="step"><b>4 · TRANSFÉRER</b>Appliquez le raisonnement aux étapes du projet — pas l’inverse.</div>
+            </div>
+            <div class="note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+              <span>Anti-spoil : les curseurs et les questions utilisent des parois génériques (autres épaisseurs, autres <span class="tex" data-tex="\lambda"></span>, autre climat). Si une vidéo et cet atelier disent la même chose <em>qualitativement</em>, vous êtes sur la bonne voie — le dossier noté, lui, se calcule à part.</span>
+            </div>
+          </div>
+        </div>
+        <div class="card wipe-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Tout recommencer</div>
+          <div class="bd">
+            <p style="margin:0;">Remet à zéro les étoiles, les Défis express, le Grand contrôle, les ateliers explorés et tous les curseurs. Utile pour un second passage, un binôme, ou une séance suivante sur le même ordinateur. Le thème clair/sombre est conservé.</p>
+            <button class="wipe-btn" id="wipe-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+              Réinitialiser tous les ateliers
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 Conduction -->
+    <section class="atelier" id="atelier-cond">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 01</p>
+          <h2>Conduction et résistance thermique</h2>
+          <p class="lede">Reliez l’épaisseur et la conductivité à la chute de température dans chaque couche — sans croire que « plus de <span class="tex" data-tex="\lambda"></span> » élargit le dessin.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : comprenez où la chaleur chute vraiment dans la paroi nord de la halle.</p>
+        </div>
+        <span class="tag">Étape 1</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Paroi 2 couches + profil <span class="tex" data-tex="T(x)"></span> <span class="hd-hint">largeurs = épaisseurs réelles</span></div>
+          <div class="bd">
+            <p class="viz-cap above">Largeurs ∝ épaisseurs · pente du profil <span class="tex" data-tex="T"></span> ∝ <span class="tex" data-tex="R"></span> de chaque couche</p>
+            <canvas id="cv-cond" width="720" height="340"></canvas>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="R=e/\lambda"></span> (avec <span class="tex" data-tex="e"></span> en mètres)</li>
+              <li>En série : <span class="tex" data-tex="R_{\mathrm{mat}}=\sum R_i"></span></li>
+              <li>Sur le schéma, la <strong>largeur</strong> d’une couche suit son <strong>épaisseur</strong>. La <strong>pente</strong> du profil de température, elle, dépend de <span class="tex" data-tex="R"></span> : plus <span class="tex" data-tex="R"></span> est grand, plus <span class="tex" data-tex="T"></span> chute fort dans cette couche.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes (génériques)</span><button class="reset-btn" type="button" data-reset="cond"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Épaisseur isolant <span class="tex" data-tex="e_1"></span> <strong id="v-e1">8 cm</strong></label>
+              <input type="range" id="e1" min="2" max="20" step="0.5" value="8" />
+            </div>
+            <div class="ctrl">
+              <label>Conductivité isolant <span class="tex" data-tex="\lambda_1"></span> <strong id="v-l1">0,045 W/(m·K)</strong></label>
+              <input type="range" id="l1" min="0.02" max="0.12" step="0.005" value="0.045" />
+            </div>
+            <div class="ctrl">
+              <label>Épaisseur béton <span class="tex" data-tex="e_2"></span> <strong id="v-e2">18 cm</strong></label>
+              <input type="range" id="e2" min="10" max="40" step="1" value="18" />
+            </div>
+            <div class="ctrl">
+              <label>Conductivité béton <span class="tex" data-tex="\lambda_2"></span> <strong id="v-l2">1,80 W/(m·K)</strong></label>
+              <input type="range" id="l2" min="0.8" max="2.5" step="0.05" value="1.80" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="T_{\mathrm{int}}"></span> / <span class="tex" data-tex="T_{\mathrm{ext}}"></span> <strong id="v-T">20 / 0 °C</strong></label>
+              <span class="hint">Curseur = température extérieure (intérieur fixé à 20 °C).</span>
+              <input type="range" id="Text" min="-10" max="10" step="1" value="0" />
+            </div>
+            <div class="readouts" id="out-cond"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : la largeur suit <span class="tex" data-tex="e"></span>, la pente suit <span class="tex" data-tex="R"></span>.</span></div>
+        <div class="bd" id="quiz-cond"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="\varphi=\lambda\,\Delta T/e=(T_a-T_b)/R"></span> en régime permanent 1D.</li>
+          <li>Isolant : <span class="tex" data-tex="\lambda"></span> petit ⇒ <span class="tex" data-tex="R"></span> grand ⇒ forte chute de <span class="tex" data-tex="T"></span>.</li>
+          <li>Béton dense : bon stockage (<span class="tex" data-tex="C_S=\rho c_p e"></span>), mauvais isolant.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Doublez <span class="tex" data-tex="e_1"></span> : <span class="tex" data-tex="R_1"></span> double-t-elle ? Où tombe surtout la température ?</li>
+          <li>Augmentez <span class="tex" data-tex="\lambda"></span> de l’isolant (matériau « fatigué ») : la chute de <span class="tex" data-tex="T"></span> dans l’isolant diminue-t-elle (profil moins pentu) ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 02 Surfaces -->
+    <section class="atelier" id="atelier-surf">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 02</p>
+          <h2>Échanges de surface, flux et confort</h2>
+          <p class="lede">La température de surface intérieure commande à la fois le confort radiatif et le risque de buée.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : les usagers se plaignent d’un « mur qui donne froid » — reliez <span class="tex" data-tex="T_{si}"></span> au point de rosée.</p>
+        </div>
+        <span class="tag">Étape 2</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">De l’air intérieur à la surface <span class="hd-hint"><span class="tex" data-tex="T_{si}=T_{int}-\varphi R_{si}"></span></span></div>
+          <div class="bd">
+            <p class="viz-cap above" id="cap-surf-top"></p>
+            <canvas id="cv-surf" width="720" height="320"></canvas>
+            <p class="viz-cap below">Repères : <span class="tex" data-tex="T_{\mathrm{int}}"></span> (orange), <span class="tex" data-tex="T_{si}"></span>, <span class="tex" data-tex="T_{\mathrm{rosée}}"></span>, <span class="tex" data-tex="T_{\mathrm{ext}}"></span>.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="R_{tot}=R_{si}+R_{\mathrm{mat}}+R_{se}"></span></li>
+              <li><span class="tex" data-tex="\varphi=(T_{int}-T_{ext})/R_{tot}"></span></li>
+              <li><span class="tex" data-tex="T_{si}=T_{int}-\varphi\,R_{si}"></span></li>
+              <li><span class="tex" data-tex="f_{Rsi}=(T_{si}-T_{ext})/(T_{int}-T_{ext})"></span></li>
+              <li>Seuil pédagogique d’ambiance très humide : <span class="tex" data-tex="f_{Rsi}\ge 0{,}90"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="surf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="R_{\mathrm{mat}}"></span> <strong id="v-Rmat">3,20 m²·K/W</strong></label>
+              <input type="range" id="Rmat" min="0.3" max="6" step="0.05" value="3.2" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="R_{si}"></span> <strong id="v-Rsi">0,13 m²·K/W</strong></label>
+              <input type="range" id="Rsi" min="0.05" max="0.25" step="0.01" value="0.13" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="R_{se}"></span> <strong id="v-Rse">0,04 m²·K/W</strong></label>
+              <input type="range" id="Rse" min="0.02" max="0.1" step="0.01" value="0.04" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="T_{\mathrm{ext}}"></span> <strong id="v-Text2">0 °C</strong></label>
+              <input type="range" id="Text2" min="-15" max="10" step="1" value="0" />
+            </div>
+            <div class="ctrl">
+              <label>Point de rosée (exemple) <span class="tex" data-tex="T_{\mathrm{rosée}}"></span> <strong id="v-Td">12 °C</strong></label>
+              <span class="hint">Ambiance humide fictive — pas la valeur du sujet.</span>
+              <input type="range" id="Td" min="5" max="20" step="0.5" value="12" />
+            </div>
+            <div class="readouts" id="out-surf"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : buée si <span class="tex" data-tex="T_{si}"></span> passe sous la rosée.</span></div>
+        <div class="bd" id="quiz-surf"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="h=h_c+h_r"></span> puis <span class="tex" data-tex="R_s=1/h"></span>.</li>
+          <li>Paroi froide : perte radiative corporelle vers <span class="tex" data-tex="T_{si}"></span> basse.</li>
+          <li>Condensation de surface si <span class="tex" data-tex="T_{si}&lt;T_{\mathrm{rosée}}"></span>.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Baissez <span class="tex" data-tex="R_{\mathrm{mat}}"></span> : <span class="tex" data-tex="f_{Rsi}"></span> et le risque de buée évoluent comment ?</li>
+          <li>Trouvez un réglage conforme (<span class="tex" data-tex="f_{Rsi}\ge 0{,}90"></span>) puis un qui ne l’est plus.</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 03 Bilan -->
+    <section class="atelier" id="atelier-bilan">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 03</p>
+          <h2>U, surfaces et ponts thermiques</h2>
+          <p class="lede">Passez du mètre carré à la façade : <span class="tex" data-tex="H_D"></span> (surfaces), <span class="tex" data-tex="H_L"></span> (ponts), puis l’énergie saisonnière via les DJU.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : un mur bien isolé ne suffit pas si les jonctions fuient — chiffrez le poids des ponts.</p>
+        </div>
+        <span class="tag">Étape 3</span>
+      </div>
+      <div class="grid">
+        <div class="viz-stack">
+          <div class="card">
+            <div class="hd">Décomposition de <span class="tex" data-tex="H_{\mathrm{tot}}"></span> <span class="hd-hint"><span class="tex" data-tex="H_D+H_L"></span></span></div>
+            <div class="bd">
+              <p class="viz-cap above" id="cap-bilan-top"></p>
+              <canvas id="cv-bilan" width="720" height="300"></canvas>
+              <p class="viz-cap below">Barres : mur <span class="tex" data-tex="U\cdot A"></span>, vitrage <span class="tex" data-tex="U\cdot A"></span>, ponts <span class="tex" data-tex="H_L"></span>.</p>
+              <ul class="eq-list">
+                <li><span class="tex" data-tex="U=1/R_{\mathrm{tot}}"></span></li>
+                <li><span class="tex" data-tex="H_D=\sum U_i A_i"></span></li>
+                <li><span class="tex" data-tex="H_L=\sum \psi_k L_k"></span></li>
+                <li>Un pont (dalle, menuiserie…) ajoute des pertes linéiques même si le mur courant est bien isolé.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="hd">Degrés Jours Unifiés (DJU) <span class="hd-hint">lien puissance → énergie saisonnière</span></div>
+            <div class="bd">
+              <p class="viz-cap above" id="cap-dju-top">DJU = écart consigne − <span class="tex" data-tex="T_{\mathrm{ext}}"></span>, cumulé jour après jour · axe vertical : <span class="tex" data-tex="T"></span> (°C)</p>
+              <canvas id="cv-dju" width="720" height="280"></canvas>
+              <p class="viz-cap below" id="cap-dju-bot"></p>
+              <ul class="eq-list">
+                <li>1 DJU ≈ un jour où <span class="tex" data-tex="T_{\mathrm{ext}}"></span> moyenne est de 1 °C sous la consigne intérieure.</li>
+                <li>Sur la saison : on <strong>cumule</strong> ces écarts jour après jour → un seul nombre (DJU).</li>
+                <li><span class="tex" data-tex="E_{\mathrm{chauffage}}\approx H_{\mathrm{tot}}\cdot 24\cdot\mathrm{DJU}"></span> (en Wh si <span class="tex" data-tex="H_{\mathrm{tot}}"></span> est en W/K).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="bilan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="U_{\mathrm{mur}}"></span> <strong id="v-Um">0,55 W/(m²·K)</strong></label>
+              <input type="range" id="Um" min="0.1" max="2" step="0.01" value="0.55" />
+            </div>
+            <div class="ctrl">
+              <label>Surface mur <span class="tex" data-tex="A_{\mathrm{mur}}"></span> <strong id="v-Am">60 m²</strong></label>
+              <input type="range" id="Am" min="20" max="200" step="5" value="60" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="U_{\mathrm{vitre}}"></span> <strong id="v-Uv">2,20 W/(m²·K)</strong></label>
+              <input type="range" id="Uv" min="0.8" max="5" step="0.05" value="2.2" />
+            </div>
+            <div class="ctrl">
+              <label>Surface vitrage <span class="tex" data-tex="A_v"></span> <strong id="v-Av">18 m²</strong></label>
+              <input type="range" id="Av" min="5" max="60" step="1" value="18" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="H_L"></span> total des ponts <strong id="v-HL">8,0 W/K</strong></label>
+              <span class="hint">Curseur = pertes linéiques globales (W/K), pas un <span class="tex" data-tex="\psi"></span> d’abaque.</span>
+              <input type="range" id="HL" min="0" max="40" step="0.5" value="8" />
+            </div>
+            <div class="ctrl">
+              <label>Consigne intérieure (pour DJU) <strong id="v-Tcons">19 °C</strong></label>
+              <input type="range" id="Tcons" min="16" max="22" step="1" value="19" />
+            </div>
+            <div class="ctrl">
+              <label>Température ext. moyenne du jour <strong id="v-Tjour">6 °C</strong></label>
+              <span class="hint">DJU du jour = max(0, consigne − <span class="tex" data-tex="T_{\mathrm{ext}}"></span> moyenne).</span>
+              <input type="range" id="Tjour" min="-5" max="20" step="1" value="6" />
+            </div>
+            <div class="ctrl">
+              <label>DJU cumulés sur la saison <strong id="v-DJU">1800</strong></label>
+              <span class="hint">Valeur générique pédagogique (pas celle du sujet).</span>
+              <input type="range" id="DJU" min="500" max="4000" step="50" value="1800" />
+            </div>
+            <div class="readouts" id="out-bilan"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : <span class="tex" data-tex="U=1/R"></span> — baisser U sans traiter les ponts = gains partiels.</span></div>
+        <div class="bd" id="quiz-bilan"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="\Phi=H_{\mathrm{tot}}\Delta T"></span> ; énergie saisonnière via DJU : <span class="tex" data-tex="E\approx H_{\mathrm{tot}}\cdot 24\cdot\mathrm{DJU}"></span>.</li>
+          <li>ITI laisse souvent des ponts de plancher : <span class="tex" data-tex="H_L"></span> non négligeable.</li>
+          <li>Baisser U mur sans traiter <span class="tex" data-tex="\psi"></span> = gains partiels.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>À surfaces fixes, quand les ponts dépassent 30 % de <span class="tex" data-tex="H_{\mathrm{tot}}"></span> ?</li>
+          <li>Halvez <span class="tex" data-tex="U_{\mathrm{mur}}"></span> puis <span class="tex" data-tex="H_L"></span> : quel levier réduit le plus <span class="tex" data-tex="H_{\mathrm{tot}}"></span> ici ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 04 Glaser -->
+    <section class="atelier" id="atelier-glaser">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 04</p>
+          <h2>Hygrothermie : pression réelle vs saturante</h2>
+          <p class="lede">La vapeur migre ; si elle croise la courbe saturante dans la paroi, elle condense — c’est le diagnostic de Glaser.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : les taches au nord sont-elles de la condensation <em>dans</em> le mur ? Testez le croisement.</p>
+        </div>
+        <span class="tag">Étape 4</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Schéma type Glaser (2 couches) <span class="hd-hint">condensation si <span class="tex" data-tex="P_v>P_{\mathrm{sat}}"></span></span></div>
+          <div class="bd">
+            <p class="viz-cap above">Abscisse <span class="tex" data-tex="S_d"></span> cumulé (m) — résistance vapeur, pas l’épaisseur géométrique</p>
+            <canvas id="cv-glaser" width="720" height="360"></canvas>
+            <p class="viz-cap below">Courbe bleue : <span class="tex" data-tex="P_v"></span> (réelle) · pointillé rouge : <span class="tex" data-tex="P_{\mathrm{sat}}(T)"></span></p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="S_d=\mu e"></span> (épaisseur d’air équivalente)</li>
+              <li>Zones colorées = <strong>couches de la paroi</strong> (isolant puis béton), pas « l’air »</li>
+              <li>Abscisse ∝ <span class="tex" data-tex="S_d"></span> cumulé (résistance vapeur), pas l’épaisseur géométrique</li>
+              <li>Courbe bleue = <span class="tex" data-tex="P_v"></span> ; pointillé rouge = <span class="tex" data-tex="P_{\mathrm{sat}}(T)"></span></li>
+              <li>Croisement (<span class="tex" data-tex="P_v>P_{\mathrm{sat}}"></span>) = risque de condensation interstitielle</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="glaser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>HR intérieure <strong id="v-HRi">65 %</strong></label>
+              <input type="range" id="HRi" min="30" max="95" step="1" value="65" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="S_{d,1}"></span> — couche isolant (côté intérieur / chaud) <strong id="v-Sd1">0,35 m</strong></label>
+              <span class="hint">Petit <span class="tex" data-tex="S_d"></span> = vapeur passe facilement (ex. laine sans pare-vapeur).</span>
+              <input type="range" id="Sd1" min="0.05" max="5" step="0.05" value="0.35" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="S_{d,2}"></span> — couche béton (côté extérieur / froid) <strong id="v-Sd2">6,0 m</strong></label>
+              <input type="range" id="Sd2" min="1" max="30" step="0.5" value="6" />
+            </div>
+            <div class="ctrl">
+              <label>Pare-vapeur ajouté <span class="tex" data-tex="S_{d,\mathrm{PV}}"></span> (côté chaud) <strong id="v-SdPV">0 m</strong></label>
+              <span class="hint">Côté chaud : augmente la résistance avant le point froid.</span>
+              <input type="range" id="SdPV" min="0" max="50" step="1" value="0" />
+            </div>
+            <div class="readouts" id="out-glaser"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : le pare-vapeur se pose côté chaud en hiver.</span></div>
+        <div class="bd" id="quiz-glaser"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="P_{\mathrm{sat}}"></span> ne dépend que de <span class="tex" data-tex="T"></span> (formule de Magnus).</li>
+          <li><span class="tex" data-tex="P_v=\mathrm{HR}\cdot P_{\mathrm{sat}}"></span>.</li>
+          <li>Pare-vapeur : toujours côté chaud en hiver.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Sans PV, augmentez HR : le croisement apparaît-il à l’interface ?</li>
+          <li>Montez <span class="tex" data-tex="S_{d,\mathrm{PV}}"></span> jusqu’à faire disparaître le risque : quel ordre de grandeur suffit ici ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 05 Dynamique -->
+    <section class="atelier" id="atelier-dyn">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 05</p>
+          <h2>Onde de chaleur : déphasage et amortissement</h2>
+          <p class="lede">En été, <span class="tex" data-tex="T_{\mathrm{ext}}"></span> n’est plus un palier : l’onde diurne arrive en retard et écrasée — si la masse est du bon côté.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : la halle surchauffe l’après-midi — voyez si le béton peut retarder le pic.</p>
+        </div>
+        <span class="tag">Étape 5</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Température ext. vs face intérieure <span class="hd-hint">période 24 h</span></div>
+          <div class="bd">
+            <p class="viz-cap above" id="cap-dyn-top"></p>
+            <canvas id="cv-dyn" width="720" height="360"></canvas>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="a=\lambda/(\rho c_p)"></span></li>
+              <li><span class="tex" data-tex="\Delta t=e\sqrt{T_0/(4\pi a)}"></span> (déphasage)</li>
+              <li><span class="tex" data-tex="A=\exp\!\big(-e\sqrt{\pi/(a T_0)}\big)"></span> (amortissement)</li>
+              <li>Courbe orange = <span class="tex" data-tex="T_{\mathrm{ext}}"></span> ; verte = signal transmis (retardé et écrasé). Axes : temps (h) et <span class="tex" data-tex="T"></span> (°C).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes (1 couche équivalente)</span><button class="reset-btn" type="button" data-reset="dyn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Épaisseur <span class="tex" data-tex="e"></span> <strong id="v-ed">22 cm</strong></label>
+              <input type="range" id="ed" min="5" max="40" step="1" value="22" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\lambda"></span> <strong id="v-ld">1,60 W/(m·K)</strong></label>
+              <input type="range" id="ld" min="0.03" max="2" step="0.01" value="1.6" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\rho"></span> <strong id="v-rd">2100 kg/m³</strong></label>
+              <input type="range" id="rd" min="20" max="2500" step="10" value="2100" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="c_p"></span> <strong id="v-cp">920 J/(kg·K)</strong></label>
+              <input type="range" id="cp" min="800" max="2000" step="20" value="920" />
+            </div>
+            <div class="readouts" id="out-dyn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : l’inertie utile, c’est la masse <em>accessible</em> depuis l’intérieur.</span></div>
+        <div class="bd" id="quiz-dyn"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Faible <span class="tex" data-tex="a"></span> ⇒ chaleur lente ⇒ fort déphasage / amortissement.</li>
+          <li>Vitrages : apports solaires quasi sans déphasage.</li>
+          <li>Inertie utile = masse <strong>accessible</strong> depuis l’intérieur (piège de l’ITI).</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez d’un béton dense à un isolant léger (λ↓, ρ↓) : l’onde intérieure s’écrase-t-elle plus ou moins ?</li>
+          <li>Visez un déphasage &gt; 8 h : quels leviers (e, ρ, λ) ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 06 Rehab -->
+    <section class="atelier" id="atelier-rehab">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 06</p>
+          <h2>ITI vs ITE : où placer l’isolant ?</h2>
+          <p class="lede">Même isolant, deux mondes : point froid, inertie d’été et ponts ne se valent pas.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : avant d’écrire à la mairie, comparez les deux positions — qualitativement.</p>
+        </div>
+        <span class="tag">Étape 6</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Schéma comparatif <span class="hd-hint">largeurs ∝ épaisseurs réelles</span></div>
+          <div class="bd">
+            <canvas id="cv-rehab" width="720" height="360"></canvas>
+            <ul class="eq-list">
+              <li>ITI : isolant côté intérieur (chaud), béton vers l’extérieur (froid)</li>
+              <li>ITE : béton côté intérieur (inertie accessible), isolant vers l’extérieur</li>
+              <li>Les largeurs du schéma suivent les <strong>épaisseurs</strong> ; les valeurs de <span class="tex" data-tex="R"></span> et <span class="tex" data-tex="U"></span> restent dans les indicateurs à droite.</li>
+              <li>Largeurs ∝ épaisseurs réelles (pas aux résistances <span class="tex" data-tex="R"></span>).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="rehab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Position de l’isolant</label>
+              <select id="pos">
+                <option value="iti" selected>ITI — isolation thermique par l’intérieur</option>
+                <option value="ite">ITE — isolation thermique par l’extérieur</option>
+              </select>
+            </div>
+            <div class="ctrl">
+              <label>Épaisseur isolant <strong id="v-eiso">12 cm</strong></label>
+              <input type="range" id="eiso" min="8" max="24" step="1" value="12" />
+            </div>
+            <div class="ctrl">
+              <label>Épaisseur béton (fixe sur le schéma) <strong>18 cm</strong></label>
+              <span class="hint">Pour comparer les deux zones à l’œil, les épaisseurs sont du même ordre de grandeur.</span>
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\lambda"></span> isolant <strong id="v-liso">0,036 W/(m·K)</strong></label>
+              <input type="range" id="liso" min="0.025" max="0.08" step="0.001" value="0.036" />
+            </div>
+            <div class="ctrl">
+              <label>Ponts résiduels <span class="tex" data-tex="H_L"></span> <strong id="v-HLr">18,0 W/K</strong></label>
+              <span class="hint">En ITE, baissez souvent ce curseur (dalles mieux enveloppées).</span>
+              <input type="range" id="HLr" min="0" max="30" step="0.5" value="18" />
+            </div>
+            <div class="readouts" id="out-rehab"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : même U courant ≠ même été ni même hygrothermie.</span></div>
+        <div class="bd" id="quiz-rehab"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Même <span class="tex" data-tex="U"></span> courant ≠ même hygrothermie ni même confort d’été.</li>
+          <li>ITE : point froid dehors + inertie intérieure + <span class="tex" data-tex="\psi"></span> souvent ↓.</li>
+          <li>Rénover = aussi sauver le bâti (condensation) et la santé, pas seulement le TRI.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez ITI → ITE à même isolant : que dit le schéma sur le point froid ?</li>
+          <li>Avec ITE, baissez <span class="tex" data-tex="H_L"></span> : quel message pour le bilan façade ?</li>
+        </ul></div></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>L’étape 6 du projet (note au maire, CAPEX/OPEX, bilan carbone) s’appuie sur ces intuitions : cet atelier prépare l’argumentaire technique, pas le chiffrage du sujet.</span>
+      </div>
+    </section>
+
+    <!-- Grand contrôle -->
+    <section class="atelier" id="atelier-defi">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 07</p>
+          <h2>Le Grand contrôle du bureau d’études</h2>
+          <p class="lede">8 questions, toutes thématiques confondues. Votre <strong>première réponse</strong> à chaque question compte pour le score — mais vous pouvez continuer jusqu’à trouver la bonne, l’explication vient toujours.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Mission Valvert : l’entretien final — 7/8 ou plus décroche la mention « Valvert d’or ».</p>
+        </div>
+        <span class="tag">Synthèse 01–06</span>
+      </div>
+      <div class="card quiz-card" style="margin-top:0;">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Grand contrôle <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1.6 3.6 1.2 6.2-.8 8.6 2.8.6 5.8 3.2 5.8 6.6A5 5 0 0 1 7 18.2c0-3.6 2.6-6.2 4.4-8.4C10 7.4 10.6 5.2 12 3Z"/></svg>Calorine souffle : relis « À retenir » des ateliers avant de te lancer.</span></div>
+        <div class="bd">
+          <div id="quiz-final"></div>
+          <div class="score-panel" id="final-panel" hidden>
+            <div>
+              <div class="score-big" id="final-score">0/8</div>
+              <div class="score-lab">premières réponses correctes</div>
+            </div>
+            <div class="score-rank" id="final-verdict"></div>
+            <button class="replay-btn" id="final-replay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Rejouer</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Ce quiz vérifie les réflexes qualitatifs, pas le projet noté : les valeurs utilisées sont génériques et le raisonnement prime sur le chiffre.</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="gloss-overlay" id="gloss" hidden>
+  <div class="gloss-panel" role="dialog" aria-modal="true" aria-label="Lexique express">
+    <button class="gloss-close" id="gloss-close" type="button" aria-label="Fermer le lexique">✕</button>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>Lexique express</h3>
+    <p class="gloss-sub">Le vocabulaire de la paroi, en français courant. Fermez avec ✕, Échap ou un clic hors de la fiche.</p>
+    <dl>
+      <dt>Résistance thermique <span class="tex" data-tex="R=e/\lambda"></span></dt>
+      <dd>Capacité d’une couche à freiner la chaleur. Plus elle est grande, plus la température chute dans cette couche. Attention : <span class="tex" data-tex="e"></span> en mètres.</dd>
+      <dt>Conductivité <span class="tex" data-tex="\lambda"></span></dt>
+      <dd>Facilité intrinsèque du matériau à conduire la chaleur. Un isolant a un petit <span class="tex" data-tex="\lambda"></span> ; un béton un grand.</dd>
+      <dt>Coefficient <span class="tex" data-tex="U=1/R_{\mathrm{tot}}"></span></dt>
+      <dd>Transmission surfacique de la paroi complète (matériaux + résistances de surface). Plus <span class="tex" data-tex="U"></span> est petit, mieux le mur isole.</dd>
+      <dt>Flux <span class="tex" data-tex="\varphi"></span></dt>
+      <dd>Puissance thermique par mètre carré (W/m²). En régime 1D permanent : <span class="tex" data-tex="\varphi=\Delta T/R_{\mathrm{tot}}"></span>.</dd>
+      <dt><span class="tex" data-tex="T_{si}"></span> et <span class="tex" data-tex="T_{\mathrm{rosée}}"></span></dt>
+      <dd>Température de la face intérieure, et température à laquelle l’air commence à déposer de l’eau. Buée si <span class="tex" data-tex="T_{si}&lt;T_{\mathrm{rosée}}"></span>.</dd>
+      <dt>Facteur <span class="tex" data-tex="f_{Rsi}"></span></dt>
+      <dd>Indicateur adimensionnel de qualité de surface : <span class="tex" data-tex="f_{Rsi}=(T_{si}-T_{\mathrm{ext}})/(T_{int}-T_{\mathrm{ext}})"></span>. Indépendant (en théorie) de la météo du jour.</dd>
+      <dt><span class="tex" data-tex="H_D"></span>, <span class="tex" data-tex="H_L"></span>, <span class="tex" data-tex="H_{\mathrm{tot}}"></span></dt>
+      <dd>Pertes par les surfaces (<span class="tex" data-tex="\sum UA"></span>), par les ponts linéiques (<span class="tex" data-tex="\sum\psi L"></span>), et leur somme en W/K.</dd>
+      <dt>Pont thermique <span class="tex" data-tex="\psi"></span></dt>
+      <dd>Fuite linéique aux jonctions (dalle, menuiserie, toiture). Même un mur courant bien isolé laisse passer de la chaleur par ces lignes.</dd>
+      <dt>DJU</dt>
+      <dd>Degrés Jours Unifiés : cumul, sur la saison, des écarts journaliers consigne − <span class="tex" data-tex="T_{\mathrm{ext}}"></span>. Relie la puissance <span class="tex" data-tex="H_{\mathrm{tot}}"></span> à l’énergie annuelle.</dd>
+      <dt><span class="tex" data-tex="S_d=\mu e"></span></dt>
+      <dd>Épaisseur d’air équivalente : « résistance » du matériau au passage de la vapeur. Un grand <span class="tex" data-tex="S_d"></span> freine beaucoup l’humidité.</dd>
+      <dt>Diagramme de Glaser</dt>
+      <dd>On compare la pression de vapeur réelle <span class="tex" data-tex="P_v"></span> à la pression saturante <span class="tex" data-tex="P_{\mathrm{sat}}(T)"></span>. Un croisement = risque de condensation <em>dans</em> la paroi.</dd>
+      <dt>Déphasage et amortissement</dt>
+      <dd>Retard (<span class="tex" data-tex="\Delta t"></span>) et atténuation (<span class="tex" data-tex="A"></span>) de l’onde de chaleur d’été entre l’extérieur et la face intérieure.</dd>
+      <dt>ITI / ITE</dt>
+      <dd>Isolation par l’intérieur vs par l’extérieur. Même <span class="tex" data-tex="U"></span> courant, mais pas le même point froid, pas la même inertie, pas les mêmes ponts.</dd>
+    </dl>
+  </div>
+</div>
+
+<canvas id="fx-confetti"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<footer class="credit-bar" aria-label="Crédit et identification du module">
+  <div class="credit-cell">
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="credit-cell module">
+    <div class="who">R 2-9 Transferts thermiques et hydriques</div>
+    <div class="role">Laboratoire virtuel pédagogique</div>
+  </div>
+  <div class="credit-cell iut">
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const Tint = 20;
+  const TAU = Math.PI * 2;
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (id) => document.getElementById(id);
+  const fmt = (x, n = 2) => Number(x).toLocaleString("fr-FR", {
+    maximumFractionDigits: n,
+    minimumFractionDigits: n,
+  });
+
+  const THEMES = {
+    dark: {
+      ink: "#f3ebe3", muted: "#c4b5a5", faint: "rgba(196,181,165,0.45)",
+      iso: "#8a6a48", beton: "#5a646c",
+      heat: "#e08a5a", vapor: "#6bb8c9", sat: "#f47d7d",
+      ok: "#3ecf8e", warn: "#f2b73f", danger: "#f47d7d",
+      grid: "rgba(224,196,168,0.22)", axis: "#d4c4b4",
+      capBg: "rgba(42,32,24,0.88)", barMur: "#8a7a68", barVit: "#6bb8c9", barPont: "#e08a5a",
+      hall: "#3a2c22", hallStroke: "#e0c4a8", window: "#6bb8c9", ground: "#241810",
+      confetti: ["#e08a5a", "#e0c4a8", "#3ecf8e", "#f2b73f", "#c45c26", "#ffd166"],
+    },
+    light: {
+      ink: "#1f1a16", muted: "#6a5f55", faint: "rgba(106,95,85,0.4)",
+      iso: "#d9c4a8", beton: "#9aa3a8",
+      heat: "#c45c26", vapor: "#0b6e8a", sat: "#9b1c1c",
+      ok: "#1f7a4c", warn: "#a15c00", danger: "#9b1c1c",
+      grid: "rgba(207,198,187,0.55)", axis: "#3d4f5f",
+      capBg: "#f7f3ec", barMur: "#5c5346", barVit: "#0b6e8a", barPont: "#c45c26",
+      hall: "#efe6dc", hallStroke: "#5c5346", window: "#0b6e8a", ground: "#e5ddd4",
+      confetti: ["#c45c26", "#e08a5a", "#1f7a4c", "#a15c00", "#5c5346", "#c98a12"],
+    },
+  };
+  let P = THEMES.dark;
+
+  function texHTML(src) {
+    if (window.katex) {
+      try { return katex.renderToString(src, { throwOnError: false, displayMode: false, output: "html" }); }
+      catch (_) { /* fall through */ }
+    }
+    return `<span class="tex-fallback">${src}</span>`;
+  }
+  function paintStaticTex() {
+    document.querySelectorAll(".tex[data-tex]").forEach((el) => {
+      el.innerHTML = texHTML(el.getAttribute("data-tex"));
+      el.classList.add("tex-inline");
+    });
+  }
+  function kpiHTML(items) {
+    return items.map((it) => {
+      const k = it.texK ? texHTML(it.texK) + (it.kSuffix ? " " + it.kSuffix : "") : it.k;
+      return `<div class="kpi${it.wide ? " wide" : ""}"><div class="k">${k}</div><div class="v">${it.v}</div></div>`;
+    }).join("");
+  }
+  function Psat(Tc) {
+    if (Tc >= 0) return 610.5 * Math.exp((17.269 * Tc) / (237.3 + Tc));
+    return 610.5 * Math.exp((21.875 * Tc) / (265.5 + Tc));
+  }
+
+  const ORDER = ["home", "cond", "surf", "bilan", "glaser", "dyn", "rehab", "defi"];
+  const EXPLORABLE = ["cond", "surf", "bilan", "glaser", "dyn", "rehab"];
+  const buttons = [...document.querySelectorAll(".nav-btn")];
+  const ateliers = [...document.querySelectorAll(".atelier")];
+  let current = "home";
+
+  function show(id) {
+    current = id;
+    buttons.forEach((b) => {
+      const on = b.dataset.atelier === id;
+      b.classList.toggle("active", on);
+      if (on) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    ateliers.forEach((a) => a.classList.toggle("active", a.id === "atelier-" + id));
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    setTimeout(() => {
+      paintStaticTex();
+      repaintCurrent();
+      ensureAnim();
+    }, 0);
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => show(b.dataset.atelier)));
+
+  window.addEventListener("keydown", (e) => {
+    const t = e.target.tagName;
+    if (t === "INPUT" || t === "SELECT" || t === "TEXTAREA") return;
+    if (e.key === "Escape") { closeGloss(); return; }
+    if (e.key === "l" || e.key === "L") { toggleGloss(); return; }
+    const i = ORDER.indexOf(current);
+    if (e.key === "ArrowRight" && i < ORDER.length - 1) show(ORDER[i + 1]);
+    else if (e.key === "ArrowLeft" && i > 0) show(ORDER[i - 1]);
+    else if (/^[0-7]$/.test(e.key)) show(ORDER[+e.key]);
+  });
+
+  const STORE_KEY = "r29_lab_virtuel";
+  let store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme: "dark" };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      store = Object.assign(store, s);
+      store.final = Object.assign({ first: {}, best: -1 }, s.final || {});
+    }
+  } catch (_) { /* stockage indisponible */ }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (_) { /* ignore */ }
+  }
+  function starCount() { return EXPLORABLE.filter((k) => store.stars[k]).length; }
+  function rankName() {
+    const s = starCount();
+    const f = store.final.best;
+    if (s >= 6 && f >= 7) return "Ingénieur·e TTH · Valvert d’or";
+    if (s >= 5) return "Chef·fe de projet TTH";
+    if (s >= 3) return "Chargé·e d’études junior";
+    if (s >= 1) return "Technicien·ne hygrothermie";
+    return "Stagiaire pathologie";
+  }
+  function renderHud() {
+    let n = 0;
+    EXPLORABLE.forEach((k) => {
+      if (store.explored[k]) n += 1;
+      const dot = document.querySelector(`.dot[data-dot="${k}"]`);
+      if (dot) dot.classList.toggle("done", !!store.explored[k]);
+      const st = document.querySelector(`.star-ic[data-star="${k}"]`);
+      if (st) st.classList.toggle("on", !!store.stars[k]);
+    });
+    const stFinal = document.querySelector('.star-ic[data-star="final"]');
+    if (stFinal) stFinal.classList.toggle("on", store.final.best >= 7);
+    $("prog-count").textContent = n + "/6";
+    $("prog-fill").style.width = (n / 6 * 100) + "%";
+    const sc = starCount();
+    $("star-count").textContent = sc + "/6";
+    $("star-fill").style.width = (sc / 6 * 100) + "%";
+    $("rank-name").textContent = rankName();
+  }
+  function markExplored(key) {
+    if (!EXPLORABLE.includes(key) || store.explored[key]) return;
+    store.explored[key] = true;
+    save();
+    renderHud();
+  }
+
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    P = THEMES[t];
+    store.theme = t;
+    save();
+    const dark = t === "dark";
+    $("theme-ic-sun").style.display = dark ? "" : "none";
+    $("theme-ic-moon").style.display = dark ? "none" : "";
+    $("theme-label").textContent = dark ? "Passer en mode clair" : "Passer en mode sombre";
+    $("theme-btn").setAttribute("aria-pressed", String(!dark));
+    repaintAll();
+  }
+  $("theme-btn").addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+
+  function toggleGloss() {
+    const gl = $("gloss");
+    if (gl.hidden) { gl.hidden = false; paintStaticTex(); }
+    else gl.hidden = true;
+  }
+  function closeGloss() { $("gloss").hidden = true; }
+  $("gloss-btn").addEventListener("click", toggleGloss);
+  $("gloss-close").addEventListener("click", closeGloss);
+  $("gloss").addEventListener("click", (e) => { if (e.target === $("gloss")) closeGloss(); });
+
+  let confettiParts = [];
+  let confettiOn = false;
+  function confetti() {
+    if (RM) return;
+    const cv = $("fx-confetti");
+    cv.width = innerWidth;
+    cv.height = innerHeight;
+    cv.style.display = "block";
+    const cols = P.confetti;
+    for (let i = 0; i < 90; i++) {
+      confettiParts.push({
+        x: innerWidth * (0.2 + Math.random() * 0.6),
+        y: -20 - Math.random() * 80,
+        vx: (Math.random() - 0.5) * 3.2,
+        vy: 2 + Math.random() * 3.4,
+        rot: Math.random() * TAU,
+        vr: (Math.random() - 0.5) * 0.3,
+        s: 4 + Math.random() * 5,
+        c: cols[i % cols.length],
+        drop: Math.random() < 0.4,
+      });
+    }
+    if (!confettiOn) { confettiOn = true; requestAnimationFrame(confettiLoop); }
+  }
+  function confettiLoop() {
+    const cv = $("fx-confetti");
+    const ctx = cv.getContext("2d");
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    confettiParts.forEach((p) => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      if (p.drop) { ctx.beginPath(); ctx.arc(0, 0, p.s / 2, 0, TAU); ctx.fill(); }
+      else ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      ctx.restore();
+    });
+    confettiParts = confettiParts.filter((p) => p.y < cv.height + 30);
+    if (confettiParts.length > 0) requestAnimationFrame(confettiLoop);
+    else { confettiOn = false; cv.style.display = "none"; }
+  }
+
+  const heatBits = Array.from({ length: 18 }, (_, i) => ({ s: i / 18, sp: 0.012 + (i % 5) * 0.004 }));
+  function paintHero() {
+    const cv = $("cv-hero");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const t = RM ? 0 : performance.now() / 1000;
+    const gy = h - 48;
+    ctx.fillStyle = P.ground;
+    ctx.fillRect(0, gy, w, h - gy);
+    ctx.strokeStyle = P.axis;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+
+    const bx = 380, by = 70, bw = 680, bh = gy - by;
+    ctx.fillStyle = P.hall;
+    ctx.strokeStyle = P.hallStroke;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(bx - 40, by + 36);
+    ctx.lineTo(bx + bw / 2, by - 28);
+    ctx.lineTo(bx + bw + 40, by + 36);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.fillRect(bx, by + 36, bw, bh - 36);
+    ctx.strokeRect(bx, by + 36, bw, bh - 36);
+
+    const cutX = bx + 70, cutW = 210, cutY = by + 70, cutH = bh - 110;
+    const eIso = 0.12, eBet = 0.18, eTot = eIso + eBet;
+    const wI = (eIso / eTot) * cutW, wB = cutW - wI;
+    ctx.fillStyle = P.iso;
+    ctx.fillRect(cutX, cutY, wI, cutH);
+    ctx.fillStyle = P.beton;
+    ctx.fillRect(cutX + wI, cutY, wB, cutH);
+    ctx.strokeStyle = P.ink;
+    ctx.strokeRect(cutX, cutY, cutW, cutH);
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 13px 'DM Sans', sans-serif";
+    ctx.fillText("Isolant", cutX + 8, cutY + 22);
+    ctx.fillText("Béton", cutX + wI + 8, cutY + 22);
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("Intérieur", cutX - 4, cutY + cutH + 22);
+    ctx.fillText("Extérieur", cutX + cutW - 58, cutY + cutH + 22);
+
+    ctx.fillStyle = P.window;
+    for (let i = 0; i < 3; i++) {
+      const wx = bx + 330 + i * 90, wy = by + 90;
+      ctx.globalAlpha = 0.55 + 0.2 * Math.sin(t * 1.4 + i);
+      ctx.fillRect(wx, wy, 54, 70);
+    }
+    ctx.globalAlpha = 1;
+
+    heatBits.forEach((p) => {
+      p.s = (p.s + p.sp * (RM ? 0 : 1)) % 1;
+      const x = 220 + Math.sin(p.s * TAU * 2 + t) * 18;
+      const y = gy - 30 - p.s * (gy - 90);
+      ctx.fillStyle = P.heat;
+      ctx.globalAlpha = 0.25 + 0.55 * (1 - p.s);
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, TAU); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = P.heat;
+    ctx.font = "600 14px 'DM Sans', sans-serif";
+    ctx.fillText("Halle de Valvert", bx + bw / 2 - 68, by + 58);
+  }
+
+  let animOn = false;
+  function ensureAnim() {
+    if (current !== "home") return;
+    paintHero();
+    if (RM || animOn) return;
+    animOn = true;
+    const loop = () => {
+      if (current === "home" && !RM) {
+        paintHero();
+        requestAnimationFrame(loop);
+      } else animOn = false;
+    };
+    requestAnimationFrame(loop);
+  }
+
+  function updateCond() {
+    const e1 = +$("e1").value / 100, l1 = +$("l1").value;
+    const e2 = +$("e2").value / 100, l2 = +$("l2").value;
+    const Text = +$("Text").value;
+    $("v-e1").textContent = $("e1").value.replace(".", ",") + " cm";
+    $("v-l1").textContent = fmt(l1, 3) + " W/(m·K)";
+    $("v-e2").textContent = $("e2").value + " cm";
+    $("v-l2").textContent = fmt(l2, 2) + " W/(m·K)";
+    $("v-T").textContent = Tint + " / " + Text + " °C";
+    const R1 = e1 / l1, R2 = e2 / l2, Rm = R1 + R2;
+    const phi = (Tint - Text) / Rm;
+    const T12 = Tint - phi * R1;
+    $("out-cond").innerHTML = kpiHTML([
+      { texK: "R_1=e_1/\\lambda_1", v: fmt(R1, 3) + " m²·K/W" },
+      { texK: "R_2", v: fmt(R2, 3) + " m²·K/W" },
+      { texK: "R_{\\mathrm{mat}}", v: fmt(Rm, 3) + " m²·K/W", wide: true },
+      { texK: "\\varphi", v: fmt(phi, 2) + " W/m²" },
+      { texK: "T_{\\mathrm{interface}}", v: fmt(T12, 1) + " °C" },
+    ]);
+    drawCond(e1, e2, Tint, Text, T12);
+  }
+  function drawCond(e1, e2, Ti, Te, T12) {
+    const cv = $("cv-cond"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const eTot = e1 + e2;
+    const xL = 80, xR = w - 80, yTop = 36, yBot = h - 50;
+    const w1 = (e1 / eTot) * (xR - xL), w2 = (e2 / eTot) * (xR - xL);
+    ctx.fillStyle = P.iso;
+    ctx.fillRect(xL, yTop, w1, yBot - yTop);
+    ctx.fillStyle = P.beton;
+    ctx.fillRect(xL + w1, yTop, w2, yBot - yTop);
+    ctx.strokeStyle = P.axis;
+    ctx.strokeRect(xL, yTop, xR - xL, yBot - yTop);
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 13px 'DM Sans', sans-serif";
+    ctx.fillText("Isolant", xL + 12, yTop + 24);
+    ctx.fillText("Béton", xL + w1 + 12, yTop + 24);
+    const Tmin = Math.min(Ti, Te) - 2, Tmax = Math.max(Ti, Te) + 2;
+    const Y = (T) => yBot - ((T - Tmin) / (Tmax - Tmin)) * (yBot - yTop - 40) - 20;
+    ctx.strokeStyle = P.faint;
+    ctx.lineWidth = 1;
+    for (let T = Math.ceil(Tmin / 5) * 5; T <= Tmax; T += 5) {
+      const y = Y(T);
+      ctx.beginPath(); ctx.moveTo(xL - 6, y); ctx.lineTo(xL, y); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.font = "11px 'DM Sans', sans-serif";
+      ctx.fillText(String(T), xL - 28, y + 4);
+    }
+    ctx.strokeStyle = P.heat;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(xL, Y(Ti));
+    ctx.lineTo(xL + w1, Y(T12));
+    ctx.lineTo(xR, Y(Te));
+    ctx.stroke();
+    ctx.fillStyle = P.heat;
+    [[xL, Ti], [xL + w1, T12], [xR, Te]].forEach(([x, T]) => {
+      ctx.beginPath(); ctx.arc(x, Y(T), 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'IBM Plex Mono', monospace";
+      ctx.fillText(fmt(T, 1) + " °C", x - 18, Y(T) - 10);
+      ctx.fillStyle = P.heat;
+    });
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Intérieur →", xL, yBot + 28);
+    ctx.fillText("← Extérieur", xR - 90, yBot + 28);
+  }
+
+  function updateSurf() {
+    const Rmat = +$("Rmat").value, Rsi = +$("Rsi").value, Rse = +$("Rse").value;
+    const Text = +$("Text2").value, Td = +$("Td").value;
+    $("v-Rmat").textContent = fmt(Rmat, 2) + " m²·K/W";
+    $("v-Rsi").textContent = fmt(Rsi, 2) + " m²·K/W";
+    $("v-Rse").textContent = fmt(Rse, 2) + " m²·K/W";
+    $("v-Text2").textContent = Text + " °C";
+    $("v-Td").textContent = fmt(Td, 1) + " °C";
+    const Rtot = Rsi + Rmat + Rse;
+    const phi = (Tint - Text) / Rtot;
+    const Tsi = Tint - phi * Rsi;
+    const f = (Tsi - Text) / (Tint - Text);
+    const cond = Tsi < Td;
+    const frsiOk = f >= 0.9;
+    $("out-surf").innerHTML = kpiHTML([
+      { texK: "R_{\\mathrm{tot}}", v: fmt(Rtot, 3) + " m²·K/W" },
+      { texK: "\\varphi", v: fmt(phi, 2) + " W/m²" },
+      { texK: "T_{si}", v: fmt(Tsi, 1) + " °C" },
+      { texK: "f_{Rsi}", v: fmt(f, 3) },
+      {
+        k: "Par rapport au seuil " + texHTML("f_{Rsi}\\ge 0{,}90") + " (ambiance très humide, pédagogique)",
+        v: frsiOk ? `<span class="badge ok">OK (${fmt(f, 3)})</span>` : `<span class="badge bad">Sous le seuil (${fmt(f, 3)})</span>`,
+        wide: true,
+      },
+      {
+        k: "Comparaison à " + texHTML("T_{\\mathrm{rosée}}") + " (exemple)",
+        v: cond
+          ? `<span class="badge warn">Risque de condensation de surface (${texHTML("T_{si}<T_{\\mathrm{rosée}}")})</span>`
+          : `<span class="badge ok">Pas de condensation de surface dans ce réglage</span>`,
+        wide: true,
+      },
+    ]);
+    drawSurf(Tsi, Td, Text, f, frsiOk);
+  }
+  function drawSurf(Tsi, Td, Text, f, ok) {
+    const cv = $("cv-surf"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const y = h / 2;
+    const minT = Math.min(Text, Td, Tsi) - 3, maxT = Tint + 3;
+    const X = (T) => 60 + ((T - minT) / (maxT - minT)) * (w - 120);
+    ctx.strokeStyle = P.axis; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(w - 40, y); ctx.stroke();
+    function mark(T, color, label, dy) {
+      ctx.strokeStyle = color; ctx.fillStyle = color;
+      ctx.beginPath(); ctx.moveTo(X(T), y - 40); ctx.lineTo(X(T), y + 40); ctx.stroke();
+      ctx.beginPath(); ctx.arc(X(T), y, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText(label, X(T) - 20, y + dy);
+    }
+    mark(Tint, P.heat, "int.", -50);
+    mark(Tsi, ok ? P.ok : P.danger, "si", 55);
+    mark(Td, P.vapor, "rosée", -50);
+    mark(Text, P.muted, "ext.", 55);
+    $("cap-surf-top").innerHTML =
+      texHTML("f_{Rsi}") + " = " + fmt(f, 3) +
+      (ok ? "  (" + texHTML("f_{Rsi}\\ge 0{,}90") + ")" : "  (" + texHTML("f_{Rsi}<0{,}90") + ")");
+  }
+
+  function updateBilan() {
+    const Um = +$("Um").value, Am = +$("Am").value;
+    const Uv = +$("Uv").value, Av = +$("Av").value;
+    const HL = +$("HL").value;
+    const Tcons = +$("Tcons").value, Tjour = +$("Tjour").value, DJU = +$("DJU").value;
+    $("v-Um").textContent = fmt(Um, 2) + " W/(m²·K)";
+    $("v-Am").textContent = Am + " m²";
+    $("v-Uv").textContent = fmt(Uv, 2) + " W/(m²·K)";
+    $("v-Av").textContent = Av + " m²";
+    $("v-HL").textContent = fmt(HL, 1) + " W/K";
+    $("v-Tcons").textContent = Tcons + " °C";
+    $("v-Tjour").textContent = Tjour + " °C";
+    $("v-DJU").textContent = String(DJU);
+    const HDm = Um * Am, HDv = Uv * Av, HD = HDm + HDv;
+    const Htot = HD + HL;
+    const pL = Htot > 0 ? (HL / Htot) * 100 : 0;
+    const djuJour = Math.max(0, Tcons - Tjour);
+    const E_kWh = (Htot * 24 * DJU) / 1000;
+    $("out-bilan").innerHTML = kpiHTML([
+      { texK: "H_D", kSuffix: "(surfaces)", v: fmt(HD, 1) + " W/K" },
+      { texK: "H_L", kSuffix: "(ponts)", v: fmt(HL, 1) + " W/K" },
+      { texK: "H_{\\mathrm{tot}}", v: fmt(Htot, 1) + " W/K", wide: true },
+      { k: "Part des ponts dans " + texHTML("H_{\\mathrm{tot}}"), v: fmt(pL, 0) + " %", wide: true },
+      { k: "DJU du jour (consigne − " + texHTML("T_{\\mathrm{ext}}") + ")", v: fmt(djuJour, 0) + " K·j" },
+      { texK: "E_{\\mathrm{chauffage}}", kSuffix: "(saison, approx.)", v: fmt(E_kWh, 0) + " kWh", wide: true },
+    ]);
+    drawBilan(HDm, HDv, HL, Htot);
+    drawDju(Tcons, Tjour, djuJour, DJU, E_kWh);
+  }
+  function drawBilan(HDm, HDv, HL, Htot) {
+    const cv = $("cv-bilan"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const parts = [
+      { n: "Mur", v: HDm, c: P.barMur },
+      { n: "Vitrage", v: HDv, c: P.barVit },
+      { n: "Ponts", v: HL, c: P.barPont },
+    ];
+    const max = Math.max(...parts.map((p) => p.v), 1);
+    const base = h - 40, scale = 180 / max;
+    parts.forEach((p, i) => {
+      const x = 100 + i * 180;
+      const bh = p.v * scale;
+      ctx.fillStyle = p.c;
+      ctx.fillRect(x, base - bh, 80, bh);
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText(p.n, x + 18, base + 18);
+      ctx.font = "600 12px 'IBM Plex Mono', monospace";
+      ctx.fillText(fmt(p.v, 1), x + 10, base - bh - 8);
+    });
+    $("cap-bilan-top").innerHTML =
+      texHTML("H_{\\mathrm{tot}}") + " = " + fmt(Htot, 1) + " W/K  (somme des trois barres)";
+  }
+  function drawDju(Tcons, Tjour, djuJour, DJU, E_kWh) {
+    const cv = $("cv-dju"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const x0 = 70, x1 = w - 40, y0 = 36, y1 = h - 55;
+    const Tmin = -6, Tmax = 22, nDays = 14;
+    const Y = (T) => y1 - ((T - Tmin) / (Tmax - Tmin)) * (y1 - y0);
+    const X = (d) => x0 + ((d + 0.5) / nDays) * (x1 - x0);
+    const days = [];
+    for (let d = 0; d < nDays; d++) {
+      const wave = 3 * Math.sin((d / nDays) * Math.PI * 2);
+      days.push(Math.max(Tmin + 1, Math.min(Tmax - 1, Tjour + wave)));
+    }
+    days[Math.floor(nDays / 2)] = Tjour;
+    ctx.strokeStyle = P.axis; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.font = "11px 'DM Sans', sans-serif";
+    for (let T = -5; T <= 20; T += 5) {
+      const y = Y(T);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x0 - 5, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(String(T), x0 - 28, y + 4);
+    }
+    ctx.strokeStyle = P.heat;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.moveTo(x0, Y(Tcons)); ctx.lineTo(x1, Y(Tcons)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = P.heat;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("Consigne " + Tcons + " °C", x1 - 110, Y(Tcons) - 8);
+    days.forEach((Te, d) => {
+      if (Te >= Tcons) return;
+      const x = X(d);
+      const barW = (x1 - x0) / nDays * 0.7;
+      ctx.fillStyle = d === Math.floor(nDays / 2) ? P.heat : P.heat;
+      ctx.globalAlpha = d === Math.floor(nDays / 2) ? 0.45 : 0.22;
+      ctx.fillRect(x - barW / 2, Y(Tcons), barW, Y(Te) - Y(Tcons));
+    });
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = P.vapor; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    days.forEach((Te, d) => {
+      const x = X(d), y = Y(Te);
+      if (d === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    days.forEach((Te, d) => {
+      ctx.fillStyle = d === Math.floor(nDays / 2) ? P.vapor : P.muted;
+      ctx.beginPath();
+      ctx.arc(X(d), Y(Te), d === Math.floor(nDays / 2) ? 5 : 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.fillStyle = P.muted;
+    ctx.font = "11px 'DM Sans', sans-serif";
+    for (let d = 0; d < nDays; d += 2) {
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(X(d), y1); ctx.lineTo(X(d), y1 + 5); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(String(d + 1), X(d) - 4, y1 + 18);
+    }
+    ctx.fillText("jours", x1 - 30, y1 + 18);
+    $("cap-dju-bot").innerHTML =
+      "Jour mis en avant : " + texHTML("T_{\\mathrm{ext}}") + " = " + Tjour + " °C → " + fmt(djuJour, 0) +
+      " DJU  ·  Saison : " + DJU + " DJU → E ≈ " + fmt(E_kWh, 0) + " kWh";
+  }
+
+  function updateGlaser() {
+    const HRi = +$("HRi").value / 100;
+    const Sd1 = +$("Sd1").value, Sd2 = +$("Sd2").value, SdPV = +$("SdPV").value;
+    $("v-HRi").textContent = Math.round(HRi * 100) + " %";
+    $("v-Sd1").textContent = fmt(Sd1, 2) + " m";
+    $("v-Sd2").textContent = fmt(Sd2, 1) + " m";
+    $("v-SdPV").textContent = fmt(SdPV, 0) + " m";
+    const T = [20, 12, 2, -2];
+    const Text = -2;
+    const HRe = 0.8;
+    const PsatN = T.map(Psat);
+    const PvInt = HRi * PsatN[0];
+    const PvExt = HRe * Psat(Text);
+    const SdWarm = SdPV + Sd1;
+    const SdTot = SdWarm + Sd2;
+    const PvIf = PvInt - (PvInt - PvExt) * (SdWarm / SdTot);
+    const risk = PvIf > PsatN[2];
+    $("out-glaser").innerHTML = kpiHTML([
+      { texK: "P_{v,\\mathrm{int}}", v: fmt(PvInt, 0) + " Pa" },
+      { texK: "P_{v,\\mathrm{ext}}", v: fmt(PvExt, 0) + " Pa" },
+      { texK: "P_{v,\\mathrm{interface}}", v: fmt(PvIf, 0) + " Pa" },
+      { texK: "P_{sat,\\mathrm{interface}}", v: fmt(PsatN[2], 0) + " Pa" },
+      {
+        k: "Diagnostic à l’interface (côté froid de l’isolant)",
+        v: risk
+          ? `<span class="badge bad">Risque de condensation (${texHTML("P_v>P_{\\mathrm{sat}}")})</span>`
+          : `<span class="badge ok">Pas de croisement dans ce réglage</span>`,
+        wide: true,
+      },
+    ]);
+    drawGlaser([PvInt, PvIf, PvExt], [PsatN[0], PsatN[2], Psat(Text)], SdWarm, Sd2, risk);
+  }
+  function drawGlaser(Pv, Ps, SdW, SdC, risk) {
+    const cv = $("cv-glaser"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const x0 = 70, x1 = w - 50, y0 = 48, y1 = h - 60;
+    const SdT = SdW + SdC;
+    const X = (sd) => x0 + (sd / SdT) * (x1 - x0);
+    const Pmax = Math.max(...Pv, ...Ps) * 1.15;
+    const Y = (p) => y1 - (p / Pmax) * (y1 - y0);
+    ctx.fillStyle = P.iso;
+    ctx.fillRect(x0, y0, X(SdW) - x0, y1 - y0);
+    ctx.fillStyle = P.beton;
+    ctx.fillRect(X(SdW), y0, x1 - X(SdW), y1 - y0);
+    ctx.strokeStyle = P.axis;
+    ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+    ctx.strokeStyle = P.sat; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.moveTo(x0, Y(Ps[0])); ctx.lineTo(X(SdW), Y(Ps[1])); ctx.lineTo(x1, Y(Ps[2])); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = P.vapor; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x0, Y(Pv[0])); ctx.lineTo(X(SdW), Y(Pv[1])); ctx.lineTo(x1, Y(Pv[2])); ctx.stroke();
+    if (risk) {
+      ctx.fillStyle = P.danger;
+      ctx.globalAlpha = 0.18;
+      ctx.beginPath(); ctx.arc(X(SdW), Y(Pv[1]), 16, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 12px 'DM Sans', sans-serif";
+    ctx.fillText("Couche 1 : isolant (+ PV éventuel)", x0 + 8, y0 + 18);
+    ctx.fillText("Couche 2 : béton", X(SdW) + 8, y0 + 18);
+    ctx.font = "11px 'DM Sans', sans-serif";
+    ctx.fillStyle = P.muted;
+    ctx.fillText("← intérieur / chaud", x0 + 8, y0 + 36);
+    ctx.fillText("extérieur / froid →", x1 - 118, y0 + 36);
+    ctx.strokeStyle = P.axis; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.fillStyle = P.muted;
+    ctx.font = "11px 'DM Sans', sans-serif";
+    for (let i = 0; i <= 5; i++) {
+      const sd = (SdT * i) / 5;
+      const x = X(sd);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y1 + 6); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(fmt(sd, sd >= 10 ? 0 : 1), x - 10, y1 + 20);
+    }
+    ctx.strokeStyle = P.heat;
+    ctx.beginPath(); ctx.moveTo(X(SdW), y1); ctx.lineTo(X(SdW), y1 + 10); ctx.stroke();
+    ctx.fillStyle = P.heat;
+    ctx.font = "10px 'DM Sans', sans-serif";
+    ctx.fillText("interface", X(SdW) - 22, y1 + 34);
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("INTÉRIEUR", x0 - 8, y1 + 48);
+    ctx.fillText("EXTÉRIEUR", x1 - 70, y1 + 48);
+  }
+
+  function updateDyn() {
+    const e = +$("ed").value / 100, lam = +$("ld").value, rho = +$("rd").value, cp = +$("cp").value;
+    $("v-ed").textContent = $("ed").value + " cm";
+    $("v-ld").textContent = fmt(lam, 2) + " W/(m·K)";
+    $("v-rd").textContent = rho + " kg/m³";
+    $("v-cp").textContent = cp + " J/(kg·K)";
+    const a = lam / (rho * cp);
+    const T0 = 86400;
+    const dtH = (e * Math.sqrt(T0 / (4 * Math.PI * a))) / 3600;
+    const A = Math.exp(-e * Math.sqrt(Math.PI / (a * T0)));
+    $("out-dyn").innerHTML = kpiHTML([
+      { texK: "a=\\lambda/(\\rho c_p)", v: a.toExponential(2).replace(".", ",") + " m²/s", wide: true },
+      { texK: "\\Delta t", kSuffix: "(déphasage)", v: fmt(dtH, 1) + " h" },
+      { texK: "A", kSuffix: "(amortissement)", v: fmt(A, 3) },
+    ]);
+    drawDyn(dtH, A);
+  }
+  function drawDyn(dtH, A) {
+    const cv = $("cv-dyn"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const Tmoy = 25, Amp = 8, tmax = 15;
+    const x0 = 58, x1 = w - 40, y0 = 28, y1 = h - 55;
+    const Tlo = Tmoy - Amp - 1, Thi = Tmoy + Amp + 1;
+    const X = (t) => x0 + (t / 24) * (x1 - x0);
+    const Y = (T) => y1 - ((T - Tlo) / (Thi - Tlo)) * (y1 - y0);
+    ctx.strokeStyle = P.axis; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.font = "11px 'DM Sans', sans-serif";
+    for (let T = 18; T <= 34; T += 2) {
+      if (T < Tlo || T > Thi) continue;
+      const y = Y(T);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x0 - 5, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(String(T), x0 - 28, y + 4);
+    }
+    ctx.strokeStyle = P.faint;
+    ctx.beginPath(); ctx.moveTo(x0, Y(Tmoy)); ctx.lineTo(x1, Y(Tmoy)); ctx.stroke();
+    for (let t = 0; t <= 24; t += 2) {
+      const x = X(t);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y1 + 6); ctx.stroke();
+      if (t % 4 === 0) {
+        ctx.fillStyle = P.muted;
+        ctx.fillText(t + " h", x - 8, y1 + 20);
+      }
+    }
+    function wave(color, delay, ampFac, width) {
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      ctx.beginPath();
+      for (let t = 0; t <= 24; t += 0.25) {
+        const T = Tmoy + Amp * ampFac * Math.cos((2 * Math.PI / 24) * (t - (tmax + delay)));
+        const x = X(t), y = Y(T);
+        if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    wave(P.heat, 0, 1, 2.5);
+    wave(P.ok, dtH, A, 2.5);
+    const tPeakExt = tmax, tPeakInt = tmax + dtH;
+    const markPeak = (t, color, label, dy, ampFac) => {
+      const tt = ((t % 24) + 24) % 24;
+      const T = Tmoy + Amp * ampFac;
+      ctx.strokeStyle = color; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(X(tt), Y(T)); ctx.lineTo(X(tt), y1); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(X(tt), Y(T), 4, 0, Math.PI * 2); ctx.fill();
+      ctx.font = "11px 'DM Sans', sans-serif";
+      ctx.fillText(label, X(tt) + 4, Y(T) + dy);
+    };
+    markPeak(tPeakExt, P.heat, "max ext.", -10, 1);
+    markPeak(tPeakInt, P.ok, "max int.", 16, A);
+    if (dtH > 0.5) {
+      const yArr = y1 - 12;
+      const xA = X(((tPeakExt % 24) + 24) % 24);
+      const xB = X(((tPeakInt % 24) + 24) % 24);
+      ctx.strokeStyle = P.ink; ctx.fillStyle = P.ink; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(xA, yArr); ctx.lineTo(xB, yArr); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(xA, yArr - 4); ctx.lineTo(xA, yArr + 4);
+      ctx.moveTo(xB, yArr - 4); ctx.lineTo(xB, yArr + 4);
+      ctx.stroke();
+      ctx.font = "600 12px 'DM Sans', sans-serif";
+      const label = "Δt ≈ " + fmt(dtH, 1) + " h";
+      const mid = (xA + xB) / 2;
+      ctx.fillStyle = P.capBg;
+      ctx.fillRect(mid - 38, yArr - 16, 76, 14);
+      ctx.fillStyle = P.ink;
+      ctx.fillText(label, mid - 34, yArr - 5);
+    }
+    $("cap-dyn-top").innerHTML =
+      "Orange : " + texHTML("T_{\\mathrm{ext}}") +
+      "  ·  Vert : face intérieure  ·  " +
+      texHTML("\\Delta t") + " ≈ " + fmt(dtH, 1) + " h  ·  " +
+      texHTML("A") + " = " + fmt(A, 2) +
+      "  ·  axe vertical : " + texHTML("T") + " (°C)";
+  }
+
+  function updateRehab() {
+    const pos = $("pos").value;
+    const e = +$("eiso").value / 100, lam = +$("liso").value, HL = +$("HLr").value;
+    $("v-eiso").textContent = $("eiso").value + " cm";
+    $("v-liso").textContent = fmt(lam, 3) + " W/(m·K)";
+    $("v-HLr").textContent = fmt(HL, 1) + " W/K";
+    const Riso = e / lam;
+    const Rbet = 0.18 / 1.80;
+    const Rtot = 0.13 + Riso + Rbet + 0.04;
+    const U = 1 / Rtot;
+    const msg = pos === "iti"
+      ? "ITI : béton côté froid — interface isolant/béton à surveiller (Glaser) ; ponts de plancher souvent élevés ; inertie intérieure masquée."
+      : "ITE : béton côté chaud — masse accessible pour l’été ; point froid repoussé ; " + texHTML("H_L") + " souvent réduit si enveloppe continue.";
+    $("out-rehab").innerHTML = kpiHTML([
+      { texK: "R_{\\mathrm{isolant}}", v: fmt(Riso, 2) + " m²·K/W" },
+      { texK: "U_{\\mathrm{mur}}", kSuffix: "(courant, approx.)", v: fmt(U, 3) + " W/(m²·K)" },
+      { texK: "H_L", v: fmt(HL, 1) + " W/K" },
+      { k: "Lecture ingénieur", v: msg, wide: true },
+    ]);
+    drawRehab(pos, e, 0.18);
+  }
+  function drawRehab(pos, eIso, eBet) {
+    const cv = $("cv-rehab"), ctx = cv.getContext("2d");
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    const y0 = 55, th = 160;
+    const xL = 100, xR = w - 100;
+    const eTot = eIso + eBet;
+    const wI = (eIso / eTot) * (xR - xL), wB = (eBet / eTot) * (xR - xL);
+    ctx.fillStyle = P.muted;
+    ctx.font = "600 14px 'DM Sans', sans-serif";
+    ctx.fillText(pos === "iti" ? "Configuration ITI (isolant à l’intérieur)" : "Configuration ITE (isolant à l’extérieur)", 40, 32);
+    if (pos === "iti") {
+      ctx.fillStyle = P.iso; ctx.fillRect(xL, y0, wI, th);
+      ctx.fillStyle = P.beton; ctx.fillRect(xL + wI, y0, wB, th);
+      ctx.fillStyle = P.ink;
+      ctx.fillText("Isolant (" + Math.round(eIso * 100) + " cm)", xL + 10, y0 + 28);
+      ctx.fillText("Béton (" + Math.round(eBet * 100) + " cm)", xL + wI + 10, y0 + 28);
+      ctx.fillStyle = P.danger;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText("Interface à risque hygro ↓", xL + wI - 40, y0 + th + 24);
+      ctx.beginPath(); ctx.arc(xL + wI, y0 + th / 2, 8, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.fillStyle = P.beton; ctx.fillRect(xL, y0, wB, th);
+      ctx.fillStyle = P.iso; ctx.fillRect(xL + wB, y0, wI, th);
+      ctx.fillStyle = P.ink;
+      ctx.fillText("Béton (" + Math.round(eBet * 100) + " cm, inertie)", xL + 10, y0 + 28);
+      ctx.fillText("Isolant (" + Math.round(eIso * 100) + " cm)", xL + wB + 10, y0 + 28);
+      ctx.fillStyle = P.ok;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText("Point froid repoussé à l’extérieur →", xL + wB - 20, y0 + th + 24);
+      ctx.beginPath(); ctx.arc(xL + wB + wI, y0 + th / 2, 8, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.strokeStyle = P.axis;
+    ctx.strokeRect(xL, y0, xR - xL, th);
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Intérieur", xL, y0 + th + 48);
+    ctx.fillText("Extérieur", xR - 70, y0 + th + 48);
+  }
+
+  function syncFill(inp) {
+    if (inp.type !== "range") return;
+    const p = ((+inp.value - +inp.min) / (+inp.max - +inp.min)) * 100;
+    inp.style.setProperty("--p", p + "%");
+  }
+  const GROUPS = {
+    cond: ["e1", "l1", "e2", "l2", "Text"],
+    surf: ["Rmat", "Rsi", "Rse", "Text2", "Td"],
+    bilan: ["Um", "Am", "Uv", "Av", "HL", "Tcons", "Tjour", "DJU"],
+    glaser: ["HRi", "Sd1", "Sd2", "SdPV"],
+    dyn: ["ed", "ld", "rd", "cp"],
+    rehab: ["pos", "eiso", "liso", "HLr"],
+  };
+  const UPDATERS = {
+    cond: updateCond, surf: updateSurf, bilan: updateBilan,
+    glaser: updateGlaser, dyn: updateDyn, rehab: updateRehab,
+  };
+  const DEFAULTS = {};
+  Object.entries(GROUPS).forEach(([key, ids]) => {
+    ids.forEach((id) => {
+      const inp = $(id);
+      DEFAULTS[id] = inp.tagName === "SELECT" ? inp.value : inp.getAttribute("value");
+      inp.addEventListener("input", () => {
+        syncFill(inp);
+        markExplored(key);
+        UPDATERS[key]();
+      });
+    });
+  });
+  function resetGroup(key) {
+    GROUPS[key].forEach((id) => {
+      const inp = $(id);
+      inp.value = DEFAULTS[id];
+      syncFill(inp);
+    });
+    UPDATERS[key]();
+  }
+  document.querySelectorAll(".reset-btn").forEach((btn) => {
+    btn.addEventListener("click", () => resetGroup(btn.dataset.reset));
+  });
+
+  let toastTimer;
+  function showToast(msg) {
+    const el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+  $("wipe-btn").addEventListener("click", () => {
+    const ok = window.confirm(
+      "Remettre à zéro tout le laboratoire ?\n\nÉtoiles, Défis express, Grand contrôle, ateliers explorés et curseurs seront effacés. Le thème clair/sombre est conservé."
+    );
+    if (!ok) return;
+    const theme = store.theme === "light" ? "light" : "dark";
+    store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme };
+    save();
+    Object.keys(GROUPS).forEach(resetGroup);
+    renderAllQuizzes();
+    $("final-panel").hidden = true;
+    renderHud();
+    show("home");
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    showToast("Progression remise à zéro — vous pouvez tout refaire.");
+  });
+
+  const tex = (s) => {
+    const esc = String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return `<span class="tex" data-tex="${esc}"></span>`;
+  };
+  const QUIZ = {
+    cond: [
+      {
+        q: `On double l’épaisseur ${tex("e")} d’une couche, ${tex("\\lambda")} fixe. Que devient ${tex("R=e/\\lambda")} ?`,
+        opts: [
+          { t: `Elle double`, ok: true, fb: `Exact : ${tex("R")} est proportionnelle à ${tex("e")}. Sur le schéma, la couche s’élargit (largeur ∝ ${tex("e")}) et la pente de ${tex("T")} se raidit (plus de ${tex("R")}).` },
+          { t: `Elle est divisée par 2`, fb: `${tex("e")} est au numérateur : l’épaissir augmente ${tex("R")}, ça ne la réduit pas.` },
+          { t: `Elle ne change pas`, fb: `Sans ${tex("e")} ni ${tex("\\lambda")}, pas de ${tex("R")}. Ici ${tex("e")} a changé.` },
+        ],
+        apply: { set: { e1: 16 }, label: "Voir sur le schéma : e₁ = 16 cm" },
+      },
+      {
+        q: `On augmente ${tex("\\lambda")} de l’isolant (matériau « fatigué »). Sur le dessin, la couche isolant…`,
+        opts: [
+          { t: `ne s’élargit pas : la pente de ${tex("T")} s’adoucit`, ok: true, fb: `Oui : largeurs ∝ ${tex("e")}, pas ∝ ${tex("R")}. ${tex("\\lambda")} plus grand ⇒ ${tex("R")} plus petit ⇒ chute de ${tex("T")} plus faible dans cette couche.` },
+          { t: `s’élargit, parce que ${tex("R")} a changé`, fb: `Piège classique : le schéma ne « gonfle » pas une couche quand ${tex("\\lambda")} monte. C’est la pente qui porte ${tex("R")}.` },
+          { t: `disparaît`, fb: `Le matériau est toujours là : il conduit simplement mieux.` },
+        ],
+        apply: { set: { l1: 0.09 }, label: "Voir sur le schéma : λ₁ plus élevé" },
+      },
+    ],
+    surf: [
+      {
+        q: `Condensation de surface : elle apparaît quand…`,
+        opts: [
+          { t: `${tex("T_{si}")} passe sous ${tex("T_{\\mathrm{rosée}}")}`, ok: true, fb: `Oui : la face intérieure est alors plus froide que le point de rosée de l’air — l’eau se dépose.` },
+          { t: `${tex("T_{\\mathrm{ext}}")} est positive`, fb: `Le signe de ${tex("T_{\\mathrm{ext}}")} ne suffit pas : c’est le couple ${tex("T_{si}")} / rosée qui compte.` },
+          { t: `${tex("R_{si}")} est nulle`, fb: `${tex("R_{si}")} n’est jamais nulle en pratique ; elle participe à ${tex("T_{si}=T_{int}-\\varphi R_{si}")}.` },
+        ],
+      },
+      {
+        q: `On baisse ${tex("R_{\\mathrm{mat}}")} (mur moins isolé). ${tex("f_{Rsi}")} et le risque de buée…`,
+        opts: [
+          { t: `${tex("f_{Rsi}")} diminue, le risque de buée augmente`, ok: true, fb: `Flux ${tex("\\varphi")} plus fort ⇒ chute ${tex("\\varphi R_{si}")} plus grande ⇒ ${tex("T_{si}")} plus basse. Essayez le curseur.` },
+          { t: `${tex("f_{Rsi}")} augmente`, fb: `Moins d’isolant refroidit la face intérieure, ça n’améliore pas ${tex("f_{Rsi}")}.` },
+          { t: `rien ne change : ${tex("f_{Rsi}")} ne dépend que de ${tex("T_{\\mathrm{ext}}")}`, fb: `${tex("f_{Rsi}")} caractérise la paroi, pas la météo — mais il dépend bien de ${tex("R_{\\mathrm{mat}}")}.` },
+        ],
+        apply: { set: { Rmat: 0.6 }, label: "Voir sur le schéma : Rmat faible" },
+      },
+    ],
+    bilan: [
+      {
+        q: `Le coefficient ${tex("U")} et la résistance ${tex("R_{\\mathrm{tot}}")} sont liés par…`,
+        opts: [
+          { t: `${tex("U=1/R_{\\mathrm{tot}}")}`, ok: true, fb: `Oui : plus la paroi résiste, moins elle transmet. Les unités s’inversent (W/(m²·K) ↔ m²·K/W).` },
+          { t: `${tex("U=R_{\\mathrm{tot}}")}`, fb: `Ce serait la même grandeur deux fois — or ${tex("U")} et ${tex("R")} sont inverses.` },
+          { t: `${tex("U=R_{\\mathrm{tot}}\\times A")}`, fb: `Le produit ${tex("U A")} donne une contribution à ${tex("H_D")}, pas ${tex("U")} lui-même.` },
+        ],
+      },
+      {
+        q: `On isole mieux le mur courant (on baisse ${tex("U_{\\mathrm{mur}}")}) sans toucher aux ponts. ${tex("H_{\\mathrm{tot}}")}…`,
+        opts: [
+          { t: `baisse, mais la part des ponts ${tex("H_L")} dans le total augmente`, ok: true, fb: `Les ponts ne « disparaissent » pas : ils pèsent relativement plus quand le courant est meilleur. D’où l’intérêt de les traiter aussi.` },
+          { t: `est inchangé, car seuls les ponts comptent`, fb: `${tex("H_D=\\sum U A")} bouge bien quand ${tex("U")} du mur change.` },
+          { t: `tombe à zéro`, fb: `Il reste le vitrage et les ponts — le bilan n’est jamais « tout le mur ».` },
+        ],
+        apply: { set: { Um: 0.2 }, label: "Voir les barres : U mur plus bas" },
+      },
+    ],
+    glaser: [
+      {
+        q: `Risque de condensation interstitielle : on le lit quand…`,
+        opts: [
+          { t: `la courbe ${tex("P_v")} croise ${tex("P_{\\mathrm{sat}}")} (${tex("P_v>P_{\\mathrm{sat}}")})`, ok: true, fb: `C’est le diagnostic de Glaser : trop de vapeur pour la température locale.` },
+          { t: `${tex("S_d")} de l’isolant est grand`, fb: `Un grand ${tex("S_d")} côté chaud (pare-vapeur) protège souvent ; ce n’est pas le signal de risque.` },
+          { t: `le béton est plus épais que l’isolant`, fb: `L’abscisse n’est pas l’épaisseur géométrique : c’est ${tex("S_d")}.` },
+        ],
+        apply: { set: { HRi: 90 }, label: "Voir le croisement : HR haute" },
+      },
+      {
+        q: `En hiver, un pare-vapeur se pose…`,
+        opts: [
+          { t: `côté chaud (intérieur)`, ok: true, fb: `Il freine la vapeur avant le point froid. Côté froid, il piégerait l’humidité dans la paroi.` },
+          { t: `côté froid (extérieur)`, fb: `Classique erreur : la vapeur entrerait puis buterait contre le froid — condensation garantie.` },
+          { t: `indifféremment, ${tex("S_d")} total suffit`, fb: `L’ordre des résistances vapeur compte autant que leur somme.` },
+        ],
+        apply: { set: { SdPV: 20 }, label: "Voir l’effet d’un PV côté chaud" },
+      },
+    ],
+    dyn: [
+      {
+        q: `Le déphasage, c’est…`,
+        opts: [
+          { t: `le retard entre le maximum de ${tex("T_{\\mathrm{ext}}")} et le maximum à la face intérieure`, ok: true, fb: `Sur le schéma : la barre ${tex("\\Delta t")} entre les deux pics. Utile pour décaler la surchauffe après les heures d’occupation.` },
+          { t: `la différence ${tex("T_{int}-T_{\\mathrm{ext}}")} en régime permanent`, fb: `Ça, c’est un écart stationnaire — pas une onde dans le temps.` },
+          { t: `l’épaisseur de l’isolant en centimètres`, fb: `${tex("e")} influence ${tex("\\Delta t")}, mais le déphasage s’exprime en heures.` },
+        ],
+      },
+      {
+        q: `On passe d’un béton dense à un isolant léger (${tex("\\lambda")} ↓ et ${tex("\\rho")} ↓). L’onde intérieure…`,
+        opts: [
+          { t: `s’écrase souvent moins : un isolant léger transmet plus vite le pic`, ok: true, fb: `Faible masse, diffusivité pas forcément petite : le signal intérieur reste plus « nerveux ». L’inertie utile, c’est la masse accessible.` },
+          { t: `disparaît toujours, car l’isolant bloque toute chaleur`, fb: `L’isolant réduit le flux moyen, mais le transitoire d’été est une autre histoire — surtout côté vitrages.` },
+          { t: `est identique : seul ${tex("U")} compte`, fb: `${tex("U")} parle du stationnaire. Déphasage et amortissement parlent de ${tex("a=\\lambda/(\\rho c_p)")}.` },
+        ],
+        apply: { set: { ld: 0.04, rd: 40 }, label: "Voir l’onde : isolant léger" },
+      },
+    ],
+    rehab: [
+      {
+        q: `À même isolant, passer d’ITI à ITE déplace surtout…`,
+        opts: [
+          { t: `le point froid vers l’extérieur, et rend la masse béton accessible à l’intérieur`, ok: true, fb: `Hiver : interface à risque hygro repoussée. Été : le béton peut tamponner. Les ponts de dalle baissent souvent aussi.` },
+          { t: `${tex("U")} du mur courant d’un facteur 10`, fb: `Le ${tex("U")} courant change peu si ${tex("e")} et ${tex("\\lambda")} de l’isolant sont les mêmes — c’est le reste (ponts, hygro, inertie) qui change.` },
+          { t: `uniquement la couleur du schéma`, fb: `Les largeurs suivent les épaisseurs ; la physique, elle, change de côté.` },
+        ],
+        apply: { set: { pos: "ite" }, label: "Voir le schéma ITE" },
+      },
+      {
+        q: `En été, l’ITI est souvent moins confortable que l’ITE parce que…`,
+        opts: [
+          { t: `le béton (inertie) est du mauvais côté : coupé de l’ambiance intérieure`, ok: true, fb: `La masse utile est celle que l’air intérieur « voit ». En ITI, elle est derrière l’isolant.` },
+          { t: `${tex("\\lambda")} de l’isolant devient plus grand l’été`, fb: `${tex("\\lambda")} ne bascule pas avec la saison de façon pédagogique ici.` },
+          { t: `l’ITE interdit toute ventilation`, fb: `Ventiler, c’est un autre levier (VMC). La position d’isolant joue sur l’inertie et les ponts.` },
+        ],
+      },
+    ],
+    final: [
+      {
+        q: `${tex("R=e/\\lambda")} : si on double ${tex("e")} à ${tex("\\lambda")} fixe, ${tex("R")}…`,
+        opts: [
+          { t: `double`, ok: true, fb: `Le réflexe n°1 du module — et ${tex("e")} en mètres dans la formule.` },
+          { t: `est divisée par 2`, fb: `${tex("e")} est au numérateur.` },
+          { t: `reste constante`, fb: `Deux grandeurs dans la formule : l’une a changé.` },
+        ],
+      },
+      {
+        q: `Buée sur la face intérieure si…`,
+        opts: [
+          { t: `${tex("T_{si}<T_{\\mathrm{rosée}}")}`, ok: true, fb: `Comparaison directe, pas un seuil magique de météo.` },
+          { t: `${tex("T_{\\mathrm{ext}}<0")}`, fb: `Il peut geler dehors sans buée dedans — si ${tex("T_{si}")} reste au-dessus de la rosée.` },
+          { t: `${tex("U")} est petit`, fb: `Un petit ${tex("U")} réchauffe plutôt ${tex("T_{si}")}.` },
+        ],
+      },
+      {
+        q: `${tex("U")} et ${tex("R_{\\mathrm{tot}}")} :`,
+        opts: [
+          { t: `ils sont inverses : ${tex("U=1/R_{\\mathrm{tot}}")}`, ok: true, fb: `Isoler plus = ${tex("R")} ↑ = ${tex("U")} ↓.` },
+          { t: `ils s’additionnent`, fb: `On n’ajoute pas une transmission et une résistance.` },
+          { t: `${tex("U=R_{\\mathrm{tot}}\\times e")}`, fb: `L’épaisseur est déjà dans ${tex("R=e/\\lambda")}.` },
+        ],
+      },
+      {
+        q: `Dans un diagramme de Glaser, un croisement ${tex("P_v>P_{\\mathrm{sat}}")} signifie…`,
+        opts: [
+          { t: `un risque de condensation dans la paroi`, ok: true, fb: `Interstitielle — pas seulement de la buée en surface.` },
+          { t: `que le mur est trop isolé`, fb: `L’isolation n’est pas le diagnostic : c’est vapeur vs saturante.` },
+          { t: `que ${tex("S_d")} est nul partout`, fb: `${tex("S_d")} n’est jamais nul ; le problème est le profil de ${tex("P_v")} vs ${tex("T")}.` },
+        ],
+      },
+      {
+        q: `Le déphasage d’été, c’est essentiellement…`,
+        opts: [
+          { t: `un retard (en heures) du pic de chaleur`, ok: true, fb: `Lire ${tex("\\Delta t")} entre max ext. et max int. sur le schéma.` },
+          { t: `la valeur de ${tex("U")} en W/(m²·K)`, fb: `${tex("U")} est stationnaire ; le déphasage est dynamique.` },
+          { t: `l’humidité relative intérieure`, fb: `La HR parle vapeur, pas onde thermique.` },
+        ],
+      },
+      {
+        q: `ITI vs ITE, à même isolant : en hiver le point froid…`,
+        opts: [
+          { t: `est plus à l’extérieur en ITE`, ok: true, fb: `Le béton reste au chaud ; l’interface à risque hygro est repoussée.` },
+          { t: `reste au même endroit : seul ${tex("U")} compte`, fb: `La position de l’isolant déplace le profil de ${tex("T")}.` },
+          { t: `disparaît en ITI`, fb: `En ITI, l’interface isolant/béton est souvent le point à surveiller.` },
+        ],
+      },
+      {
+        q: `En été, l’ITE est en général plus confortable car…`,
+        opts: [
+          { t: `la masse (béton) reste accessible depuis l’intérieur`, ok: true, fb: `Elle tamponne les apports. En ITI, cette masse est « derrière » l’isolant.` },
+          { t: `l’ITE interdit le soleil`, fb: `Les vitrages restent le gros levier solaire — l’ITE joue sur l’opaque et l’inertie.` },
+          { t: `${tex("\\lambda")} du béton devient nul`, fb: `Le béton conduit toujours : c’est sa capacité qui est utile, côté intérieur.` },
+        ],
+      },
+      {
+        q: `Baisser ${tex("U")} du mur sans traiter les ponts…`,
+        opts: [
+          { t: `améliore le courant, mais laisse ${tex("H_L")} intact — gains partiels`, ok: true, fb: `Les jonctions (dalles, menuiseries) continuent de fuir. D’où l’ITE, souvent, sur ce levier-là aussi.` },
+          { t: `annule automatiquement tous les ponts`, fb: `Les ponts sont des lignes, pas des surfaces : ${tex("U")} du courant ne les efface pas.` },
+          { t: `augmente ${tex("H_{\\mathrm{tot}}")}`, fb: `Le terme ${tex("H_D")} baisse ; le total baisse, mais moins qu’on ne croit si ${tex("H_L")} est gros.` },
+        ],
+      },
+    ],
+  };
+
+  function shuffleOpts(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+  Object.keys(QUIZ).forEach((k) => {
+    QUIZ[k].forEach((item) => {
+      item.opts = shuffleOpts(item.opts);
+    });
+  });
+
+  function quizSolved(a) { return store.quiz[a] || {}; }
+  function renderQuiz(a) {
+    const host = $("quiz-" + a);
+    if (!host) return;
+    const solved = quizSolved(a);
+    const banner = `<p class="quiz-banner">Formative seulement : ces questions entraînent un réflexe. Elles ne donnent aucune valeur à recopier dans le dossier « Sueurs Froides au Grand Bain ».</p>`;
+    host.innerHTML = banner + QUIZ[a].map((item, i) => {
+      const done = !!solved[i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      return `<div class="quiz-q${done ? " solved" : ""}" data-a="${a}" data-i="${i}">
+        <p class="q-txt"><span class="q-num">${i + 1}</span>${item.q}</p>
+        <div class="q-opts">${item.opts.map((o, j) => `
+          <button class="opt${done && j === okIdx ? " correct" : ""}${done && j !== okIdx ? " dim" : ""}" type="button" data-j="${j}" ${done ? "disabled" : ""}>
+            <span class="letter">${"ABCD"[j]}</span><span>${o.t}</span>
+          </button>`).join("")}
+        </div>
+        <div class="q-fb good" ${done ? "" : "hidden"}>${done ? item.opts[okIdx].fb + applyHTML(item) : ""}</div>
+      </div>`;
+    }).join("") + statusHTML(a);
+    wireQuiz(host, a);
+  }
+  function applyHTML(item) {
+    if (!item.apply) return "";
+    return `<div><button class="q-apply" type="button" data-apply='${JSON.stringify(item.apply.set)}'>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>${item.apply.label}</button></div>`;
+  }
+  function statusHTML(a) {
+    if (a === "final") return "";
+    const solved = quizSolved(a);
+    const n = QUIZ[a].filter((_, i) => solved[i]).length;
+    const tot = QUIZ[a].length;
+    const star = store.stars[a]
+      ? `<svg class="star-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg> <strong>Étoile décrochée !</strong> Défi validé ${n}/${tot}.`
+      : `Défi : <strong>${n}/${tot}</strong> question${tot > 1 ? "s" : ""} validée${n > 1 ? "s" : ""} — toutes justes = une étoile.`;
+    return `<div class="quiz-status">${star}</div>`;
+  }
+  function wireQuiz(host, a) {
+    host.querySelectorAll(".quiz-q").forEach((qEl) => {
+      const i = +qEl.dataset.i;
+      const item = QUIZ[a][i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      qEl.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const j = +btn.dataset.j;
+          if (a === "final" && store.final.first[i] === undefined) {
+            store.final.first[i] = (j === okIdx);
+            save();
+          }
+          const fb = qEl.querySelector(".q-fb");
+          if (j === okIdx) {
+            btn.classList.add("correct");
+            qEl.classList.add("solved");
+            qEl.querySelectorAll(".opt").forEach((b) => {
+              b.disabled = true;
+              if (+b.dataset.j !== okIdx) b.classList.add("dim");
+            });
+            fb.className = "q-fb good";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[okIdx].fb + applyHTML(item);
+            wireApply(fb, a);
+            if (!store.quiz[a]) store.quiz[a] = {};
+            store.quiz[a][i] = true;
+            save();
+            afterSolve(a);
+          } else {
+            btn.classList.add("wrong");
+            btn.disabled = true;
+            fb.className = "q-fb bad";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[j].fb;
+          }
+          paintStaticTex();
+        });
+      });
+      wireApply(qEl, a);
+    });
+  }
+  function wireApply(scope, a) {
+    scope.querySelectorAll(".q-apply").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", () => {
+        const set = JSON.parse(btn.dataset.apply);
+        Object.entries(set).forEach(([id, val]) => {
+          const inp = $(id);
+          if (!inp) return;
+          inp.value = val;
+          inp.dispatchEvent(new Event("input"));
+        });
+        const section = $("atelier-" + a);
+        const cvs = section && section.querySelector("canvas");
+        if (cvs) cvs.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
+      });
+    });
+  }
+  function afterSolve(a) {
+    if (a === "final") { updateFinalPanel(); return; }
+    const solved = quizSolved(a);
+    const all = QUIZ[a].every((_, i) => solved[i]);
+    const statusEl = document.querySelector(`#quiz-${a} .quiz-status`);
+    if (all && !store.stars[a]) {
+      store.stars[a] = true;
+      save();
+      confetti();
+    }
+    if (statusEl) statusEl.outerHTML = statusHTML(a);
+    renderHud();
+  }
+  function updateFinalPanel() {
+    const answered = Object.keys(store.final.first).length;
+    const total = QUIZ.final.length;
+    if (answered < total) {
+      $("final-panel").hidden = true;
+      return;
+    }
+    const score = QUIZ.final.reduce((n, _, i) => n + (store.final.first[i] ? 1 : 0), 0);
+    if (score > store.final.best) {
+      store.final.best = score;
+      save();
+    }
+    $("final-panel").hidden = false;
+    $("final-score").textContent = score + "/" + total;
+    const verdict =
+      score >= 7 ? "Mention « Valvert d’or » — le bureau d’études vous embauche !" :
+      score >= 5 ? "Solide ! Encore un ou deux réflexes à ancrer." :
+      "Bon entraînement — relisez les « À retenir » puis rejouez.";
+    $("final-verdict").textContent = verdict;
+    if (score >= 7) confetti();
+    renderHud();
+  }
+  $("final-replay").addEventListener("click", () => {
+    store.quiz.final = {};
+    store.final.first = {};
+    save();
+    renderQuiz("final");
+    $("final-panel").hidden = true;
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+  });
+
+  function renderAllQuizzes() {
+    Object.keys(QUIZ).forEach(renderQuiz);
+    updateFinalPanel();
+  }
+
+  function repaintCurrent() {
+    if (current === "home") paintHero();
+    else if (UPDATERS[current]) UPDATERS[current]();
+  }
+  function repaintAll() {
+    Object.keys(UPDATERS).forEach((k) => UPDATERS[k]());
+    paintHero();
+    ensureAnim();
+  }
+
+  function boot() {
+    renderAllQuizzes();
+    paintStaticTex();
+    document.querySelectorAll('input[type="range"]').forEach(syncFill);
+    renderHud();
+    applyTheme(store.theme === "light" ? "light" : "dark");
+  }
+  function whenReady(cb) {
+    if (window.katex) { cb(); return; }
+    let n = 0;
+    const t = setInterval(() => {
+      n += 1;
+      if (window.katex || n > 40) { clearInterval(t); cb(); }
+    }, 50);
+  }
+  whenReady(boot);
+})();
+</script>
+</body>
+</html>

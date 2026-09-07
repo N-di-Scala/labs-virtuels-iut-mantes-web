@@ -1,0 +1,2629 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab virtuel R 3-10 — Physique et Énergétique du bâtiment | IUT Mantes</title>
+<style>
+  :root {
+    --sidebar-w: 292px;
+    --credit-h: 3.4rem;
+    --radius: 16px;
+    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "DM Sans", "Segoe UI", sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --bg0: #07140f;
+    --bg1: #0b1c15;
+    --bg-glow1: rgba(64, 145, 108, 0.28);
+    --bg-glow2: rgba(224, 138, 90, 0.10);
+    --ink: #e8f2ec;
+    --muted: #9cb8a8;
+    --line: rgba(149, 213, 178, 0.14);
+    --panel: rgba(15, 40, 28, 0.62);
+    --panel-solid: #0f281c;
+    --panel-brd: rgba(149, 213, 178, 0.16);
+    --water: #74c69d;
+    --water-deep: #1b4332;
+    --water-soft: rgba(116, 198, 157, 0.13);
+    --accent: #e08a5a;
+    --ok: #3ecf8e;
+    --warn: #f2b73f;
+    --danger: #f47d7d;
+    --ok-soft: rgba(62, 207, 142, 0.14);
+    --warn-soft: rgba(242, 183, 63, 0.14);
+    --danger-soft: rgba(244, 125, 125, 0.14);
+    --steel: #b5c9bc;
+    --track: rgba(149, 213, 178, 0.18);
+    --cv-bg: linear-gradient(180deg, #123528, #0a1f16);
+    --cv-brd: rgba(149, 213, 178, 0.18);
+    --shadow: 0 18px 40px rgba(2, 12, 8, 0.5);
+    --glow: 0 0 24px rgba(116, 198, 157, 0.14);
+    --hero-grad: linear-gradient(92deg, #eaf6ef 0%, #95d5b2 62%, #e08a5a 130%);
+    --fx1: rgba(116, 198, 157, 0.16);
+    --fx2: rgba(27, 67, 50, 0.22);
+    --fx3: rgba(224, 138, 90, 0.10);
+    --note-bg: rgba(224, 138, 90, 0.08);
+    --step-bg: rgba(116, 198, 157, 0.05);
+    --gold: #ffd166;
+  }
+  :root[data-theme="light"] {
+    --bg0: #eef4f1;
+    --bg1: #f4f7f5;
+    --bg-glow1: rgba(216, 243, 220, 0.9);
+    --bg-glow2: rgba(255, 232, 216, 0.8);
+    --ink: #14241c;
+    --muted: #5a6e63;
+    --line: rgba(20, 36, 28, 0.12);
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-solid: #ffffff;
+    --panel-brd: rgba(20, 36, 28, 0.10);
+    --water: #1b4332;
+    --water-deep: #1b4332;
+    --water-soft: #e4efe9;
+    --accent: #c45c26;
+    --ok: #1b7a4a;
+    --warn: #a15c00;
+    --danger: #9b1c1c;
+    --ok-soft: #e5f6ec;
+    --warn-soft: #fff3d9;
+    --danger-soft: #fde8e8;
+    --steel: #2f4a3c;
+    --track: #d5e4db;
+    --cv-bg: linear-gradient(180deg, #eef5f1, #f8fbf9);
+    --cv-brd: rgba(20, 36, 28, 0.12);
+    --shadow: 0 10px 30px rgba(20, 36, 28, 0.08);
+    --glow: none;
+    --hero-grad: linear-gradient(92deg, #14241c 0%, #1b4332 95%);
+    --fx1: rgba(27, 67, 50, 0.10);
+    --fx2: rgba(64, 145, 108, 0.10);
+    --fx3: rgba(196, 92, 38, 0.07);
+    --note-bg: #fff7f1;
+    --step-bg: #ffffff;
+    --gold: #c98a12;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -12%, var(--bg-glow1) 0%, transparent 55%),
+      radial-gradient(900px 520px at 100% 0%, var(--bg-glow2) 0%, transparent 45%),
+      linear-gradient(180deg, var(--bg1), var(--bg0));
+    background-attachment: fixed;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  ::selection { background: var(--water); color: #061b12; }
+
+  .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bg-fx b { position: absolute; width: 46vw; height: 46vw; border-radius: 50%; filter: blur(90px); opacity: 0.8; }
+  .bg-fx b:nth-child(1) { background: var(--fx1); top: -18vw; left: 22vw; animation: drift1 26s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(2) { background: var(--fx2); bottom: -22vw; right: -10vw; animation: drift2 32s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(3) { background: var(--fx3); top: 30vh; left: -18vw; animation: drift3 38s ease-in-out infinite alternate; }
+  @keyframes drift1 { to { transform: translate(6vw, 8vh) scale(1.12); } }
+  @keyframes drift2 { to { transform: translate(-8vw, -6vh) scale(1.08); } }
+  @keyframes drift3 { to { transform: translate(9vw, -8vh); } }
+  :root[data-theme="dark"] .bg-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(149, 213, 178, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(149, 213, 178, 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 80%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-fx b { animation: none !important; }
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  .app { position: relative; z-index: 1; display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+  .sidebar {
+    background: linear-gradient(180deg, #1b4332 0%, #081c15 100%);
+    border-right: 1px solid rgba(149, 213, 178, 0.10);
+    color: #eef6f1;
+    padding: 1.15rem 0.9rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(149, 213, 178, 0.3) transparent;
+  }
+  .brand { display: flex; gap: 0.65rem; align-items: center; padding: 0.25rem 0.4rem 0.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+  .logo {
+    width: 42px; height: 42px; flex: none; display: grid; place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(116, 198, 157, 0.22), rgba(27, 67, 50, 0.30));
+    border: 1px solid rgba(116, 198, 157, 0.35);
+    box-shadow: 0 0 18px rgba(116, 198, 157, 0.18);
+  }
+  .logo svg { width: 22px; height: 22px; }
+  .brand .code { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: #95d5b2; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
+  .brand h1 { margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 800; line-height: 1.2; }
+  .brand-sub { margin: 0.55rem 0.4rem 0.35rem; font-size: 0.78rem; color: rgba(238, 246, 241, 0.6); line-height: 1.45; }
+  nav.ateliers { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.2rem; }
+  .nav-btn {
+    appearance: none; position: relative; border: 1px solid transparent; background: transparent;
+    color: inherit; text-align: left; padding: 0.55rem 0.65rem; border-radius: 12px; cursor: pointer;
+    font: inherit; display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .nav-btn:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(2px); }
+  .nav-btn:focus-visible { outline: 2px solid #74c69d; outline-offset: 2px; }
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(116, 198, 157, 0.16), rgba(116, 198, 157, 0.04));
+    border-color: rgba(116, 198, 157, 0.35);
+    box-shadow: 0 0 20px rgba(116, 198, 157, 0.10);
+  }
+  .nav-btn.active::before {
+    content: ""; position: absolute; left: -1px; top: 18%; bottom: 18%; width: 3px; border-radius: 3px;
+    background: #74c69d; box-shadow: 0 0 10px rgba(116, 198, 157, 0.8);
+  }
+  .nav-btn .ic {
+    width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); color: #95d5b2;
+  }
+  .nav-btn.active .ic { color: #d8f3dc; background: rgba(116, 198, 157, 0.14); border-color: rgba(116, 198, 157, 0.3); }
+  .nav-btn .ic svg { width: 16px; height: 16px; }
+  .nav-btn .label { font-size: 0.88rem; font-weight: 650; display: block; }
+  .nav-btn .sub { display: block; font-size: 0.72rem; font-weight: 400; color: rgba(238, 246, 241, 0.5); margin-top: 0.1rem; }
+  .nav-btn .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
+  .nav-btn .idx { font-family: var(--mono); font-size: 0.66rem; color: rgba(149, 213, 178, 0.75); }
+  .nav-btn .marks { display: flex; align-items: center; gap: 0.28rem; }
+  .nav-btn .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 1.5px solid rgba(149, 213, 178, 0.45); background: transparent;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-btn .dot.done { background: #3ecf8e; border-color: #3ecf8e; box-shadow: 0 0 8px rgba(62, 207, 142, 0.7); }
+  .nav-btn .star-ic { width: 12px; height: 12px; color: #ffd166; display: none; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.7)); }
+  .nav-btn .star-ic.on { display: block; }
+  .side-tools { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.10); display: flex; flex-direction: column; gap: 0.6rem; }
+  .progress { padding: 0 0.3rem; }
+  .progress-top { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(238, 246, 241, 0.6); margin-bottom: 0.35rem; }
+  .progress-top b { font-family: var(--mono); color: #95d5b2; font-weight: 600; }
+  .progress-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .progress-bar i {
+    display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #1b4332, #74c69d);
+    box-shadow: 0 0 10px rgba(116, 198, 157, 0.6);
+    transition: width 0.4s ease;
+  }
+  .progress-bar.gold i { background: linear-gradient(90deg, #b8860b, #ffd166); box-shadow: 0 0 10px rgba(255, 209, 102, 0.55); }
+  .rank { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.72rem; color: rgba(238, 246, 241, 0.6); }
+  .rank b { color: #ffd166; font-size: 0.74rem; font-weight: 700; text-align: right; line-height: 1.3; }
+  .theme-btn {
+    appearance: none; font: inherit; display: flex; align-items: center; gap: 0.55rem;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid rgba(149, 213, 178, 0.28); background: rgba(116, 198, 157, 0.08);
+    color: #d8f3dc; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+    transition: background 0.18s ease;
+  }
+  .theme-btn:hover { background: rgba(116, 198, 157, 0.15); }
+  .theme-btn:focus-visible { outline: 2px solid #74c69d; outline-offset: 2px; }
+  .theme-btn svg { width: 16px; height: 16px; flex: none; }
+  .kbd-hint { margin: 0; padding: 0 0.3rem; font-size: 0.7rem; color: rgba(238, 246, 241, 0.42); line-height: 1.45; }
+  .kbd-hint kbd { font-family: var(--mono); font-size: 0.66rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 5px; padding: 0.05rem 0.3rem; }
+
+  .main { padding: 1.5rem 1.75rem calc(2.6rem + var(--credit-h)); max-width: 1240px; width: 100%; margin-inline: auto; position: relative; }
+  .atelier { display: none; }
+  .atelier.active { display: block; animation: rise 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .atelier.active { animation: none; } }
+
+  .hero { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; justify-content: space-between; margin-bottom: 1.1rem; }
+  .eyebrow { margin: 0 0 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--water); }
+  .hero h2 {
+    margin: 0; font-size: clamp(1.5rem, 2.6vw, 1.95rem); font-weight: 800; letter-spacing: -0.01em;
+    background: var(--hero-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin: 0.45rem 0 0; color: var(--muted); max-width: 46rem; line-height: 1.5; font-size: 0.94rem; }
+  .mission {
+    margin: 0.5rem 0 0; display: flex; gap: 0.45rem; align-items: flex-start;
+    font-size: 0.85rem; color: var(--water); max-width: 46rem; line-height: 1.45; font-weight: 550;
+  }
+  .mission svg { width: 14px; height: 14px; flex: none; margin-top: 0.2rem; }
+  .tag {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--water); background: var(--water-soft);
+    border: 1px solid var(--panel-brd); padding: 0.32rem 0.6rem; border-radius: 999px; white-space: nowrap;
+  }
+
+  .grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 1rem; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .viz-stack { display: grid; gap: 0.85rem; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--panel-brd); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    backdrop-filter: blur(16px) saturate(1.15); -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.35s ease;
+  }
+  .viz-stack .card:hover, .grid > .card:hover { transform: translateY(-2px); }
+  .card .hd { padding: 0.8rem 1.05rem; border-bottom: 1px solid var(--line); font-weight: 700; line-height: 1.45; font-size: 0.95rem; }
+  .card .bd { padding: 1rem 1.05rem 1.05rem; }
+  .card .hd-hint { float: right; font-weight: 500; color: var(--muted); font-size: 0.78rem; margin-left: 0.75rem; max-width: 50%; text-align: right; line-height: 1.35; }
+  .coach-ic { width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; color: var(--water); }
+  canvas { width: 100%; height: auto; display: block; background: var(--cv-bg); border-radius: 12px; border: 1px solid var(--cv-brd); }
+  .viz-cap { margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .viz-cap.below { margin: 0.45rem 0 0; }
+  .viz-cap strong { color: var(--ink); font-weight: 650; }
+  .eq-list {
+    margin: 0.55rem 0 0; padding: 0; list-style: none;
+    font-size: 0.82rem; color: var(--muted); line-height: 1.55;
+  }
+  .eq-list li { margin: 0.25rem 0; }
+
+  .controls-card .hd { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .reset-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; color: var(--muted); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.28rem 0.6rem; cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease; white-space: nowrap;
+  }
+  .reset-btn:hover { color: var(--water); border-color: var(--water); }
+  .reset-btn:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .reset-btn svg { width: 12px; height: 12px; }
+  .controls { display: grid; gap: 0.9rem; }
+  .ctrl label { display: block; font-size: 0.86rem; color: var(--muted); margin-bottom: 0.3rem; line-height: 1.45; overflow: hidden; }
+  .ctrl label strong {
+    float: right; color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 0.82rem;
+    white-space: nowrap; margin-left: 0.75rem;
+    background: var(--water-soft); border: 1px solid var(--panel-brd); border-radius: 7px; padding: 0.1rem 0.45rem;
+  }
+  .ctrl .hint { display: block; font-size: 0.75rem; color: var(--muted); margin: -0.1rem 0 0.4rem; line-height: 1.35; opacity: 0.85; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: pointer; --p: 50%; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--water) var(--p), var(--track) var(--p)); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel-solid); border: 2.5px solid var(--water); margin-top: -6px;
+    box-shadow: 0 0 0 4px var(--water-soft), 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: var(--track); }
+  input[type="range"]::-moz-range-progress { height: 6px; border-radius: 999px; background: var(--water); }
+  input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--panel-solid); border: 2.5px solid var(--water); box-shadow: 0 0 0 4px var(--water-soft); }
+  input[type="range"]:focus-visible { outline: 2px solid var(--water); outline-offset: 4px; border-radius: 8px; }
+  select {
+    font: inherit; font-size: 0.86rem; border-radius: 10px; border: 1px solid var(--panel-brd);
+    padding: 0.55rem 0.7rem; background: var(--panel-solid); color: var(--ink); width: 100%; cursor: pointer;
+  }
+  select:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+  .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .kpi { border: 1px solid var(--panel-brd); border-radius: 12px; padding: 0.6rem 0.7rem; background: linear-gradient(160deg, var(--water-soft), transparent 65%); position: relative; }
+  .kpi .k { font-size: 0.76rem; color: var(--muted); letter-spacing: 0.01em; line-height: 1.35; }
+  .kpi .k .katex { font-size: 0.95em; }
+  .kpi .v { font-family: var(--mono); font-size: 1.06rem; font-weight: 650; margin-top: 0.25rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .kpi .v .katex { font-size: 1em; }
+  .kpi.wide { grid-column: 1 / -1; }
+  .kpi.wide .v:has(strong), .kpi.wide .v:has(sub) { font-family: var(--sans); font-size: 0.87rem; font-weight: 500; line-height: 1.45; color: var(--steel); }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+  .badge.ok, .badge.lam { background: var(--ok-soft); color: var(--ok); }
+  .badge.warn, .badge.tr { background: var(--warn-soft); color: var(--warn); }
+  .badge.bad, .badge.turb { background: var(--danger-soft); color: var(--danger); }
+  .badge .katex { font-size: 0.95em !important; color: inherit; }
+
+  .dpe-scale { display: grid; gap: 0.35rem; margin-top: 0.5rem; }
+  .dpe-row { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.5rem; align-items: center; font-size: 0.82rem; }
+  .dpe-bar { height: 1.35rem; border-radius: 4px; display: flex; align-items: center; padding: 0 0.45rem; color: #fff; font-weight: 700; font-size: 0.75rem; }
+  .dpe-row.on .dpe-bar { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .pedago { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .pedago { grid-template-columns: 1fr; } }
+  .pedago .card .hd { display: flex; align-items: center; gap: 0.5rem; }
+  .pedago .card .hd svg { width: 15px; height: 15px; flex: none; }
+  .pedago .card.retenir .hd { color: var(--water); }
+  .pedago .card.challenge .hd { color: var(--accent); }
+  .pedago .card.retenir { border-top: 2px solid var(--water); }
+  .pedago .card.challenge { border-top: 2px solid var(--accent); }
+  .pedago .card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .pedago ul { margin: 0.1rem 0 0; padding-left: 1.1rem; }
+  .pedago li { margin-bottom: 0.4rem; }
+  .pedago li:last-child { margin-bottom: 0; }
+
+  .note {
+    margin-top: 1rem; padding: 0.85rem 1rem; display: flex; gap: 0.65rem; align-items: flex-start;
+    border-left: 3px solid var(--accent); background: var(--note-bg); border-radius: 0 12px 12px 0;
+    font-size: 0.87rem; color: var(--steel); line-height: 1.5;
+  }
+  .note svg { width: 16px; height: 16px; flex: none; margin-top: 0.15rem; color: var(--accent); }
+
+  .quiz-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .quiz-card > .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-card > .hd svg.trophy { width: 15px; height: 15px; flex: none; }
+  .quiz-q { padding: 0.85rem 0; border-bottom: 1px dashed var(--line); }
+  .quiz-q:first-child { padding-top: 0; }
+  .quiz-q:last-child { border-bottom: none; padding-bottom: 0; }
+  .q-txt { margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink); font-weight: 600; }
+  .q-num {
+    display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px;
+    background: var(--water-soft); color: var(--water); font-family: var(--mono); font-size: 0.72rem;
+    margin-right: 0.5rem; vertical-align: -3px;
+  }
+  .quiz-q.solved .q-num { background: var(--ok-soft); color: var(--ok); }
+  .q-opts { display: grid; gap: 0.45rem; }
+  .opt {
+    appearance: none; font: inherit; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: center;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid var(--panel-brd); background: var(--panel-solid);
+    color: var(--steel); font-size: 0.88rem; line-height: 1.4;
+    transition: border-color 0.15s ease, transform 0.12s ease, background 0.2s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--water); transform: translateX(2px); }
+  .opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .opt .letter {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+    background: var(--water-soft); color: var(--water); flex: none;
+  }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ink); }
+  .opt.correct .letter { background: var(--ok); color: #06281a; }
+  .opt.wrong { border-color: var(--danger); background: var(--danger-soft); opacity: 0.85; animation: shake 0.3s ease; }
+  .opt.wrong .letter { background: var(--danger); color: #2b0a0a; }
+  .opt.dim { opacity: 0.5; }
+  .opt:disabled { cursor: default; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+  .q-fb {
+    margin-top: 0.55rem; padding: 0.6rem 0.75rem; border-radius: 0 10px 10px 0;
+    font-size: 0.84rem; line-height: 1.5; color: var(--steel);
+  }
+  .q-fb.good { border-left: 3px solid var(--ok); background: var(--ok-soft); }
+  .q-fb.bad { border-left: 3px solid var(--danger); background: var(--danger-soft); }
+  .q-apply {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.78rem; font-weight: 650; transition: background 0.15s ease;
+  }
+  .q-apply:hover { background: var(--water-soft); }
+  .q-apply svg { width: 12px; height: 12px; }
+  .quiz-status { margin-top: 0.8rem; font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-status .star-ic { width: 15px; height: 15px; color: var(--gold); }
+  .score-panel {
+    margin-top: 1rem; padding: 1rem 1.1rem; border-radius: 13px;
+    border: 1px solid var(--panel-brd); background: linear-gradient(160deg, var(--water-soft), transparent 70%);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem;
+  }
+  .score-big { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+  .score-lab { font-size: 0.8rem; color: var(--muted); }
+  .score-rank { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
+  .replay-btn {
+    appearance: none; font: inherit; margin-left: auto; padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.8rem; font-weight: 650; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .replay-btn:hover { background: var(--water-soft); }
+  .replay-btn svg { width: 12px; height: 12px; }
+
+  .wipe-card { margin-top: 1rem; border-top: 2px solid var(--danger); }
+  .wipe-card .hd { color: var(--danger); display: flex; align-items: center; gap: 0.5rem; }
+  .wipe-card .hd svg { width: 15px; height: 15px; }
+  .wipe-card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .wipe-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.45rem;
+    margin-top: 0.75rem; padding: 0.55rem 1rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--danger); background: var(--danger-soft); color: var(--danger);
+    font-size: 0.86rem; font-weight: 700;
+  }
+  .wipe-btn:hover { filter: brightness(1.05); }
+  .wipe-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+  .wipe-btn svg { width: 14px; height: 14px; }
+  .toast {
+    position: fixed; z-index: 70; left: 50%; bottom: calc(var(--credit-h) + 1.2rem);
+    transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none;
+    background: var(--panel-solid); color: var(--ink); border: 1px solid var(--ok);
+    border-radius: 12px; padding: 0.7rem 1.1rem; font-size: 0.88rem; font-weight: 650;
+    box-shadow: var(--shadow); transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .quiz-banner {
+    margin: 0 0 0.85rem; font-size: 0.8rem; color: var(--muted); line-height: 1.45;
+    padding: 0.5rem 0.7rem; border-radius: 10px; background: var(--water-soft);
+    border: 1px dashed var(--panel-brd);
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.9rem; }
+  .chip { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid var(--panel-brd); background: var(--water-soft); color: var(--water); }
+  .chip.gold { color: var(--gold); background: var(--warn-soft); }
+  .welcome .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+  @media (max-width: 1100px) { .welcome .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .welcome .steps { grid-template-columns: 1fr; } }
+  .welcome .step { border: 1px solid var(--panel-brd); border-radius: 13px; padding: 0.9rem; background: var(--step-bg); line-height: 1.5; font-size: 0.88rem; color: var(--steel); }
+  .welcome .step b { display: block; margin-bottom: 0.3rem; color: var(--water); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; }
+  .mission-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .mission-card .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; }
+  .mission-card .hd svg { width: 15px; height: 15px; }
+  .mission-card .bd { font-size: 0.92rem; line-height: 1.55; color: var(--steel); }
+
+  .gloss-overlay {
+    position: fixed; inset: 0; z-index: 40; display: grid; place-items: center;
+    background: rgba(4, 14, 10, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 1.2rem;
+  }
+  .gloss-overlay[hidden] { display: none; }
+  .gloss-panel {
+    background: var(--panel-solid); color: var(--ink);
+    border: 1px solid var(--panel-brd); border-radius: 18px; box-shadow: var(--shadow);
+    max-width: 680px; width: 100%; max-height: 82vh; overflow-y: auto; padding: 1.3rem 1.5rem 1.5rem;
+  }
+  .gloss-panel h3 { margin: 0 0 0.2rem; font-size: 1.2rem; font-weight: 800; color: var(--water); display: flex; align-items: center; gap: 0.5rem; }
+  .gloss-panel h3 svg { width: 18px; height: 18px; }
+  .gloss-panel .gloss-sub { margin: 0 0 1rem; font-size: 0.82rem; color: var(--muted); }
+  .gloss-panel dl { margin: 0; display: grid; gap: 0.75rem; }
+  .gloss-panel dt { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+  .gloss-panel dd { margin: 0.15rem 0 0; font-size: 0.86rem; line-height: 1.5; color: var(--steel); padding-bottom: 0.6rem; border-bottom: 1px dashed var(--line); }
+  .gloss-panel dd:last-child { border-bottom: none; }
+  .gloss-close {
+    appearance: none; font: inherit; float: right; margin: -0.2rem -0.4rem 0 0;
+    width: 32px; height: 32px; display: grid; place-items: center;
+    border-radius: 50%; border: 1px solid var(--panel-brd); background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 1rem;
+  }
+  .gloss-close:hover { color: var(--danger); border-color: var(--danger); }
+
+  #fx-confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: transparent; border: none; border-radius: 0; width: 100vw; height: 100vh; display: none; }
+
+  .credit-bar {
+    position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; z-index: 20;
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1px;
+    background: rgba(149, 213, 178, 0.12);
+    border-top: 1px solid rgba(149, 213, 178, 0.14);
+    box-shadow: 0 -8px 24px rgba(2, 12, 8, 0.35);
+    min-height: var(--credit-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .credit-cell { background: rgba(8, 28, 21, 0.92); color: #d7efe4; padding: 0.55rem 0.9rem; display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; min-width: 0; }
+  .credit-cell .who { font-size: 0.82rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .credit-cell .role { font-size: 0.68rem; color: rgba(215, 239, 228, 0.68); line-height: 1.3; }
+  .credit-cell.module { background: linear-gradient(135deg, #14532d, #1b4332); text-align: center; align-items: center; }
+  .credit-cell.module .who { font-size: 0.82rem; letter-spacing: 0.01em; white-space: normal; }
+  .credit-cell.iut { text-align: right; align-items: flex-end; }
+
+  .tex, .tex-inline { display: inline; white-space: nowrap; }
+  .tex .katex, .tex-inline .katex, .kpi .k .katex, .hint .katex,
+  .pedago .katex, .card .hd .katex, .ctrl label .katex,
+  .viz-cap .katex, .eq-list .katex, .q-txt .katex, .opt .katex,
+  .q-fb .katex, .gloss-panel .katex {
+    font-size: 1.02em !important; line-height: 1; vertical-align: -0.12em;
+  }
+  .katex-display { display: inline !important; margin: 0 !important; text-align: left !important; }
+
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: sticky; top: 0; z-index: 10; height: auto; overflow: visible; padding-bottom: 0.7rem; }
+    nav.ateliers { flex-direction: row; overflow-x: auto; padding-bottom: 0.3rem; }
+    .nav-btn { flex: none; grid-template-columns: auto auto; }
+    .nav-btn .meta, .nav-btn .sub { display: none; }
+    .side-tools { margin-top: 0.4rem; flex-direction: row; align-items: center; }
+    .progress, .kbd-hint, .brand-sub { display: none; }
+    .credit-bar { left: 0; grid-template-columns: 1fr; }
+    :root { --credit-h: auto; }
+    .credit-cell.iut { text-align: left; align-items: flex-start; }
+    .main { padding: 1.1rem 1rem calc(2rem + 8rem); }
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--track); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+</head>
+<body>
+<div class="bg-fx" aria-hidden="true"><b></b><b></b><b></b></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#95d5b2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.5 12 4l9 7.5"/>
+          <path d="M5.5 10v9h13v-9"/>
+          <path d="M9.5 19v-5h5v5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="code">R 3-10 · Lab virtuel</div>
+        <h1>Énergétique du bâtiment</h1>
+      </div>
+    </div>
+    <p class="brand-sub">Ateliers interactifs pour sentir pertes, DJU, DPE, rénovation et systèmes avant les notes de calcul. Aucune donnée du sujet « Mission Réno-Confort » n’est fournie ici.</p>
+
+    <nav class="ateliers" aria-label="Ateliers du laboratoire virtuel">
+      <button class="nav-btn active" data-atelier="home" aria-current="page">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></span>
+        <span class="txt"><span class="label">Accueil</span><span class="sub">Mode d’emploi &amp; mission</span></span>
+        <span class="meta"><span class="idx">00</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="trans">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="7" height="14"/><rect x="13" y="5" width="7" height="14"/></svg></span>
+        <span class="txt"><span class="label">Transmission</span><span class="sub">R, U, Φ</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="trans" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="trans"></span></span><span class="idx">01</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="vent">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8c4-4 8 4 12 0"/><path d="M4 14c4-4 8 4 12 0"/><path d="M16 6c2 0 4 1.2 4 3s-2 3-4 3"/></svg></span>
+        <span class="txt"><span class="label">Ventilation &amp; ponts</span><span class="sub">H<sub>bat</sub> &amp; postes</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="vent" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="vent"></span></span><span class="idx">02</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="dju">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M4 10h16"/></svg></span>
+        <span class="txt"><span class="label">DJU &amp; besoins</span><span class="sub">B<sub>ch,an</sub></span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="dju" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="dju"></span></span><span class="idx">03</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="dpe">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M6 18V8l4 3 4-5 4 7v5"/></svg></span>
+        <span class="txt"><span class="label">DPE</span><span class="sub">C<sub>ep</sub>, échelle A–G</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="dpe" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="dpe"></span></span><span class="idx">04</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="reno">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></span>
+        <span class="txt"><span class="label">Rénovation enveloppe</span><span class="sub">Avant / après U</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="reno" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="reno"></span></span><span class="idx">05</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="sys">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 5v2"/><path d="M12 17v2"/><path d="M5 12h2"/><path d="M17 12h2"/><path d="m7.8 7.8 1.4 1.4"/><path d="m14.8 14.8 1.4 1.4"/><path d="m7.8 16.2 1.4-1.4"/><path d="m14.8 9.2 1.4-1.4"/></svg></span>
+        <span class="txt"><span class="label">VMC DF &amp; PAC</span><span class="sub">η, COP, C<sub>elec</sub></span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="sys" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="sys"></span></span><span class="idx">06</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="tri">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+        <span class="txt"><span class="label">TRI &amp; CO₂</span><span class="sub">Coût net / gain</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="tri" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="tri"></span></span><span class="idx">07</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="defi">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg></span>
+        <span class="txt"><span class="label">Grand contrôle</span><span class="sub">Quiz de synthèse</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="final" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg></span><span class="idx">08</span></span>
+      </button>
+    </nav>
+
+    <div class="side-tools">
+      <div class="progress">
+        <div class="progress-top"><span>Exploration</span><b id="prog-count">0/7</b></div>
+        <div class="progress-bar"><i id="prog-fill"></i></div>
+        <div class="progress-top" style="margin-top:0.5rem;"><span>Étoiles de défi</span><b id="star-count">0/7</b></div>
+        <div class="progress-bar gold"><i id="star-fill"></i></div>
+        <div class="rank"><span>Rang bureau d’études</span><b id="rank-name">Stagiaire énergétique</b></div>
+      </div>
+      <button class="theme-btn" id="gloss-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>Lexique express</span>
+      </button>
+      <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false">
+        <svg id="theme-ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+        <svg id="theme-ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>
+        <span id="theme-label">Passer en mode clair</span>
+      </button>
+      <p class="kbd-hint">Naviguez avec <kbd>←</kbd> <kbd>→</kbd> ou <kbd>0</kbd>–<kbd>8</kbd> · <kbd>L</kbd> = lexique. Accueil : bouton « tout recommencer ». Point vert = exploré, étoile = défi réussi.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- HOME -->
+    <section class="atelier active" id="atelier-home">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">R 3-10 · Physique et Énergétique du bâtiment</p>
+          <h2>Bienvenue dans le laboratoire virtuel</h2>
+          <p class="lede">Explorez un pavillon d’entraînement : transmission, ventilation, DJU, DPE, enveloppe et systèmes. Objectif : relier les curseurs à une image mentale solide. Le projet noté reste le dossier + l’oral.</p>
+        </div>
+        <span class="tag">Fichier HTML autonome</span>
+      </div>
+      <div class="viz-stack">
+        <div class="card">
+          <div class="hd">Le pavillon des Aulnes <span class="hd-hint">décor animé — la physique sérieuse commence à l’atelier 01</span></div>
+          <div class="bd">
+            <canvas id="cv-hero" width="1440" height="400"></canvas>
+            <p class="viz-cap">Un pavillon générique : la <strong>chaleur</strong> fuit par les parois, le <strong>toit</strong> et le renouvellement d’air. Chaque atelier isole un maillon — de la couche au DPE, puis aux systèmes et au temps de retour.</p>
+          </div>
+        </div>
+        <div class="card mission-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Votre mission : le pavillon des Aulnes</div>
+          <div class="bd">
+            <p style="margin:0 0 0.55rem;">Un bureau d’études imaginaire vous recrute pour diagnostiquer le <strong>pavillon des Aulnes</strong> — une maison d’entraînement, pas le bâtiment du sujet noté. Au fil des ateliers, vous remontez toute la chaîne énergétique :</p>
+            <ul style="margin:0 0 0.55rem;padding-left:1.1rem;">
+              <li>chaque atelier se termine par un <strong>Défi express</strong> : réussissez toutes ses questions pour décrocher une <strong>étoile</strong> ;</li>
+              <li>les étoiles font grimper votre <strong>rang</strong> dans la barre de gauche (de Stagiaire énergétique à Chef·fe de projet rénovation) ;</li>
+              <li>terminez par le <strong>Grand contrôle</strong> (atelier 08) : 8 questions toutes thématiques, votre première réponse compte pour le score.</li>
+            </ul>
+            <p style="margin:0;">Les Aulnes sont un terrain d’entraînement : <strong>aucune donnée du vrai sujet</strong> ne s’y cache. Les Défis express sont <strong>formatifs</strong> — ils testent un réflexe physique, pas le chiffre que vous calculerez dans les notes de projet.</p>
+          </div>
+        </div>
+        <div class="card welcome">
+          <div class="bd">
+            <div class="chip-row">
+              <span class="chip">7 ateliers guidés</span>
+              <span class="chip gold">Défis à étoiles</span>
+              <span class="chip">Lexique intégré</span>
+              <span class="chip">100 % hors-ligne</span>
+              <span class="chip">Anti-spoil garanti</span>
+            </div>
+            <p style="margin:0;"><strong>Comment travailler :</strong> choisissez un atelier à gauche, bougez les curseurs, observez la scène, puis répondez aux Défis express. Ce n’est <em>pas</em> un QCM de projet : réussir ici ne donne aucune valeur à recopier dans vos notes de calcul.</p>
+            <div class="steps">
+              <div class="step"><b>1 · OBSERVER</b>Changez un paramètre. Que se passe-t-il sur le dessin et sur les indicateurs ?</div>
+              <div class="step"><b>2 · NOMMER</b>Associez l’effet à la grandeur (<span class="tex" data-tex="U"></span>, <span class="tex" data-tex="H_{\mathrm{bat}}"></span>, DJU, COP…). Relisez la boîte à outils du sujet.</div>
+              <div class="step"><b>3 · VALIDER</b>Tentez le Défi express : prédisez avant de cliquer, l’explication tombe tout de suite.</div>
+              <div class="step"><b>4 · TRANSFÉRER</b>Appliquez le raisonnement aux étapes du projet — pas l’inverse.</div>
+            </div>
+            <div class="note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+              <span>Anti-spoil : les curseurs et les questions utilisent des situations génériques (autre maison, autres surfaces, autres montants). Si une fiche et cet atelier disent la même chose <em>qualitativement</em>, vous êtes sur la bonne voie — le dossier noté « Mission Réno-Confort », lui, se calcule à part.</span>
+            </div>
+          </div>
+        </div>
+        <div class="card wipe-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Tout recommencer</div>
+          <div class="bd">
+            <p style="margin:0;">Remet à zéro les étoiles, les Défis express, le Grand contrôle, les ateliers explorés et tous les curseurs. Utile pour un second passage, un binôme, ou une séance suivante sur le même ordinateur. Le thème clair/sombre est conservé.</p>
+            <button class="wipe-btn" id="wipe-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+              Réinitialiser tous les ateliers
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 01 Transmission -->
+    <section class="atelier" id="atelier-trans">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 01</p>
+          <h2>Transmission : de la couche au flux</h2>
+          <p class="lede">Reliez épaisseur et conductivité à la résistance, puis au coefficient <span class="tex" data-tex="U"></span> et au flux <span class="tex" data-tex="\Phi"></span>.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : identifier les couches de la paroi — relier <span class="tex" data-tex="R"></span>, <span class="tex" data-tex="U"></span> et <span class="tex" data-tex="\Phi"></span> avant de parler rénovation.</p>
+        </div>
+        <span class="tag">Étape 1</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Paroi multicouche + flux <span class="tex" data-tex="\Phi"></span> <span class="hd-hint">largeurs ∝ épaisseurs</span></div>
+          <div class="bd">
+            <p class="viz-cap" id="cap-trans-top">Largeurs ∝ épaisseurs · résistance totale puis <span class="tex" data-tex="U=1/R_{\mathrm{th}}"></span></p>
+            <canvas id="cv-trans" width="720" height="320"></canvas>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="R=e/\lambda"></span> (avec <span class="tex" data-tex="e"></span> en mètres)</li>
+              <li><span class="tex" data-tex="R_{\mathrm{th}}=R_{si}+\sum R_i+R_{se}"></span> (éventuellement × <span class="tex" data-tex="b_{\mathrm{LNC}}"></span>)</li>
+              <li><span class="tex" data-tex="U=1/R_{\mathrm{th}}"></span> puis <span class="tex" data-tex="\Phi=U A \Delta T"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="trans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Épaisseur isolant <span class="tex" data-tex="e_{\mathrm{iso}}"></span> <strong id="v-eiso1">12 cm</strong></label>
+              <span class="hint">Valeur générique pédagogique — pas celle du sujet</span>
+              <input type="range" id="eiso1" min="2" max="30" step="1" value="12" />
+            </div>
+            <div class="ctrl">
+              <label>Conductivité isolant <span class="tex" data-tex="\lambda_{\mathrm{iso}}"></span> <strong id="v-liso1">0,040 W/(m·K)</strong></label>
+              <span class="hint">Changer <span class="tex" data-tex="\lambda"></span> ne grossit pas la couche dessinée</span>
+              <input type="range" id="liso1" min="0.020" max="0.080" step="0.001" value="0.040" />
+            </div>
+            <div class="ctrl">
+              <label>Épaisseur support <span class="tex" data-tex="e_{\mathrm{sup}}"></span> <strong id="v-esup">20 cm</strong></label>
+              <input type="range" id="esup" min="10" max="40" step="1" value="20" />
+            </div>
+            <div class="ctrl">
+              <label>Conductivité support <span class="tex" data-tex="\lambda_{\mathrm{sup}}"></span> <strong id="v-lsup">1,75 W/(m·K)</strong></label>
+              <input type="range" id="lsup" min="0.5" max="2.5" step="0.05" value="1.75" />
+            </div>
+            <div class="ctrl">
+              <label>Surface <span class="tex" data-tex="A"></span> <strong id="v-A1">80 m²</strong></label>
+              <span class="hint">Surface générique pédagogique — pas celle du sujet noté</span>
+              <input type="range" id="A1" min="20" max="200" step="5" value="80" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\Delta T=T_{\mathrm{int}}-T_{\mathrm{ext}}"></span> <strong id="v-dT1">20 K</strong></label>
+              <input type="range" id="dT1" min="5" max="35" step="1" value="20" />
+            </div>
+            <div class="ctrl">
+              <label>Facteur local non chauffé <span class="tex" data-tex="b_{\mathrm{LNC}}"></span> <strong id="v-bLNC">1,00</strong></label>
+              <span class="hint">1 = plein air ; &lt; 1 si local tampon</span>
+              <input type="range" id="bLNC" min="0.4" max="1" step="0.05" value="1" />
+            </div>
+            <div class="readouts" id="out-trans"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : <span class="tex" data-tex="U"></span> est l’inverse de <span class="tex" data-tex="R_{\mathrm{th}}"></span>.</span></div>
+        <div class="bd" id="quiz-trans"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="R"></span> mesure la « difficulté » à faire passer la chaleur ; <span class="tex" data-tex="U=1/R_{\mathrm{th}}"></span> est l’inverse.</li>
+          <li>Sur le schéma, la <strong>largeur</strong> suit l’épaisseur ; l’effet de <span class="tex" data-tex="R"></span> se lit dans la pente de <span class="tex" data-tex="T"></span> et dans les KPI.</li>
+          <li><span class="tex" data-tex="b_{\mathrm{LNC}}"></span> réduit le flux vers un local non chauffé (valeur pédagogique).</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Si vous doublez l’épaisseur d’isolant sans changer <span class="tex" data-tex="\lambda"></span>, le flux <span class="tex" data-tex="\Phi"></span> est-il divisé exactement par deux ? Observez, puis expliquez avec <span class="tex" data-tex="R_{si}"></span> et <span class="tex" data-tex="R_{se}"></span>.</li>
+          <li>Montez <span class="tex" data-tex="\lambda_{\mathrm{iso}}"></span> : la bande isolant s’élargit-elle, ou seule la pente de <span class="tex" data-tex="T"></span> change ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 02 Ventilation -->
+    <section class="atelier" id="atelier-vent">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 02</p>
+          <h2>Ventilation, ponts et <span class="tex" data-tex="H_{\mathrm{bat}}"></span></h2>
+          <p class="lede">Trois postes s’additionnent : transmission, renouvellement d’air, ponts thermiques. Lequel domine dans votre réglage ?</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : ne pas isoler « en oubliant » l’air et les ponts — lisez les parts de <span class="tex" data-tex="H_{\mathrm{bat}}"></span>.</p>
+        </div>
+        <span class="tag">Étape 2</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Trois postes de pertes (barres empilées)</div>
+          <div class="bd">
+            <p class="viz-cap" id="cap-vent-top">Parts relatives de <span class="tex" data-tex="H_{\mathrm{tr}}"></span>, <span class="tex" data-tex="H_{v}"></span> et <span class="tex" data-tex="H_{\mathrm{pt}}"></span></p>
+            <canvas id="cv-vent" width="720" height="340"></canvas>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="\Phi_{v}=0{,}34\,Q_{v}\,\Delta T"></span> (avec <span class="tex" data-tex="Q_{v}"></span> en m³/h)</li>
+              <li><span class="tex" data-tex="\Phi_{\mathrm{pt}}=\Psi L \Delta T"></span></li>
+              <li><span class="tex" data-tex="H_{\mathrm{bat}}=H_{\mathrm{tr}}+H_{v}+H_{\mathrm{pt}}"></span> (W/K)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="vent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="H_{\mathrm{tr}}=\sum U A"></span> (transmission) <strong id="v-Htr">120 W/K</strong></label>
+              <span class="hint">Générique pédagogique — pas le <span class="tex" data-tex="H"></span> du sujet</span>
+              <input type="range" id="Htr" min="40" max="250" step="5" value="120" />
+            </div>
+            <div class="ctrl">
+              <label>Débit ventilation <span class="tex" data-tex="Q_{v}"></span> <strong id="v-Qv">150 m³/h</strong></label>
+              <input type="range" id="Qv" min="50" max="400" step="10" value="150" />
+            </div>
+            <div class="ctrl">
+              <label>Ponts : <span class="tex" data-tex="\Psi"></span> moyen <strong id="v-Psi">0,40 W/(m·K)</strong></label>
+              <input type="range" id="Psi" min="0.05" max="1.2" step="0.05" value="0.40" />
+            </div>
+            <div class="ctrl">
+              <label>Longueur de ponts <span class="tex" data-tex="L"></span> <strong id="v-Lpt">40 m</strong></label>
+              <span class="hint">Longueur générique (linéaires de planchers, etc.)</span>
+              <input type="range" id="Lpt" min="10" max="120" step="5" value="40" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\Delta T"></span> <strong id="v-dT2">20 K</strong></label>
+              <input type="range" id="dT2" min="5" max="35" step="1" value="20" />
+            </div>
+            <div class="readouts" id="out-vent"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : isolez mentalement quelle barre bouge.</span></div>
+        <div class="bd" id="quiz-vent"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="H_{\mathrm{bat}}"></span> convertit un écart de température en puissance de perte globale.</li>
+          <li>Isoler sans traiter les ponts ni la ventilation laisse souvent un poste dominant.</li>
+          <li>Le coefficient 0,34 vient de <span class="tex" data-tex="\rho c_p"></span> de l’air (unités m³/h).</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Augmentez le débit <span class="tex" data-tex="Q_{v}"></span> : quelle barre grandit ?</li>
+          <li>Si vous divisez <span class="tex" data-tex="\Psi"></span> par deux, le gain sur <span class="tex" data-tex="H_{\mathrm{bat}}"></span> est-il forcément spectaculaire ? Pourquoi ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 03 DJU -->
+    <section class="atelier" id="atelier-dju">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 03</p>
+          <h2>DJU et besoin annuel de chauffage</h2>
+          <p class="lede">Les degrés-jours « comptent » le froid sous la consigne. Reliez enveloppe et climat au besoin saisonnier.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : un hiver plus doux ou une consigne plus basse — voyez ce que les bandes racontent.</p>
+        </div>
+        <span class="tag">Étape 3</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Schéma DJU interactif</div>
+          <div class="bd viz-stack">
+            <p class="viz-cap" id="cap-dju-top">Bandes = écart journalier entre consigne et <span class="tex" data-tex="T_{\mathrm{ext}}"></span> (quand <span class="tex" data-tex="T_{\mathrm{ext}}<T_{\mathrm{cons}}"></span>)</p>
+            <canvas id="cv-dju" width="720" height="280"></canvas>
+            <p class="viz-cap below" id="cap-dju-bot"></p>
+            <ul class="eq-list">
+              <li>DJU jour ≈ <span class="tex" data-tex="\max(0,\,T_{\mathrm{cons}}-T_{\mathrm{ext}})"></span></li>
+              <li><span class="tex" data-tex="B_{\mathrm{ch,an}}=H_{\mathrm{bat}}\cdot\mathrm{DJU}\cdot 24/1000"></span> (kWh/an)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="dju"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="H_{\mathrm{bat}}"></span> <strong id="v-Hbat3">180 W/K</strong></label>
+              <span class="hint">Générique pédagogique — pas celui du sujet</span>
+              <input type="range" id="Hbat3" min="60" max="350" step="5" value="180" />
+            </div>
+            <div class="ctrl">
+              <label>Consigne <span class="tex" data-tex="T_{\mathrm{cons}}"></span> <strong id="v-Tcons">19 °C</strong></label>
+              <input type="range" id="Tcons" min="16" max="22" step="1" value="19" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="T_{\mathrm{ext}}"></span> du jour mis en avant <strong id="v-Text3">5 °C</strong></label>
+              <input type="range" id="Text3" min="-8" max="18" step="1" value="5" />
+            </div>
+            <div class="ctrl">
+              <label>DJU saison (somme) <strong id="v-DJU">2200</strong></label>
+              <span class="hint">Valeur générique pédagogique — pas celle du sujet</span>
+              <input type="range" id="DJU" min="1200" max="3200" step="50" value="2200" />
+            </div>
+            <div class="readouts" id="out-dju"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : une bande = un jour sous la consigne.</span></div>
+        <div class="bd" id="quiz-dju"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Les DJU « comptent » les degrés-jours sous la consigne sur la saison.</li>
+          <li><span class="tex" data-tex="B_{\mathrm{ch,an}}"></span> relie la performance enveloppe (<span class="tex" data-tex="H_{\mathrm{bat}}"></span>) au climat (DJU).</li>
+          <li>Baisser la consigne ou isoler réduit le besoin — mais pas de la même façon.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Si vous baissez <span class="tex" data-tex="T_{\mathrm{cons}}"></span> d’1 °C, les bandes du schéma rétrécissent-elles ?</li>
+          <li>Le besoin annuel évolue-t-il linéairement avec le DJU saison ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 04 DPE -->
+    <section class="atelier" id="atelier-dpe">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 04</p>
+          <h2>DPE : énergie finale → primaire</h2>
+          <p class="lede">Ce que vous payez au compteur n’est pas l’indicateur affiché sur l’étiquette. Distinguez finale et primaire.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : lire une classe A–G sans confondre <span class="tex" data-tex="C_{\mathrm{ef}}"></span> et <span class="tex" data-tex="C_{\mathrm{ep}}"></span>.</p>
+        </div>
+        <span class="tag">Étape 4</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Échelle indicative A–G (seuils génériques)</div>
+          <div class="bd">
+            <p class="viz-cap">Indicateur en <span class="tex" data-tex="\mathrm{kWh}_{\mathrm{ep}}/(\mathrm{m}^{2}\cdot\mathrm{an})"></span> — seuils pédagogiques, pas le moteur réglementaire officiel</p>
+            <div class="dpe-scale" id="dpe-scale"></div>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="C_{\mathrm{ep}}=f_{\mathrm{p}}\,C_{\mathrm{ef}}"></span> (facteur primaire, souvent 2,3 pour l’électricité)</li>
+              <li>Indicateur = <span class="tex" data-tex="C_{\mathrm{ep}}/S_{\mathrm{hab}}"></span></li>
+            </ul>
+            <p class="viz-cap below" id="cap-dpe-bot"></p>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="dpe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Consommation finale <span class="tex" data-tex="C_{\mathrm{ef}}"></span> <strong id="v-Cef">12000 kWh/an</strong></label>
+              <span class="hint">Générique pédagogique — pas le bilan du sujet noté</span>
+              <input type="range" id="Cef" min="3000" max="35000" step="500" value="12000" />
+            </div>
+            <div class="ctrl">
+              <label>Surface habitable <span class="tex" data-tex="S_{\mathrm{hab}}"></span> <strong id="v-Shab">100 m²</strong></label>
+              <span class="hint">Surface générique pédagogique — pas celle du sujet</span>
+              <input type="range" id="Shab" min="50" max="180" step="5" value="100" />
+            </div>
+            <div class="ctrl">
+              <label>Facteur primaire <span class="tex" data-tex="f_{\mathrm{p}}"></span> <strong id="v-fp">2,3</strong></label>
+              <span class="hint">2,3 pour l’électricité (convention pédagogique)</span>
+              <input type="range" id="fp" min="1" max="2.5" step="0.1" value="2.3" />
+            </div>
+            <div class="readouts" id="out-dpe"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : l’étiquette parle d’énergie primaire.</span></div>
+        <div class="bd" id="quiz-dpe"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="C_{\mathrm{ef}}"></span> = ce que vous payez / comptez au compteur ; <span class="tex" data-tex="C_{\mathrm{ep}}"></span> = vision « primaire ».</li>
+          <li>L’échelle A–G ici est <strong>indicative</strong> pour lire un ordre de grandeur.</li>
+          <li>Rénover l’enveloppe et changer le système bougent souvent <span class="tex" data-tex="C_{\mathrm{ef}}"></span> plus que la surface.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>À surface fixe, divisez <span class="tex" data-tex="C_{\mathrm{ef}}"></span> par deux : la classe saute-t-elle forcément de deux lettres ?</li>
+          <li>Passez <span class="tex" data-tex="f_{\mathrm{p}}"></span> de 2,3 à 1 : l’indicateur primaire baisse-t-il, alors que le compteur n’a pas bougé ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 05 Reno -->
+    <section class="atelier" id="atelier-reno">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 05</p>
+          <h2>Rénovation d’enveloppe : avant / après</h2>
+          <p class="lede">Avant de parler pompe à chaleur, voyez ce que l’isolant fait à <span class="tex" data-tex="U"></span> de la paroi courante.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : comparer ITE épaisse et isolant mince — l’ordre de raisonnement, pas un catalogue.</p>
+        </div>
+        <span class="tag">Étape 5</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Coupe avant / après (largeurs ∝ <span class="tex" data-tex="e"></span>)</div>
+          <div class="bd">
+            <p class="viz-cap" id="cap-reno-top">ITE : isolant extérieur ; comparez à un isolant mince côté intérieur</p>
+            <canvas id="cv-reno" width="720" height="300"></canvas>
+            <ul class="eq-list">
+              <li>Avant : <span class="tex" data-tex="U_{0}=1/R_{\mathrm{th},0}"></span></li>
+              <li>Après : ajout <span class="tex" data-tex="R_{\mathrm{iso}}=e/\lambda"></span> → <span class="tex" data-tex="U_{1}"></span></li>
+              <li>Gain relatif ≈ <span class="tex" data-tex="(U_{0}-U_{1})/U_{0}"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="reno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Stratégie</label>
+              <select id="strat">
+                <option value="ite">ITE (isolant extérieur épais)</option>
+                <option value="thin">Isolant mince (pédagogie « petite épaisseur »)</option>
+              </select>
+              <span class="hint">Comparaison qualitative ITE vs mince — pas un catalogue produit</span>
+            </div>
+            <div class="ctrl">
+              <label>Épaisseur isolant ajouté <span class="tex" data-tex="e_{\mathrm{iso}}"></span> <strong id="v-eiso5">14 cm</strong></label>
+              <span class="hint">Générique pédagogique — pas celle du sujet</span>
+              <input type="range" id="eiso5" min="1" max="25" step="1" value="14" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\lambda_{\mathrm{iso}}"></span> <strong id="v-liso5">0,038 W/(m·K)</strong></label>
+              <input type="range" id="liso5" min="0.020" max="0.080" step="0.001" value="0.038" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="U_{0}"></span> mur existant <strong id="v-U0">1,80 W/(m²·K)</strong></label>
+              <span class="hint">Mur peu isolé (exemple pédagogique)</span>
+              <input type="range" id="U0" min="0.8" max="2.5" step="0.05" value="1.80" />
+            </div>
+            <div class="readouts" id="out-reno"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : enveloppe d’abord, systèmes ensuite.</span></div>
+        <div class="bd" id="quiz-reno"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>L’ITE épaisse fait chuter <span class="tex" data-tex="U"></span> fortement ; un isolant mince limite le gain.</li>
+          <li>Les largeurs suivent <span class="tex" data-tex="e"></span> : un isolant mince reste une bande fine sur le schéma.</li>
+          <li>Le gain % porte sur <span class="tex" data-tex="U"></span> de la paroi courante — les ponts restent un autre sujet (atelier 02).</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez en « isolant mince » avec 2 cm : le gain % est-il négligeable face à 14 cm d’ITE ?</li>
+          <li>Pourquoi le schéma insiste-t-il sur l’épaisseur géométrique plutôt que sur une largeur ∝ <span class="tex" data-tex="R"></span> ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 06 Systems -->
+    <section class="atelier" id="atelier-sys">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 06</p>
+          <h2>VMC double flux et pompe à chaleur</h2>
+          <p class="lede">Deux leviers distincts : récupérer la chaleur de l’air extrait, puis produire le reste avec un COP.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : qui réduit le besoin, qui réduit la facture électrique — sans catalogue PAC.</p>
+        </div>
+        <span class="tag">Étape 6</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Schéma pédagogique systèmes</div>
+          <div class="bd">
+            <p class="viz-cap" id="cap-sys-top">Récupération sur air extrait + production chaleur via COP</p>
+            <canvas id="cv-sys" width="720" height="300"></canvas>
+            <ul class="eq-list">
+              <li>Après récupération : <span class="tex" data-tex="H_{v,\mathrm{eff}}=(1-\eta)\,H_{v}"></span></li>
+              <li><span class="tex" data-tex="C_{\mathrm{elec}}=\mathrm{besoin}/\mathrm{COP}"></span> (kWh élec.)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="sys"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Besoin chauffage (saison) <strong id="v-bes">15000 kWh</strong></label>
+              <span class="hint">Générique pédagogique — pas le besoin du sujet noté</span>
+              <input type="range" id="bes" min="5000" max="30000" step="500" value="15000" />
+            </div>
+            <div class="ctrl">
+              <label>Part ventilation dans pertes <span class="tex" data-tex="H_{v}/H_{\mathrm{bat}}"></span> <strong id="v-partV">25 %</strong></label>
+              <input type="range" id="partV" min="10" max="50" step="1" value="25" />
+            </div>
+            <div class="ctrl">
+              <label>Rendement récupération <span class="tex" data-tex="\eta"></span> <strong id="v-eta">0,70</strong></label>
+              <span class="hint">VMC DF : fraction de chaleur récupérée sur l’air extrait</span>
+              <input type="range" id="eta" min="0" max="0.9" step="0.05" value="0.70" />
+            </div>
+            <div class="ctrl">
+              <label>COP de la PAC <strong id="v-COP">3,5</strong></label>
+              <span class="hint">Sensibilité pédagogique — pas une référence catalogue</span>
+              <input type="range" id="COP" min="1" max="5" step="0.1" value="3.5" />
+            </div>
+            <div class="readouts" id="out-sys"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : le COP divise la facture, pas le besoin enveloppe.</span></div>
+        <div class="bd" id="quiz-sys"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>La VMC DF réduit surtout le poste ventilation, pas la transmission.</li>
+          <li>Le COP convertit un besoin thermique en consommation électrique.</li>
+          <li>Un COP élevé diminue <span class="tex" data-tex="C_{\mathrm{elec}}"></span> — mais le besoin enveloppe reste le point de départ.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Comparez COP = 1 (effet Joule) et COP = 3,5 : d’un facteur combien baisse <span class="tex" data-tex="C_{\mathrm{elec}}"></span> ?</li>
+          <li>La VMC DF change-t-elle ce facteur, ou surtout le besoin amont ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 07 TRI -->
+    <section class="atelier" id="atelier-tri">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 07</p>
+          <h2>Temps de retour et CO₂</h2>
+          <p class="lede">TRI simple = investissement net ÷ économies annuelles. Le signe du raisonnement, pas le chiffrage noté.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : sentir comment coût et gain se disputent le TRI — montants génériques uniquement.</p>
+        </div>
+        <span class="tag">Étape 7</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Comparaison COP = 1 vs PAC + investissement</div>
+          <div class="bd">
+            <p class="viz-cap" id="cap-tri-top">Barres : coût net, gain annuel, émissions — paramètres génériques</p>
+            <canvas id="cv-tri" width="720" height="300"></canvas>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="\mathrm{TRI}=\mathrm{co\hat{u}t_{net}}/\mathrm{gain_{annuel}}"></span> (années)</li>
+              <li><span class="tex" data-tex="\mathrm{CO}_{2}=f_{\mathrm{CO}_{2}}\cdot C_{\mathrm{ef}}"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="tri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Besoin thermique annuel <strong id="v-bes7">14000 kWh</strong></label>
+              <span class="hint">Générique pédagogique — pas celui du sujet</span>
+              <input type="range" id="bes7" min="6000" max="28000" step="500" value="14000" />
+            </div>
+            <div class="ctrl">
+              <label>Prix électricité <strong id="v-prix">0,22 €/kWh</strong></label>
+              <input type="range" id="prix" min="0.10" max="0.40" step="0.01" value="0.22" />
+            </div>
+            <div class="ctrl">
+              <label>COP scénario PAC <strong id="v-COP7">3,2</strong></label>
+              <input type="range" id="COP7" min="1.5" max="5" step="0.1" value="3.2" />
+            </div>
+            <div class="ctrl">
+              <label>Coût net investissement <strong id="v-cout">8000 €</strong></label>
+              <span class="hint">Montant générique pédagogique — pas celui du sujet</span>
+              <input type="range" id="cout" min="2000" max="20000" step="500" value="8000" />
+            </div>
+            <div class="ctrl">
+              <label>Facteur CO₂ électricité <strong id="v-fCO2">0,08 kg/kWh</strong></label>
+              <span class="hint">Ordre de grandeur pédagogique (mix FR simplifié)</span>
+              <input type="range" id="fCO2" min="0.04" max="0.40" step="0.01" value="0.08" />
+            </div>
+            <div class="readouts" id="out-tri"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : TRI = coût ÷ gain, rien de plus magique.</span></div>
+        <div class="bd" id="quiz-tri"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>TRI simple = investissement net ÷ économies d’énergie annuelles.</li>
+          <li>Passer de COP = 1 à une PAC multiplie le gain électrique… et réduit souvent le CO₂ lié à <span class="tex" data-tex="C_{\mathrm{ef}}"></span>.</li>
+          <li>Les € et facteurs ici préparent le raisonnement, pas le chiffrage noté.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Si le coût net double, le TRI double-t-il ?</li>
+          <li>Si le COP passe de 2 à 4, le gain annuel double-t-il vraiment (par rapport à COP = 1) ?</li>
+        </ul></div></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Anti-spoil rappel : aucun catalogue PAC ni montant du dossier noté n’est embarqué ici. Transférez la méthode, pas les chiffres.</span>
+      </div>
+    </section>
+
+    <!-- 08 Grand contrôle -->
+    <section class="atelier" id="atelier-defi">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 08</p>
+          <h2>Le Grand contrôle du bureau d’études</h2>
+          <p class="lede">8 questions, toutes thématiques confondues. Votre <strong>première réponse</strong> à chaque question compte pour le score — mais vous pouvez continuer jusqu’à trouver la bonne, l’explication vient toujours.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>Mission Aulnes : l’entretien final — 7/8 ou plus décroche la mention « Aulnes d’or ».</p>
+        </div>
+        <span class="tag">Synthèse 01–07</span>
+      </div>
+      <div class="card quiz-card" style="margin-top:0;">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Grand contrôle <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-6 4-8"/></svg>Thermie souffle : relis « À retenir » des ateliers avant de te lancer.</span></div>
+        <div class="bd">
+          <div id="quiz-final"></div>
+          <div class="score-panel" id="final-panel" hidden>
+            <div>
+              <div class="score-big" id="final-score">0/8</div>
+              <div class="score-lab">premières réponses correctes</div>
+            </div>
+            <div class="score-rank" id="final-verdict"></div>
+            <button class="replay-btn" id="final-replay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Rejouer</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Ce quiz vérifie les réflexes qualitatifs, pas le projet noté : les valeurs utilisées sont génériques et le raisonnement prime sur le chiffre.</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+<!-- LEXIQUE -->
+<div class="gloss-overlay" id="gloss" hidden>
+  <div class="gloss-panel" role="dialog" aria-modal="true" aria-label="Lexique express">
+    <button class="gloss-close" id="gloss-close" type="button" aria-label="Fermer le lexique">✕</button>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>Lexique express</h3>
+    <p class="gloss-sub">Le vocabulaire de l’énergétique du bâtiment, en français courant. Fermez avec ✕, Échap ou un clic hors de la fiche.</p>
+    <dl>
+      <dt>Résistance thermique <span class="tex" data-tex="R"></span></dt>
+      <dd>Difficulté à faire passer la chaleur à travers une couche : <span class="tex" data-tex="R=e/\lambda"></span> (épaisseur en mètres). On additionne les couches, plus les films d’air intérieur et extérieur, pour obtenir <span class="tex" data-tex="R_{\mathrm{th}}"></span>.</dd>
+      <dt>Coefficient de transmission <span class="tex" data-tex="U"></span></dt>
+      <dd>Inverse de la résistance totale : <span class="tex" data-tex="U=1/R_{\mathrm{th}}"></span>, en W/(m²·K). Un <span class="tex" data-tex="U"></span> petit = paroi plus isolante. Le flux vaut alors <span class="tex" data-tex="\Phi=U A \Delta T"></span>.</dd>
+      <dt><span class="tex" data-tex="H_{\mathrm{bat}}"></span></dt>
+      <dd>Coefficient de déperdition global du bâtiment, en W/K. Somme de trois postes : transmission <span class="tex" data-tex="H_{\mathrm{tr}}"></span>, ventilation <span class="tex" data-tex="H_{v}"></span> et ponts <span class="tex" data-tex="H_{\mathrm{pt}}"></span>.</dd>
+      <dt>Pont thermique <span class="tex" data-tex="\Psi"></span></dt>
+      <dd>Fuite linéaire (jonction plancher/mur, etc.). Puissance ≈ <span class="tex" data-tex="\Psi L \Delta T"></span>. Isoler la paroi courante ne supprime pas automatiquement les ponts.</dd>
+      <dt>DJU (degrés-jours unifiés)</dt>
+      <dd>On « compte » chaque jour où <span class="tex" data-tex="T_{\mathrm{ext}}<T_{\mathrm{cons}}"></span> l’écart consigne − extérieur, puis on somme sur la saison. Relie le climat au besoin : <span class="tex" data-tex="B_{\mathrm{ch,an}}=H_{\mathrm{bat}}\cdot\mathrm{DJU}\cdot 24/1000"></span>.</dd>
+      <dt>Énergie finale <span class="tex" data-tex="C_{\mathrm{ef}}"></span> / primaire <span class="tex" data-tex="C_{\mathrm{ep}}"></span></dt>
+      <dd>Finale = ce que le compteur mesure (et que vous payez). Primaire = vision amont du système énergétique : <span class="tex" data-tex="C_{\mathrm{ep}}=f_{\mathrm{p}} C_{\mathrm{ef}}"></span>. Le DPE classe surtout l’indicateur primaire par m².</dd>
+      <dt>ITE / isolant mince</dt>
+      <dd>ITE : isolation thermique par l’extérieur (souvent épaisse). Un isolant mince a une petite <span class="tex" data-tex="e"></span> : <span class="tex" data-tex="R=e/\lambda"></span> reste limité, donc le gain sur <span class="tex" data-tex="U"></span> aussi.</dd>
+      <dt>VMC double flux</dt>
+      <dd>Ventilation qui récupère une fraction <span class="tex" data-tex="\eta"></span> de la chaleur de l’air extrait pour préchauffer l’air neuf. Elle réduit surtout le poste ventilation, pas les murs.</dd>
+      <dt>COP (coefficient de performance)</dt>
+      <dd>Rapport chaleur utile / électricité consommée pour une pompe à chaleur. <span class="tex" data-tex="C_{\mathrm{elec}}=\mathrm{besoin}/\mathrm{COP}"></span>. Un COP de 3,5 divise la facture électrique par environ 3,5 par rapport à l’effet Joule (COP = 1).</dd>
+      <dt>TRI (temps de retour simple)</dt>
+      <dd>Années pour « rembourser » l’investissement : coût net ÷ gain annuel. Si le coût double à gain égal, le TRI double. Ce n’est pas un taux d’intérêt.</dd>
+      <dt><span class="tex" data-tex="b_{\mathrm{LNC}}"></span></dt>
+      <dd>Facteur de réduction quand une paroi donne sur un local non chauffé (garage, comble…) plutôt que sur l’extérieur. Égal à 1 en plein air.</dd>
+    </dl>
+  </div>
+</div>
+
+<canvas id="fx-confetti"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<footer class="credit-bar" aria-label="Crédit et identification du module">
+  <div class="credit-cell">
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="credit-cell module">
+    <div class="who">R 3-10 Physique et Énergétique du bâtiment (niveau 1)</div>
+    <div class="role">Laboratoire virtuel pédagogique</div>
+  </div>
+  <div class="credit-cell iut">
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+<script>
+(() => {
+  const TAU = Math.PI * 2;
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (id) => document.getElementById(id);
+  const fmt = (x, n = 2) => Number(x).toLocaleString("fr-FR", {
+    maximumFractionDigits: n,
+    minimumFractionDigits: n,
+  });
+
+  const THEMES = {
+    dark: {
+      ink: "#e8f2ec", muted: "#9cb8a8", faint: "rgba(156,184,168,0.45)",
+      iso: "#40916c", support: "#6c757d", wallStroke: "#95d5b2",
+      accent: "#74c69d", accentDeep: "#95d5b2", heat: "#e08a5a",
+      ok: "#3ecf8e", warn: "#f2b73f", danger: "#f47d7d",
+      grid: "rgba(149,213,178,0.22)",
+      barTr: "#14532d", barV: "#40916c", barPt: "#74c69d", barLabel: "#ffffff",
+      house: "#1d3a32", houseStroke: "#74c69d", window: "#f2b73f", roof: "#2d6a4f",
+      terrain: "#12302b", terrainLine: "#1d4a40",
+      boxVmc: "#1b4332", boxNeed: "#243830", boxPac: "#2d6a4f",
+      gaugeBg: "rgba(116,198,157,0.15)",
+      particle: "#f2b73f",
+      confetti: ["#74c69d", "#95d5b2", "#40916c", "#ffd166", "#f2b73f", "#e8f2ec"],
+      glow: true,
+    },
+    light: {
+      ink: "#14241c", muted: "#5a6e63", faint: "rgba(90,110,99,0.45)",
+      iso: "#95d5b2", support: "#adb5bd", wallStroke: "#1b4332",
+      accent: "#40916c", accentDeep: "#1b4332", heat: "#c45c26",
+      ok: "#1b7a4a", warn: "#a15c00", danger: "#9b1c1c",
+      grid: "#c5d5cc",
+      barTr: "#1b4332", barV: "#40916c", barPt: "#74c69d", barLabel: "#ffffff",
+      house: "#ffffff", houseStroke: "#1b4332", window: "#40916c", roof: "#2d6a4f",
+      terrain: "#dce8df", terrainLine: "#c2d6c8",
+      boxVmc: "#d8f3dc", boxNeed: "#e9ecef", boxPac: "#95d5b2",
+      gaugeBg: "#e9ecef",
+      particle: "#c45c26",
+      confetti: ["#1b4332", "#40916c", "#74c69d", "#c98a12", "#95d5b2", "#2d6a4f"],
+      glow: false,
+    },
+  };
+  let P = THEMES.dark;
+
+  function viewHi(cv) {
+    const ctx = cv.getContext("2d");
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    const w = cv.width / 2, h = cv.height / 2;
+    ctx.clearRect(0, 0, w, h);
+    return { ctx, w, h };
+  }
+  function view1(cv) {
+    const ctx = cv.getContext("2d");
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    return { ctx, w, h };
+  }
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function texHTML(src, display = false) {
+    if (window.katex) {
+      try {
+        return katex.renderToString(src, { throwOnError: false, displayMode: display, output: "html" });
+      } catch (_) { /* fall through */ }
+    }
+    return `<span class="tex-fallback">${src}</span>`;
+  }
+  function paintStaticTex() {
+    document.querySelectorAll(".tex[data-tex]").forEach((el) => {
+      el.innerHTML = texHTML(el.getAttribute("data-tex"));
+      el.classList.add("tex-inline");
+    });
+  }
+  function kpiHTML(items) {
+    return items.map((it) => {
+      const k = it.texK ? texHTML(it.texK) + (it.kSuffix ? " " + it.kSuffix : "") : it.k;
+      return `<div class="kpi${it.wide ? " wide" : ""}"><div class="k">${k}</div><div class="v">${it.v}</div></div>`;
+    }).join("");
+  }
+
+  const ORDER = ["home", "trans", "vent", "dju", "dpe", "reno", "sys", "tri", "defi"];
+  const buttons = [...document.querySelectorAll(".nav-btn")];
+  const ateliers = [...document.querySelectorAll(".atelier")];
+  let current = "home";
+
+  function show(id) {
+    current = id;
+    buttons.forEach((b) => {
+      const on = b.dataset.atelier === id;
+      b.classList.toggle("active", on);
+      if (on) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    ateliers.forEach((a) => a.classList.toggle("active", a.id === "atelier-" + id));
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    setTimeout(() => {
+      paintStaticTex();
+      repaintCurrent();
+      ensureAnim();
+    }, 0);
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => show(b.dataset.atelier)));
+
+  window.addEventListener("keydown", (e) => {
+    const t = e.target.tagName;
+    if (t === "INPUT" || t === "SELECT" || t === "TEXTAREA") return;
+    if (e.key === "Escape") { closeGloss(); return; }
+    if (e.key === "l" || e.key === "L") { toggleGloss(); return; }
+    const i = ORDER.indexOf(current);
+    if (e.key === "ArrowRight" && i < ORDER.length - 1) show(ORDER[i + 1]);
+    else if (e.key === "ArrowLeft" && i > 0) show(ORDER[i - 1]);
+    else if (/^[0-8]$/.test(e.key)) show(ORDER[+e.key]);
+  });
+
+  const STORE_KEY = "r310_lab_virtuel";
+  let store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme: "dark" };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      store = Object.assign(store, s);
+      store.final = Object.assign({ first: {}, best: -1 }, s.final || {});
+    }
+  } catch (_) { /* stockage indisponible */ }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (_) { /* ignore */ }
+  }
+
+  const EXPLORABLE = ["trans", "vent", "dju", "dpe", "reno", "sys", "tri"];
+  function starCount() { return EXPLORABLE.filter((k) => store.stars[k]).length; }
+  function rankName() {
+    const s = starCount();
+    const f = store.final.best;
+    if (s >= 7 && f >= 7) return "Ingénieur·e PEB · Aulnes d’or";
+    if (s >= 6) return "Chef·fe de projet rénovation";
+    if (s >= 4) return "Chargé·e d’études junior";
+    if (s >= 2) return "Technicien·ne enveloppe";
+    return "Stagiaire énergétique";
+  }
+  function renderHud() {
+    let n = 0;
+    EXPLORABLE.forEach((k) => {
+      if (store.explored[k]) n += 1;
+      const dot = document.querySelector(`.dot[data-dot="${k}"]`);
+      if (dot) dot.classList.toggle("done", !!store.explored[k]);
+      const st = document.querySelector(`.star-ic[data-star="${k}"]`);
+      if (st) st.classList.toggle("on", !!store.stars[k]);
+    });
+    const stFinal = document.querySelector('.star-ic[data-star="final"]');
+    if (stFinal) stFinal.classList.toggle("on", store.final.best >= 7);
+    $("prog-count").textContent = n + "/7";
+    $("prog-fill").style.width = (n / 7 * 100) + "%";
+    const sc = starCount();
+    $("star-count").textContent = sc + "/7";
+    $("star-fill").style.width = (sc / 7 * 100) + "%";
+    $("rank-name").textContent = rankName();
+  }
+  function markExplored(key) {
+    if (!EXPLORABLE.includes(key) || store.explored[key]) return;
+    store.explored[key] = true;
+    save();
+    renderHud();
+  }
+
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    P = THEMES[t];
+    store.theme = t;
+    save();
+    const dark = t === "dark";
+    $("theme-ic-sun").style.display = dark ? "" : "none";
+    $("theme-ic-moon").style.display = dark ? "none" : "";
+    $("theme-label").textContent = dark ? "Passer en mode clair" : "Passer en mode sombre";
+    $("theme-btn").setAttribute("aria-pressed", String(!dark));
+    repaintAll();
+  }
+  $("theme-btn").addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+
+  function toggleGloss() {
+    const gl = $("gloss");
+    if (gl.hidden) { gl.hidden = false; paintStaticTex(); }
+    else gl.hidden = true;
+  }
+  function closeGloss() { $("gloss").hidden = true; }
+  $("gloss-btn").addEventListener("click", toggleGloss);
+  $("gloss-close").addEventListener("click", closeGloss);
+  $("gloss").addEventListener("click", (e) => { if (e.target === $("gloss")) closeGloss(); });
+
+  let confettiParts = [];
+  let confettiOn = false;
+  function confetti() {
+    if (RM) return;
+    const cv = $("fx-confetti");
+    cv.width = innerWidth;
+    cv.height = innerHeight;
+    cv.style.display = "block";
+    const cols = P.confetti;
+    for (let i = 0; i < 90; i++) {
+      confettiParts.push({
+        x: innerWidth * (0.2 + Math.random() * 0.6),
+        y: -20 - Math.random() * 80,
+        vx: (Math.random() - 0.5) * 3.2,
+        vy: 2 + Math.random() * 3.4,
+        rot: Math.random() * TAU,
+        vr: (Math.random() - 0.5) * 0.3,
+        s: 4 + Math.random() * 5,
+        c: cols[i % cols.length],
+        drop: Math.random() < 0.4,
+      });
+    }
+    if (!confettiOn) { confettiOn = true; requestAnimationFrame(confettiLoop); }
+  }
+  function confettiLoop() {
+    const cv = $("fx-confetti");
+    const ctx = cv.getContext("2d");
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    confettiParts.forEach((p) => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      if (p.drop) { ctx.beginPath(); ctx.arc(0, 0, p.s / 2, 0, TAU); ctx.fill(); }
+      else ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      ctx.restore();
+    });
+    confettiParts = confettiParts.filter((p) => p.y < cv.height + 30);
+    if (confettiParts.length > 0) requestAnimationFrame(confettiLoop);
+    else { confettiOn = false; cv.style.display = "none"; }
+  }
+
+  const heroHeats = Array.from({ length: 18 }, (_, i) => ({
+    s: Math.random(), side: i % 3, sp: 0.004 + Math.random() * 0.006,
+  }));
+
+  function paintHero() {
+    const cv = $("cv-hero");
+    if (!cv) return;
+    const { ctx, w, h } = viewHi(cv);
+    const t = performance.now() / 1000;
+    const groundY = 158;
+
+    ctx.fillStyle = P.terrain;
+    ctx.fillRect(0, groundY, w, h - groundY);
+    ctx.strokeStyle = P.terrainLine;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, groundY);
+    ctx.lineTo(w, groundY);
+    ctx.stroke();
+
+    function tree(tx, sc) {
+      ctx.fillStyle = P.roof;
+      ctx.beginPath();
+      ctx.moveTo(tx, groundY - 52 * sc);
+      ctx.lineTo(tx + 16 * sc, groundY - 8 * sc);
+      ctx.lineTo(tx - 16 * sc, groundY - 8 * sc);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = P.houseStroke;
+      ctx.fillRect(tx - 2.5 * sc, groundY - 8 * sc, 5 * sc, 8 * sc);
+    }
+    tree(70, 1);
+    tree(118, 0.75);
+    tree(660, 0.85);
+    tree(700, 1.05);
+
+    const hx = 250, hy = 62, hw = 220, hh = 96;
+    ctx.fillStyle = P.house;
+    ctx.strokeStyle = P.houseStroke;
+    ctx.lineWidth = 2.5;
+    rr(ctx, hx, hy, hw, hh, 4);
+    ctx.fill(); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(hx - 18, hy);
+    ctx.lineTo(hx + hw / 2, hy - 42);
+    ctx.lineTo(hx + hw + 18, hy);
+    ctx.closePath();
+    ctx.fillStyle = P.roof;
+    ctx.fill();
+    ctx.strokeStyle = P.houseStroke;
+    ctx.stroke();
+    ctx.fillStyle = P.window;
+    const lit = Math.sin(t * 0.6) > -0.35;
+    if (lit) {
+      ctx.fillRect(hx + 28, hy + 28, 28, 24);
+      ctx.fillRect(hx + 88, hy + 28, 28, 24);
+      ctx.fillRect(hx + 148, hy + 28, 28, 24);
+    }
+    ctx.fillStyle = P.houseStroke;
+    ctx.fillRect(hx + 96, hy + 58, 28, 38);
+    ctx.fillStyle = P.muted;
+    ctx.font = "600 13px 'DM Sans', sans-serif";
+    ctx.fillText("Pavillon des Aulnes", hx + 42, hy - 50);
+
+    heroHeats.forEach((d) => {
+      if (!RM) d.s = (d.s + d.sp) % 1;
+      let x, y;
+      if (d.side === 0) { x = hx - 6; y = hy + 20 + d.s * (hh - 24); }
+      else if (d.side === 1) { x = hx + hw + 6; y = hy + 16 + d.s * (hh - 20); }
+      else { x = hx + 30 + d.s * (hw - 60); y = hy - 8 - d.s * 18; }
+      ctx.beginPath();
+      if (P.glow) { ctx.shadowColor = P.particle; ctx.shadowBlur = 6; }
+      ctx.fillStyle = P.particle;
+      ctx.globalAlpha = 0.35 + 0.55 * (1 - d.s);
+      ctx.arc(x, y, 2.2, 0, TAU);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+    });
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("fuites de chaleur (décor) — la physique commence à l’atelier 01", 24, h - 16);
+  }
+
+  let animRunning = false;
+  function animLoop() {
+    animRunning = true;
+    if (current === "home") paintHero();
+    if (!RM && current === "home") requestAnimationFrame(animLoop);
+    else animRunning = false;
+  }
+  function ensureAnim() {
+    if (RM) { if (current === "home") paintHero(); return; }
+    if (!animRunning) requestAnimationFrame(animLoop);
+  }
+
+  function updateTrans() {
+    const eIso = +$("eiso1").value / 100, lIso = +$("liso1").value;
+    const eSup = +$("esup").value / 100, lSup = +$("lsup").value;
+    const A = +$("A1").value, dT = +$("dT1").value, b = +$("bLNC").value;
+    $("v-eiso1").textContent = $("eiso1").value + " cm";
+    $("v-liso1").textContent = fmt(lIso, 3) + " W/(m·K)";
+    $("v-esup").textContent = $("esup").value + " cm";
+    $("v-lsup").textContent = fmt(lSup, 2) + " W/(m·K)";
+    $("v-A1").textContent = A + " m²";
+    $("v-dT1").textContent = dT + " K";
+    $("v-bLNC").textContent = fmt(b, 2);
+    const Rsi = 0.13, Rse = 0.04;
+    const Riso = eIso / lIso, Rsup = eSup / lSup;
+    const Rth = Rsi + Riso + Rsup + Rse;
+    const U = 1 / Rth;
+    const Phi = b * U * A * dT;
+    $("out-trans").innerHTML = kpiHTML([
+      { texK: "R_{\\mathrm{iso}}", v: fmt(Riso, 2) + " m²·K/W" },
+      { texK: "R_{\\mathrm{sup}}", v: fmt(Rsup, 3) + " m²·K/W" },
+      { texK: "R_{\\mathrm{th}}", v: fmt(Rth, 2) + " m²·K/W" },
+      { texK: "U", v: fmt(U, 3) + " W/(m²·K)" },
+      { texK: "\\Phi", kSuffix: "(avec " + texHTML("b_{\\mathrm{LNC}}") + ")", v: fmt(Phi, 0) + " W", wide: true },
+    ]);
+    $("cap-trans-top").innerHTML =
+      "Largeurs ∝ épaisseurs · " + texHTML("U") + " = " + fmt(U, 3) +
+      " W/(m²·K) · " + texHTML("\\Phi") + " = " + fmt(Phi, 0) + " W";
+    drawTrans(eIso, eSup, Riso, Rsup);
+  }
+  function drawTrans(eIso, eSup, Riso, Rsup) {
+    const { ctx, w, h } = view1($("cv-trans"));
+    const eTot = eIso + eSup;
+    const xL = 90, xR = w - 90, yTop = 40, yBot = h - 48;
+    const wI = (eIso / eTot) * (xR - xL), wS = (eSup / eTot) * (xR - xL);
+    ctx.fillStyle = P.iso;
+    ctx.fillRect(xL, yTop, wI, yBot - yTop);
+    ctx.fillStyle = P.support;
+    ctx.fillRect(xL + wI, yTop, wS, yBot - yTop);
+    ctx.strokeStyle = P.wallStroke;
+    ctx.strokeRect(xL, yTop, xR - xL, yBot - yTop);
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 13px DM Sans, sans-serif";
+    ctx.fillText("Isolant", xL + 10, yTop + 22);
+    ctx.fillText("Support", xL + wI + 10, yTop + 22);
+    ctx.font = "11px DM Sans, sans-serif";
+    ctx.fillStyle = P.muted;
+    ctx.fillText(fmt(eIso * 100, 0) + " cm", xL + 10, yTop + 42);
+    ctx.fillText(fmt(eSup * 100, 0) + " cm", xL + wI + 10, yTop + 42);
+    const Rmat = Riso + Rsup;
+    const Ti = 20, Te = 0;
+    const T12 = Ti - (Ti - Te) * (Riso / Rmat);
+    const Y = (T) => {
+      const Tmin = -2, Tmax = 22;
+      return yBot - ((T - Tmin) / (Tmax - Tmin)) * (yBot - yTop - 50) - 25;
+    };
+    ctx.strokeStyle = P.accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(xL, Y(Ti));
+    ctx.lineTo(xL + wI, Y(T12));
+    ctx.lineTo(xR, Y(Te));
+    ctx.stroke();
+    [[xL, Ti], [xL + wI, T12], [xR, Te]].forEach(([x, T]) => {
+      ctx.fillStyle = P.accent;
+      ctx.beginPath(); ctx.arc(x, Y(T), 5, 0, TAU); ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px IBM Plex Mono, monospace";
+      ctx.fillText(fmt(T, 1) + " °C", x - 16, Y(T) - 10);
+    });
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px DM Sans, sans-serif";
+    ctx.fillText("Intérieur →", xL, yBot + 28);
+    ctx.fillText("← Extérieur", xR - 90, yBot + 28);
+  }
+
+  function updateVent() {
+    const Htr = +$("Htr").value, Qv = +$("Qv").value;
+    const Psi = +$("Psi").value, L = +$("Lpt").value, dT = +$("dT2").value;
+    $("v-Htr").textContent = fmt(Htr, 0) + " W/K";
+    $("v-Qv").textContent = Qv + " m³/h";
+    $("v-Psi").textContent = fmt(Psi, 2) + " W/(m·K)";
+    $("v-Lpt").textContent = L + " m";
+    $("v-dT2").textContent = dT + " K";
+    const Hv = 0.34 * Qv;
+    const Hpt = Psi * L;
+    const Hbat = Htr + Hv + Hpt;
+    const Phitr = Htr * dT, Phiv = Hv * dT, Phipt = Hpt * dT;
+    $("out-vent").innerHTML = kpiHTML([
+      { texK: "H_{v}=0{,}34 Q_{v}", v: fmt(Hv, 1) + " W/K" },
+      { texK: "H_{\\mathrm{pt}}=\\Psi L", v: fmt(Hpt, 1) + " W/K" },
+      { texK: "H_{\\mathrm{bat}}", v: fmt(Hbat, 1) + " W/K", wide: true },
+      { texK: "\\Phi_{\\mathrm{tr}}", v: fmt(Phitr, 0) + " W" },
+      { texK: "\\Phi_{v}", v: fmt(Phiv, 0) + " W" },
+      { texK: "\\Phi_{\\mathrm{pt}}", v: fmt(Phipt, 0) + " W" },
+    ]);
+    drawVent(Htr, Hv, Hpt, Hbat);
+  }
+  function drawVent(Htr, Hv, Hpt, Hbat) {
+    const { ctx, w, h } = view1($("cv-vent"));
+    const x0 = 70, x1 = w - 50, y0 = 36, y1 = h - 70;
+    const parts = [
+      { n: "Transmission", v: Htr, c: P.barTr },
+      { n: "Ventilation", v: Hv, c: P.barV },
+      { n: "Ponts", v: Hpt, c: P.barPt },
+    ];
+    ctx.strokeStyle = P.wallStroke;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1);
+    ctx.stroke();
+    const max = Math.max(Hbat, 1);
+    const Y = (v) => y1 - (v / max) * (y1 - y0);
+    ctx.font = "11px DM Sans, sans-serif";
+    for (let i = 0; i <= 5; i++) {
+      const val = (max * i) / 5;
+      const y = Y(val);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x0 - 5, y); ctx.lineTo(x0, y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(fmt(val, 0), x0 - 36, y + 4);
+    }
+    ctx.fillStyle = P.muted;
+    ctx.fillText("W/K", x0 - 36, y0 - 8);
+    const bx = x0 + 180, bw = 120;
+    let yCursor = y1;
+    parts.forEach((p) => {
+      const bh = (p.v / max) * (y1 - y0);
+      yCursor -= bh;
+      ctx.fillStyle = p.c;
+      ctx.fillRect(bx, yCursor, bw, bh);
+      if (bh > 22) {
+        ctx.fillStyle = P.barLabel;
+        ctx.font = "600 12px DM Sans, sans-serif";
+        ctx.fillText(fmt(p.v, 1), bx + 28, yCursor + bh / 2 + 4);
+      }
+    });
+    ctx.strokeStyle = P.wallStroke;
+    ctx.strokeRect(bx, Y(Hbat), bw, y1 - Y(Hbat));
+    let ly = y0 + 10;
+    parts.forEach((p) => {
+      ctx.fillStyle = p.c;
+      ctx.fillRect(x0 + 20, ly, 14, 14);
+      ctx.fillStyle = P.ink;
+      ctx.font = "13px DM Sans, sans-serif";
+      ctx.fillText(p.n + "  " + fmt(p.v, 1) + " W/K", x0 + 42, ly + 12);
+      ly += 26;
+    });
+    ctx.font = "600 13px DM Sans, sans-serif";
+    ctx.fillText("total = " + fmt(Hbat, 1) + " W/K", bx, y1 + 28);
+    $("cap-vent-top").innerHTML =
+      texHTML("H_{\\mathrm{bat}}") + " = " + fmt(Hbat, 1) + " W/K  ·  parts empilées des trois postes";
+  }
+
+  function updateDju() {
+    const Hbat = +$("Hbat3").value, Tcons = +$("Tcons").value;
+    const Text = +$("Text3").value, DJU = +$("DJU").value;
+    $("v-Hbat3").textContent = fmt(Hbat, 0) + " W/K";
+    $("v-Tcons").textContent = Tcons + " °C";
+    $("v-Text3").textContent = Text + " °C";
+    $("v-DJU").textContent = String(DJU);
+    const djuJour = Math.max(0, Tcons - Text);
+    const B = Hbat * DJU * 24 / 1000;
+    $("out-dju").innerHTML = kpiHTML([
+      { k: "DJU du jour (consigne − " + texHTML("T_{\\mathrm{ext}}") + ")", v: fmt(djuJour, 0) + " K·j" },
+      { texK: "B_{\\mathrm{ch,an}}", kSuffix: "(saison)", v: fmt(B, 0) + " kWh/an", wide: true },
+      { k: "Lecture", v: "Besoin ≈ " + texHTML("H_{\\mathrm{bat}}") + " × DJU × 24 / 1000", wide: true },
+    ]);
+    drawDju(Tcons, Text, djuJour, DJU, B);
+  }
+  function drawDju(Tcons, Tjour, djuJour, DJU, B) {
+    const { ctx, w, h } = view1($("cv-dju"));
+    const x0 = 70, x1 = w - 40, y0 = 36, y1 = h - 55;
+    const Tmin = -6, Tmax = 22;
+    const nDays = 14;
+    const Y = (T) => y1 - ((T - Tmin) / (Tmax - Tmin)) * (y1 - y0);
+    const X = (d) => x0 + ((d + 0.5) / nDays) * (x1 - x0);
+    const days = [];
+    for (let d = 0; d < nDays; d++) {
+      const wave = 3 * Math.sin((d / nDays) * Math.PI * 2);
+      days.push(Math.max(Tmin + 1, Math.min(Tmax - 1, Tjour + wave)));
+    }
+    days[Math.floor(nDays / 2)] = Tjour;
+    ctx.strokeStyle = P.wallStroke;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.font = "11px DM Sans, sans-serif";
+    for (let T = -5; T <= 20; T += 5) {
+      const y = Y(T);
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(x0 - 5, y); ctx.lineTo(x0, y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(String(T), x0 - 28, y + 4);
+    }
+    ctx.fillText("°C", x0 - 28, y0 - 8);
+    ctx.strokeStyle = P.accent;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x0, Y(Tcons)); ctx.lineTo(x1, Y(Tcons));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = P.accent;
+    ctx.font = "12px DM Sans, sans-serif";
+    ctx.fillText("Consigne " + Tcons + " °C", x1 - 110, Y(Tcons) - 8);
+    days.forEach((Te, d) => {
+      if (Te >= Tcons) return;
+      const x = X(d);
+      const barW = (x1 - x0) / nDays * 0.7;
+      ctx.fillStyle = d === Math.floor(nDays / 2) ? P.accent : P.iso;
+      ctx.globalAlpha = d === Math.floor(nDays / 2) ? 0.5 : 0.28;
+      ctx.fillRect(x - barW / 2, Y(Tcons), barW, Y(Te) - Y(Tcons));
+      ctx.globalAlpha = 1;
+    });
+    ctx.strokeStyle = P.wallStroke;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    days.forEach((Te, d) => {
+      const x = X(d), y = Y(Te);
+      if (d === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    days.forEach((Te, d) => {
+      ctx.fillStyle = d === Math.floor(nDays / 2) ? P.accentDeep : P.muted;
+      ctx.beginPath();
+      ctx.arc(X(d), Y(Te), d === Math.floor(nDays / 2) ? 5 : 3, 0, TAU);
+      ctx.fill();
+    });
+    ctx.font = "11px DM Sans, sans-serif";
+    for (let d = 0; d < nDays; d += 2) {
+      ctx.strokeStyle = P.grid;
+      ctx.beginPath(); ctx.moveTo(X(d), y1); ctx.lineTo(X(d), y1 + 5); ctx.stroke();
+      ctx.fillStyle = P.muted;
+      ctx.fillText(String(d + 1), X(d) - 4, y1 + 18);
+    }
+    ctx.fillText("jours", x1 - 30, y1 + 18);
+    $("cap-dju-bot").innerHTML =
+      "Jour mis en avant : " + texHTML("T_{\\mathrm{ext}}") + " = " + Tjour + " °C → " + fmt(djuJour, 0) +
+      " DJU  ·  Saison : " + DJU + " DJU → " + texHTML("B_{\\mathrm{ch,an}}") +
+      " ≈ " + fmt(B, 0) + " kWh/an";
+  }
+
+  const DPE_THRESH = [
+    { letter: "A", max: 70, c: "#319b4a" },
+    { letter: "B", max: 110, c: "#51b364" },
+    { letter: "C", max: 180, c: "#c5d645" },
+    { letter: "D", max: 250, c: "#f0c419" },
+    { letter: "E", max: 330, c: "#f09a1a" },
+    { letter: "F", max: 420, c: "#e85d2a" },
+    { letter: "G", max: Infinity, c: "#c41e1e" },
+  ];
+  function dpeLetter(ind) {
+    for (const row of DPE_THRESH) {
+      if (ind <= row.max) return row.letter;
+    }
+    return "G";
+  }
+  function updateDpe() {
+    const Cef = +$("Cef").value, Shab = +$("Shab").value, fp = +$("fp").value;
+    $("v-Cef").textContent = fmt(Cef, 0) + " kWh/an";
+    $("v-Shab").textContent = Shab + " m²";
+    $("v-fp").textContent = fmt(fp, 1);
+    const Cep = fp * Cef;
+    const ind = Cep / Shab;
+    const letter = dpeLetter(ind);
+    let badgeHTML;
+    if (letter === "A") {
+      badgeHTML = `<span class="badge ok">${texHTML("C_{\\mathrm{ep}}/S\\le 70")} → A</span>`;
+    } else if (letter === "G") {
+      badgeHTML = `<span class="badge bad">${texHTML("C_{\\mathrm{ep}}/S>420")} → G</span>`;
+    } else {
+      const prev = DPE_THRESH[DPE_THRESH.findIndex((r) => r.letter === letter) - 1];
+      const cur = DPE_THRESH.find((r) => r.letter === letter);
+      badgeHTML = `<span class="badge ${letter <= "C" ? "ok" : letter <= "E" ? "warn" : "bad"}">${texHTML(`C_{\\mathrm{ep}}/S>${prev.max}`)} et ${texHTML(`C_{\\mathrm{ep}}/S\\le ${cur.max}`)} → ${letter}</span>`;
+    }
+    $("out-dpe").innerHTML = kpiHTML([
+      { texK: "C_{\\mathrm{ep}}=f_{\\mathrm{p}} C_{\\mathrm{ef}}", v: fmt(Cep, 0) + " kWh_ep/an", wide: true },
+      { texK: "C_{\\mathrm{ep}}/S_{\\mathrm{hab}}", v: fmt(ind, 0) + " kWh_ep/(m²·an)", wide: true },
+      { k: "Position sur l’échelle (seuils génériques)", v: badgeHTML, wide: true },
+    ]);
+    const widths = [18, 28, 40, 52, 64, 76, 90];
+    $("dpe-scale").innerHTML = DPE_THRESH.map((row, i) => {
+      const on = row.letter === letter ? " on" : "";
+      const range = row.max === Infinity ? "> 420" : "≤ " + row.max;
+      return `<div class="dpe-row${on}"><strong>${row.letter}</strong><div class="dpe-bar" style="width:${widths[i]}%;background:${row.c}">${row.letter}</div><span>${range}</span></div>`;
+    }).join("");
+    $("cap-dpe-bot").innerHTML =
+      "Indicateur = " + fmt(ind, 0) + " kWh<sub>ep</sub>/(m²·an) · classe " + letter +
+      " · " + texHTML("C_{\\mathrm{ep}}=f_{\\mathrm{p}} C_{\\mathrm{ef}}");
+  }
+
+  function updateReno() {
+    const strat = $("strat").value;
+    const e = +$("eiso5").value / 100;
+    const lam = +$("liso5").value, U0 = +$("U0").value;
+    $("v-eiso5").textContent = $("eiso5").value + " cm";
+    $("v-liso5").textContent = fmt(lam, 3) + " W/(m·K)";
+    $("v-U0").textContent = fmt(U0, 2) + " W/(m²·K)";
+    const R0 = 1 / U0;
+    const Riso = e / lam;
+    const U1 = 1 / (R0 + Riso);
+    const gain = ((U0 - U1) / U0) * 100;
+    const msg = strat === "ite"
+      ? "ITE épaisse : chute nette de " + texHTML("U") + " ; largeur isolant visible ∝ épaisseur."
+      : "Isolant mince : même logique " + texHTML("R=e/\\lambda") + ", mais " + texHTML("e") + " petit → gain souvent limité.";
+    $("out-reno").innerHTML = kpiHTML([
+      { texK: "R_{0}=1/U_{0}", v: fmt(R0, 2) + " m²·K/W" },
+      { texK: "R_{\\mathrm{iso}}", v: fmt(Riso, 2) + " m²·K/W" },
+      { texK: "U_{1}", v: fmt(U1, 3) + " W/(m²·K)" },
+      { k: "Gain relatif sur " + texHTML("U"), v: fmt(gain, 0) + " %", wide: true },
+      { k: "Lecture", v: msg, wide: true },
+    ]);
+    drawReno(strat, e, U0, U1, gain);
+  }
+  function drawReno(strat, eIso, U0, U1, gain) {
+    const { ctx, w, h } = view1($("cv-reno"));
+    const eBet = 0.20;
+    const drawWall = (xL, label, withIso) => {
+      const y0 = 55, th = 150;
+      const xR = xL + 280;
+      const eTot = withIso ? eIso + eBet : eBet;
+      const scale = (xR - xL) / Math.max(eTot, eBet + 0.14);
+      const wB = eBet * scale;
+      const wI = withIso ? eIso * scale : 0;
+      if (strat === "ite" && withIso) {
+        ctx.fillStyle = P.support;
+        ctx.fillRect(xL, y0, wB, th);
+        ctx.fillStyle = P.iso;
+        ctx.fillRect(xL + wB, y0, wI, th);
+        ctx.fillStyle = P.ink;
+        ctx.font = "12px DM Sans, sans-serif";
+        ctx.fillText("Support", xL + 8, y0 + 24);
+        if (wI > 36) ctx.fillText("Isolant", xL + wB + 6, y0 + 24);
+      } else if (withIso) {
+        ctx.fillStyle = P.iso;
+        ctx.fillRect(xL, y0, wI, th);
+        ctx.fillStyle = P.support;
+        ctx.fillRect(xL + wI, y0, wB, th);
+        ctx.fillStyle = P.ink;
+        ctx.font = "12px DM Sans, sans-serif";
+        if (wI > 28) ctx.fillText("Isolant", xL + 4, y0 + 24);
+        ctx.fillText("Support", xL + wI + 8, y0 + 24);
+      } else {
+        ctx.fillStyle = P.support;
+        ctx.fillRect(xL, y0, wB, th);
+        ctx.fillStyle = P.ink;
+        ctx.font = "12px DM Sans, sans-serif";
+        ctx.fillText("Support seul", xL + 8, y0 + 24);
+      }
+      ctx.strokeStyle = P.wallStroke;
+      ctx.strokeRect(xL, y0, (withIso ? wB + wI : wB), th);
+      ctx.fillStyle = P.ink;
+      ctx.font = "600 13px DM Sans, sans-serif";
+      ctx.fillText(label, xL, y0 - 12);
+      ctx.fillStyle = P.muted;
+      ctx.font = "12px DM Sans, sans-serif";
+      ctx.fillText("Int. → Ext.", xL, y0 + th + 22);
+    };
+    drawWall(40, "Avant  U0 = " + fmt(U0, 2), false);
+    drawWall(400, "Après  U1 = " + fmt(U1, 3), true);
+    ctx.fillStyle = P.accent;
+    ctx.font = "600 14px DM Sans, sans-serif";
+    ctx.fillText("Gain ≈ " + fmt(gain, 0) + " %", 300, h - 20);
+    $("cap-reno-top").innerHTML =
+      (strat === "ite" ? "ITE" : "Isolant mince") +
+      " · largeurs ∝ " + texHTML("e") +
+      " · gain ≈ " + fmt(gain, 0) + " %";
+  }
+
+  function updateSys() {
+    const bes = +$("bes").value, partV = +$("partV").value / 100;
+    const eta = +$("eta").value, COP = +$("COP").value;
+    $("v-bes").textContent = fmt(bes, 0) + " kWh";
+    $("v-partV").textContent = Math.round(partV * 100) + " %";
+    $("v-eta").textContent = fmt(eta, 2);
+    $("v-COP").textContent = fmt(COP, 1);
+    const besV = bes * partV;
+    const besVeff = besV * (1 - eta);
+    const besOther = bes * (1 - partV);
+    const besNet = besOther + besVeff;
+    const Celec = besNet / COP;
+    const CelecNoPac = besNet;
+    $("out-sys").innerHTML = kpiHTML([
+      { texK: "H_{v,\\mathrm{eff}}", kSuffix: "(via " + texHTML("\\eta") + ")", v: "besoin vent. → " + fmt(besVeff, 0) + " kWh" },
+      { k: "Besoin net après récupération", v: fmt(besNet, 0) + " kWh", wide: true },
+      { texK: "C_{\\mathrm{elec}}", kSuffix: "(PAC)", v: fmt(Celec, 0) + " kWh" },
+      { texK: "C_{\\mathrm{elec}}", kSuffix: "(COP = 1)", v: fmt(CelecNoPac, 0) + " kWh" },
+      {
+        k: "Sensibilité COP",
+        v: COP > 1
+          ? `<span class="badge ok">${texHTML("C_{\\mathrm{elec,PAC}}<C_{\\mathrm{elec,Joule}}")} (facteur ≈ ${fmt(COP, 1)})</span>`
+          : `<span class="badge warn">COP = 1 : pas de gain PAC</span>`,
+        wide: true,
+      },
+    ]);
+    drawSys(eta, COP, besNet, Celec);
+  }
+  function drawSys(eta, COP, besNet, Celec) {
+    const { ctx, w, h } = view1($("cv-sys"));
+    function box(x, y, bw, bh, fill, title, sub) {
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = P.wallStroke;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, y, bw, bh, 10); else ctx.rect(x, y, bw, bh);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = P.ink;
+      ctx.font = "600 13px DM Sans, sans-serif";
+      ctx.fillText(title, x + 12, y + 28);
+      ctx.font = "12px DM Sans, sans-serif";
+      ctx.fillStyle = P.muted;
+      ctx.fillText(sub, x + 12, y + 50);
+    }
+    function arrow(x1, y1, x2, y2) {
+      ctx.strokeStyle = P.accent;
+      ctx.fillStyle = P.accent;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      const ang = Math.atan2(y2 - y1, x2 - x1);
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - 10 * Math.cos(ang - 0.4), y2 - 10 * Math.sin(ang - 0.4));
+      ctx.lineTo(x2 - 10 * Math.cos(ang + 0.4), y2 - 10 * Math.sin(ang + 0.4));
+      ctx.closePath(); ctx.fill();
+    }
+    box(40, 90, 160, 80, P.boxVmc, "VMC DF", "η = " + fmt(eta, 2));
+    box(280, 90, 160, 80, P.boxNeed, "Besoin net", fmt(besNet, 0) + " kWh");
+    box(520, 90, 160, 80, P.boxPac, "PAC", "COP = " + fmt(COP, 1));
+    arrow(200, 130, 280, 130);
+    arrow(440, 130, 520, 130);
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 14px DM Sans, sans-serif";
+    ctx.fillText("électricité ≈ " + fmt(Celec, 0) + " kWh", 520, 210);
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px DM Sans, sans-serif";
+    ctx.fillText("Air extrait → récupération → air neuf préchauffé", 40, 50);
+    ctx.fillText("Chaleur utile / COP = électricité", 420, 50);
+    ctx.fillStyle = P.gaugeBg;
+    ctx.fillRect(40, 230, 200, 18);
+    ctx.fillStyle = P.accent;
+    ctx.fillRect(40, 230, 200 * eta, 18);
+    ctx.strokeStyle = P.wallStroke;
+    ctx.strokeRect(40, 230, 200, 18);
+    ctx.fillStyle = P.ink;
+    ctx.font = "12px DM Sans, sans-serif";
+    ctx.fillText("Récupération η", 40, 270);
+    const copX = 320;
+    ctx.fillStyle = P.gaugeBg;
+    ctx.fillRect(copX, 230, 280, 18);
+    ctx.fillStyle = P.accentDeep;
+    ctx.fillRect(copX, 230, 280 * Math.min(COP / 5, 1), 18);
+    ctx.strokeStyle = P.wallStroke;
+    ctx.strokeRect(copX, 230, 280, 18);
+    ctx.fillStyle = P.ink;
+    ctx.fillText("Sensibilité COP (1 → 5)", copX, 270);
+    $("cap-sys-top").innerHTML =
+      texHTML("\\eta") + " = " + fmt(eta, 2) + " · " +
+      texHTML("\\mathrm{COP}") + " = " + fmt(COP, 1) + " · " +
+      texHTML("C_{\\mathrm{elec}}") + " ≈ " + fmt(Celec, 0) + " kWh";
+  }
+
+  function updateTri() {
+    const bes = +$("bes7").value, prix = +$("prix").value;
+    const COP = +$("COP7").value, cout = +$("cout").value, fCO2 = +$("fCO2").value;
+    $("v-bes7").textContent = fmt(bes, 0) + " kWh";
+    $("v-prix").textContent = fmt(prix, 2) + " €/kWh";
+    $("v-COP7").textContent = fmt(COP, 1);
+    $("v-cout").textContent = fmt(cout, 0) + " €";
+    $("v-fCO2").textContent = fmt(fCO2, 2) + " kg/kWh";
+    const Celec1 = bes;
+    const CelecP = bes / COP;
+    const cost1 = Celec1 * prix;
+    const costP = CelecP * prix;
+    const gain = cost1 - costP;
+    const TRI = gain > 0 ? cout / gain : Infinity;
+    const CO2_1 = fCO2 * Celec1;
+    const CO2_P = fCO2 * CelecP;
+    $("out-tri").innerHTML = kpiHTML([
+      { k: "Facture COP = 1", v: fmt(cost1, 0) + " €/an" },
+      { k: "Facture PAC", v: fmt(costP, 0) + " €/an" },
+      { k: "Gain annuel", v: fmt(gain, 0) + " €/an", wide: true },
+      { texK: "\\mathrm{TRI}", v: Number.isFinite(TRI) ? fmt(TRI, 1) + " ans" : "∞", wide: true },
+      { k: "CO₂ (COP = 1)", v: fmt(CO2_1, 0) + " kg/an" },
+      { k: "CO₂ (PAC)", v: fmt(CO2_P, 0) + " kg/an" },
+      {
+        k: "Comparaison",
+        v: gain > 0
+          ? `<span class="badge ok">${texHTML("C_{\\mathrm{ef,PAC}}<C_{\\mathrm{ef,Joule}}")} et TRI ≈ ${fmt(TRI, 1)} ans</span>`
+          : `<span class="badge warn">Pas de gain dans ce réglage</span>`,
+        wide: true,
+      },
+    ]);
+    drawTri(cost1, costP, gain, TRI, CO2_1, CO2_P, cout);
+  }
+  function drawTri(cost1, costP, gain, TRI, CO2_1, CO2_P, cout) {
+    const { ctx, w, h } = view1($("cv-tri"));
+    const yTitle = 22, y0 = 52, y1 = h - 60;
+    function bars(items, xStart, maxV, title) {
+      ctx.fillStyle = P.ink;
+      ctx.font = "600 13px DM Sans, sans-serif";
+      ctx.fillText(title, xStart, yTitle);
+      const maxH = y1 - y0;
+      items.forEach((it, i) => {
+        const x = xStart + i * 70;
+        const bh = (it.v / maxV) * maxH * 0.92;
+        ctx.fillStyle = it.c;
+        ctx.fillRect(x, y1 - bh, 48, bh);
+        ctx.fillStyle = P.ink;
+        ctx.font = "11px IBM Plex Mono, monospace";
+        ctx.fillText(fmt(it.v, 0), x, y1 - bh - 6);
+        ctx.font = "11px DM Sans, sans-serif";
+        ctx.fillStyle = P.muted;
+        ctx.fillText(it.n, x, y1 + 16);
+      });
+      ctx.strokeStyle = P.wallStroke;
+      ctx.beginPath();
+      ctx.moveTo(xStart - 10, y0); ctx.lineTo(xStart - 10, y1); ctx.lineTo(xStart + items.length * 70, y1);
+      ctx.stroke();
+      for (let i = 0; i <= 4; i++) {
+        const val = (maxV * i) / 4;
+        const y = y1 - (val / maxV) * maxH * 0.92;
+        ctx.strokeStyle = P.grid;
+        ctx.beginPath(); ctx.moveTo(xStart - 14, y); ctx.lineTo(xStart - 10, y); ctx.stroke();
+        ctx.fillStyle = P.muted;
+        ctx.font = "10px DM Sans, sans-serif";
+        ctx.fillText(fmt(val, 0), xStart - 48, y + 3);
+      }
+    }
+    const maxE = Math.max(cost1, costP, gain, cout, 1);
+    const maxC = Math.max(CO2_1, CO2_P, 1);
+    bars([
+      { n: "COP=1", v: cost1, c: P.support },
+      { n: "PAC", v: costP, c: P.barV },
+      { n: "Gain", v: gain, c: P.barTr },
+    ], 80, maxE, "Économie (€/an)");
+    bars([
+      { n: "COP=1", v: CO2_1, c: P.support },
+      { n: "PAC", v: CO2_P, c: P.barPt },
+    ], 420, maxC, "Émissions (kg CO2/an)");
+    ctx.fillStyle = P.heat;
+    ctx.font = "600 13px DM Sans, sans-serif";
+    const triLabel = Number.isFinite(TRI) ? "TRI ≈ " + fmt(TRI, 1) + " ans" : "TRI ∞";
+    ctx.fillText("Coût net " + fmt(cout, 0) + " €  →  " + triLabel, 80, h - 18);
+    $("cap-tri-top").innerHTML =
+      texHTML("\\mathrm{TRI}") + " ≈ " + (Number.isFinite(TRI) ? fmt(TRI, 1) + " ans" : "∞") +
+      " · gain = " + fmt(gain, 0) + " €/an · CO₂ réduit d’un facteur ≈ " +
+      fmt(CO2_1 / Math.max(CO2_P, 1e-9), 1);
+  }
+
+  function syncFill(inp) {
+    if (inp.type !== "range") return;
+    const p = ((+inp.value - +inp.min) / (+inp.max - +inp.min)) * 100;
+    inp.style.setProperty("--p", p + "%");
+  }
+  const GROUPS = {
+    trans: ["eiso1", "liso1", "esup", "lsup", "A1", "dT1", "bLNC"],
+    vent: ["Htr", "Qv", "Psi", "Lpt", "dT2"],
+    dju: ["Hbat3", "Tcons", "Text3", "DJU"],
+    dpe: ["Cef", "Shab", "fp"],
+    reno: ["strat", "eiso5", "liso5", "U0"],
+    sys: ["bes", "partV", "eta", "COP"],
+    tri: ["bes7", "prix", "COP7", "cout", "fCO2"],
+  };
+  const UPDATERS = {
+    trans: updateTrans,
+    vent: updateVent,
+    dju: updateDju,
+    dpe: updateDpe,
+    reno: updateReno,
+    sys: updateSys,
+    tri: updateTri,
+  };
+  const DEFAULTS = {};
+  Object.entries(GROUPS).forEach(([key, ids]) => {
+    ids.forEach((id) => {
+      const inp = $(id);
+      DEFAULTS[id] = inp.tagName === "SELECT" ? inp.value : inp.getAttribute("value");
+      inp.addEventListener("input", () => {
+        syncFill(inp);
+        markExplored(key);
+        UPDATERS[key]();
+      });
+    });
+  });
+  $("strat").addEventListener("change", () => {
+    if ($("strat").value === "thin" && +$("eiso5").value > 6) $("eiso5").value = "2";
+    else if ($("strat").value === "ite" && +$("eiso5").value < 8) $("eiso5").value = "14";
+    syncFill($("eiso5"));
+    markExplored("reno");
+    updateReno();
+  });
+  function resetGroup(key) {
+    GROUPS[key].forEach((id) => {
+      const inp = $(id);
+      inp.value = DEFAULTS[id];
+      syncFill(inp);
+    });
+    UPDATERS[key]();
+  }
+  document.querySelectorAll(".reset-btn").forEach((btn) => {
+    btn.addEventListener("click", () => resetGroup(btn.dataset.reset));
+  });
+
+  let toastTimer;
+  function showToast(msg) {
+    const el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+  $("wipe-btn").addEventListener("click", () => {
+    const ok = window.confirm(
+      "Remettre à zéro tout le laboratoire ?\n\nÉtoiles, Défis express, Grand contrôle, ateliers explorés et curseurs seront effacés. Le thème clair/sombre est conservé."
+    );
+    if (!ok) return;
+    const theme = store.theme === "light" ? "light" : "dark";
+    store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme };
+    save();
+    Object.keys(GROUPS).forEach(resetGroup);
+    renderAllQuizzes();
+    $("final-panel").hidden = true;
+    renderHud();
+    show("home");
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    showToast("Progression remise à zéro — vous pouvez tout refaire.");
+  });
+
+  const tex = (s) => `<span class="tex" data-tex="${s}"></span>`;
+  const QUIZ = {
+    trans: [
+      {
+        q: `Le coefficient ${tex("U")} d’une paroi vaut…`,
+        opts: [
+          { t: `l’inverse de la résistance totale ${tex("U=1/R_{\\mathrm{th}}")}`, ok: true, fb: `Oui : plus ${tex("R_{\\mathrm{th}}")} est grande, plus ${tex("U")} est petit — la paroi laisse moins passer la chaleur.` },
+          { t: `${tex("U=R_{\\mathrm{th}}")}`, fb: `C’est l’inverse : ${tex("U")} et ${tex("R")} se tournent le dos.` },
+          { t: `${tex("U=\\lambda/e")} d’une seule couche, sans les films d’air`, fb: `${tex("\\lambda/e")} est ${tex("1/R")} d’<em>une</em> couche. Il faut encore ${tex("R_{si}")}, ${tex("R_{se}")} et les autres couches.` },
+        ],
+      },
+      {
+        q: `On double l’épaisseur d’isolant, ${tex("\\lambda")} fixé. Le flux ${tex("\\Phi")} est-il divisé exactement par 2 ?`,
+        opts: [
+          { t: `Oui, toujours`, fb: `Presque, mais ${tex("R_{si}")} et ${tex("R_{se}")} (et le support) ne doublent pas. ${tex("R_{\\mathrm{th}}")} n’est pas exactement ×2.` },
+          { t: `Non : les films d’air ${tex("R_{si}")}, ${tex("R_{se}")} restent, donc ${tex("R_{\\mathrm{th}}")} n’est pas exactement doublée`, ok: true, fb: `Exact. Plus l’isolant domine déjà ${tex("R_{\\mathrm{th}}")}, plus on s’approche du facteur 2 — observez-le sur les curseurs.` },
+          { t: `Le flux augmente`, fb: `Ajouter de l’isolant augmente ${tex("R")} et diminue ${tex("U")} : le flux baisse.` },
+        ],
+        apply: { set: { eiso1: 24 }, label: "Voir sur le schéma : e iso ×2" },
+      },
+      {
+        q: `Sur le schéma, augmenter ${tex("\\lambda_{\\mathrm{iso}}")} (isolant moins performant)…`,
+        opts: [
+          { t: `élargit la bande isolant`, fb: `Non : les largeurs suivent l’épaisseur ${tex("e")}, pas ${tex("R")}. ${tex("\\lambda")} change la pente de ${tex("T")} et les KPI.` },
+          { t: `ne change pas la largeur dessinée ; la pente de ${tex("T")} et ${tex("U")} bougent`, ok: true, fb: `Oui — c’est voulu : un étudiant ne doit pas croire qu’augmenter ${tex("\\lambda")} « grossit » la couche.` },
+          { t: `fait disparaître le support`, fb: `Le support reste ; seule la chute de température dans l’isolant s’écrase.` },
+        ],
+        apply: { set: { liso1: 0.08 }, label: "Voir sur le schéma : λ plus élevé" },
+      },
+    ],
+    vent: [
+      {
+        q: `On augmente le débit de ventilation ${tex("Q_{v}")}. Quelle part de ${tex("H_{\\mathrm{bat}}")} grandit ?`,
+        opts: [
+          { t: `La ventilation ${tex("H_{v}=0{,}34 Q_{v}")}`, ok: true, fb: `Oui : la barre du milieu (ou la part « ventilation ») suit ${tex("Q_{v}")}. Transmission et ponts, eux, ne bougent pas.` },
+          { t: `La transmission ${tex("H_{\\mathrm{tr}}")}`, fb: `${tex("H_{\\mathrm{tr}}")} dépend des ${tex("U A")}, pas du débit d’air.` },
+          { t: `Aucune : ${tex("H_{\\mathrm{bat}}")} est fixe`, fb: `${tex("H_{\\mathrm{bat}}=H_{\\mathrm{tr}}+H_{v}+H_{\\mathrm{pt}}")} : le poste air est bien dedans.` },
+        ],
+        apply: { set: { Qv: 350 }, label: "Voir sur le schéma : Qv élevé" },
+      },
+      {
+        q: `Isoler les murs (baisser ${tex("H_{\\mathrm{tr}}")}) sans toucher à l’air ni aux ponts…`,
+        opts: [
+          { t: `annule ${tex("H_{\\mathrm{bat}}")}`, fb: `Il reste ${tex("H_{v}")} et ${tex("H_{\\mathrm{pt}}")}. Souvent, l’un des deux devient alors dominant.` },
+          { t: `laisse les postes ventilation et ponts, qui peuvent alors dominer`, ok: true, fb: `C’est le réflexe : une paroi très isolée ne « tue » pas le renouvellement d’air ni les linéaires.` },
+          { t: `divise aussi ${tex("Q_{v}")} par deux`, fb: `Le débit d’air est un autre levier (atelier 06 pour la VMC DF).` },
+        ],
+        apply: { set: { Htr: 50 }, label: "Voir sur le schéma : Htr bas" },
+      },
+    ],
+    dju: [
+      {
+        q: `Un DJU, concrètement, c’est…`,
+        opts: [
+          { t: `un compteur de « degrés sous la consigne » jour après jour, sommé sur la saison`, ok: true, fb: `Oui : dès que ${tex("T_{\\mathrm{ext}}<T_{\\mathrm{cons}}")}, on ajoute l’écart. Les bandes du schéma sont ce compteur au quotidien.` },
+          { t: `la température extérieure moyenne de janvier`, fb: `Ce n’est pas une moyenne : c’est une somme d’écarts (seulement les jours froids).` },
+          { t: `la consommation électrique du chauffage`, fb: `Les DJU décrivent le climat. Le besoin ${tex("B_{\\mathrm{ch,an}}")} combine DJU et ${tex("H_{\\mathrm{bat}}")}.` },
+        ],
+      },
+      {
+        q: `À ${tex("H_{\\mathrm{bat}}")} fixe, si le DJU saison double, le besoin ${tex("B_{\\mathrm{ch,an}}")}…`,
+        opts: [
+          { t: `double (relation linéaire)`, ok: true, fb: `Oui : ${tex("B_{\\mathrm{ch,an}}=H_{\\mathrm{bat}}\\cdot\\mathrm{DJU}\\cdot 24/1000")}. Climat deux fois plus « chargé » → besoin deux fois plus grand, enveloppe inchangée.` },
+          { t: `est divisé par 2`, fb: `Le DJU est au numérateur.` },
+          { t: `ne change pas : seul ${tex("U")} compte`, fb: `${tex("U")} (via ${tex("H_{\\mathrm{bat}}")}) et le climat (DJU) comptent tous les deux.` },
+        ],
+        apply: { set: { DJU: 3000 }, label: "Voir sur les indicateurs : DJU plus élevé" },
+      },
+    ],
+    dpe: [
+      {
+        q: `L’indicateur DPE (kWh/(m²·an) de l’étiquette) est une énergie…`,
+        opts: [
+          { t: `primaire ${tex("C_{\\mathrm{ep}}=f_{\\mathrm{p}} C_{\\mathrm{ef}}")}`, ok: true, fb: `Oui : ce n’est pas le kWh du compteur. L’électricité est souvent multipliée par ${tex("f_{\\mathrm{p}}\\approx 2{,}3")}.` },
+          { t: `finale : exactement ce que vous payez`, fb: `${tex("C_{\\mathrm{ef}}")} est le compteur. L’étiquette convertit en primaire.` },
+          { t: `la chaleur utile du bâtiment, sans conversion`, fb: `Entre besoin utile, finale et primaire, il y a des rendements et un facteur ${tex("f_{\\mathrm{p}}")}.` },
+        ],
+      },
+      {
+        q: `À surface fixe, on divise ${tex("C_{\\mathrm{ef}}")} par 2. La classe A–G…`,
+        opts: [
+          { t: `saute forcément de deux lettres`, fb: `Les seuils ne sont pas régulièrement espacés. Observez l’échelle : ce n’est pas un escalier uniforme.` },
+          { t: `s’améliore, mais pas forcément de deux lettres : les seuils ne sont pas réguliers`, ok: true, fb: `Exact. L’indicateur est divisé par 2, la lettre dépend de où vous étiez sur l’échelle pédagogique.` },
+          { t: `ne bouge pas, car ${tex("f_{\\mathrm{p}}")} est fixe`, fb: `${tex("C_{\\mathrm{ep}}")} suit ${tex("C_{\\mathrm{ef}}")} : l’indicateur baisse bel et bien.` },
+        ],
+        apply: { set: { Cef: 6000 }, label: "Voir l’échelle : Cef ÷2" },
+      },
+    ],
+    reno: [
+      {
+        q: `Dans un diagnostic, l’ordre de raisonnement le plus sain est…`,
+        opts: [
+          { t: `d’abord l’enveloppe (${tex("U")}, ponts, air), ensuite les systèmes (VMC, PAC)`, ok: true, fb: `Oui : le système chauffe un besoin. Réduire le besoin (isolant, ponts, récupération) avant de dimensionner la production.` },
+          { t: `d’abord choisir la PAC, l’enveloppe suivra`, fb: `Une PAC sur une passoire reste une facture (et un sous-dimensionnement ou un surdimensionnement). L’enveloppe d’abord.` },
+          { t: `seul l’isolant mince suffit toujours`, fb: `${tex("R=e/\\lambda")} : une petite ${tex("e")} donne un petit ${tex("R")}, donc un gain souvent limité.` },
+        ],
+      },
+      {
+        q: `Le gain % affiché porte sur…`,
+        opts: [
+          { t: `${tex("U")} de la paroi courante — pas sur tout ${tex("H_{\\mathrm{bat}}")} (ponts et air restent)`, ok: true, fb: `Oui. Une ITE spectaculaire sur le mur n’efface ni les ponts ni la ventilation (atelier 02).` },
+          { t: `automatiquement tout le bâtiment, ponts compris`, fb: `Les ponts sont un autre poste. Le schéma ne montre que la paroi courante.` },
+          { t: `uniquement le COP de la future PAC`, fb: `Ici on n’a pas encore parlé systèmes : c’est de l’enveloppe.` },
+        ],
+        apply: { set: { strat: "thin", eiso5: 2 }, label: "Voir sur le schéma : isolant mince 2 cm" },
+      },
+    ],
+    sys: [
+      {
+        q: `Par rapport à l’effet Joule (COP = 1), un COP de 3,5 divise la consommation électrique ${tex("C_{\\mathrm{elec}}")} par…`,
+        opts: [
+          { t: `environ 3,5`, ok: true, fb: `Oui : ${tex("C_{\\mathrm{elec}}=\\mathrm{besoin}/\\mathrm{COP}")}. C’est le levier « facture », pas le levier « besoin enveloppe ».` },
+          { t: `environ 3,5² = 12`, fb: `Pas de carré ici : le COP est au dénominateur, linéairement.` },
+          { t: `rien : le COP ne touche pas l’électricité`, fb: `Au contraire : c’est précisément le rapport chaleur / électricité.` },
+        ],
+        apply: { set: { COP: 3.5 }, label: "Voir les indicateurs : COP = 3,5" },
+      },
+      {
+        q: `Une VMC double flux (rendement ${tex("\\eta")}) réduit surtout…`,
+        opts: [
+          { t: `le poste ventilation, pas la transmission des murs`, ok: true, fb: `Elle récupère la chaleur de l’air extrait. Les parois, elles, se traitent à l’atelier 05.` },
+          { t: `${tex("U")} des murs, comme une ITE`, fb: `Ce n’est pas de l’isolant de paroi.` },
+          { t: `le COP de la PAC`, fb: `Elle baisse le besoin amont (part air). Le COP, lui, convertit le reste en électricité.` },
+        ],
+        apply: { set: { eta: 0.85 }, label: "Voir le schéma : η élevé" },
+      },
+    ],
+    tri: [
+      {
+        q: `Le TRI simple, c’est qualitativement…`,
+        opts: [
+          { t: `coût net d’investissement ÷ gain annuel`, ok: true, fb: `Oui : « en combien d’années les économies remboursent la dépense ». Si le coût double à gain égal, le TRI double.` },
+          { t: `gain annuel ÷ coût net`, fb: `C’est l’inverse (un taux de rendement approximatif, pas un temps).` },
+          { t: `le COP multiplié par le prix du kWh`, fb: `Ces grandeurs servent à construire le gain, pas le TRI à elles seules.` },
+        ],
+        apply: { set: { cout: 16000 }, label: "Voir les indicateurs : coût ×2" },
+      },
+      {
+        q: `On passe d’un COP de 2 à un COP de 4 (vs COP = 1). Le gain annuel…`,
+        opts: [
+          { t: `double forcément`, fb: `Le gain vs Joule est ${tex("1-1/\\mathrm{COP}")} de la facture Joule. De 2 à 4 : on passe de 50 % à 75 % d’économie — pas un doublement.` },
+          { t: `augmente, mais ne double pas : on passe de 50 % à 75 % d’économie sur la facture Joule`, ok: true, fb: `Exact. Les rendements « saturent » : le premier saut de COP rapporte plus que le suivant.` },
+          { t: `devient nul`, fb: `Un meilleur COP augmente le gain, il ne l’annule pas.` },
+        ],
+        apply: { set: { COP7: 4 }, label: "Voir les indicateurs : COP = 4" },
+      },
+    ],
+    final: [
+      {
+        q: `${tex("U")} d’une paroi, c’est…`,
+        opts: [
+          { t: `${tex("1/R_{\\mathrm{th}}")}`, ok: true, fb: `Le réflexe n°1 du module : résistance totale, puis inverse.` },
+          { t: `${tex("e/\\lambda")} tout court`, fb: `Ça, c’est ${tex("R")} d’une couche.` },
+          { t: `un débit d’air`, fb: `Le débit, c’est ${tex("Q_{v}")} (atelier ventilation).` },
+        ],
+      },
+      {
+        q: `${tex("H_{\\mathrm{bat}}")} additionne…`,
+        opts: [
+          { t: `transmission, ventilation et ponts`, ok: true, fb: `Trois postes, trois leviers — pas un seul curseur « isolation ».` },
+          { t: `uniquement les murs`, fb: `Les murs sont ${tex("H_{\\mathrm{tr}}")} seulement.` },
+          { t: `uniquement le DPE`, fb: `Le DPE est un indicateur d’énergie primaire, en aval.` },
+        ],
+      },
+      {
+        q: `Les DJU mesurent…`,
+        opts: [
+          { t: `la « charge climatique » sous la consigne, sommé en degrés-jours`, ok: true, fb: `Bandes du schéma = jours où il fait plus froid que la consigne.` },
+          { t: `la classe DPE`, fb: `Le DPE mélange consommation et surface ; les DJU parlent du climat.` },
+          { t: `le COP d’une PAC`, fb: `Le COP est un rendement de production.` },
+        ],
+      },
+      {
+        q: `Le DPE affiche surtout une énergie…`,
+        opts: [
+          { t: `primaire (pas le kWh du compteur)`, ok: true, fb: `${tex("C_{\\mathrm{ep}}=f_{\\mathrm{p}} C_{\\mathrm{ef}}")}.` },
+          { t: `finale uniquement`, fb: `La finale sert au calcul, l’étiquette parle primaire.` },
+          { t: `un volume d’eau chaude en litres`, fb: `On est en énergétique du bâtiment, pas en plomberie.` },
+        ],
+      },
+      {
+        q: `Avant de dimensionner une PAC, le réflexe est…`,
+        opts: [
+          { t: `traiter l’enveloppe (et l’air) pour baisser le besoin`, ok: true, fb: `La production chauffe un besoin. Moins de besoin = machine plus petite, facture plus basse.` },
+          { t: `prendre d’abord le plus gros COP du catalogue`, fb: `Sans besoin, le catalogue ne dit rien de pertinent — et ici il n’y a pas de catalogue.` },
+          { t: `ignorer les ponts`, fb: `Les ponts restent dans ${tex("H_{\\mathrm{bat}}")}.` },
+        ],
+      },
+      {
+        q: `${tex("C_{\\mathrm{elec}}=\\mathrm{besoin}/\\mathrm{COP}")} : si le COP triple, la facture électrique…`,
+        opts: [
+          { t: `est divisée par environ 3`, ok: true, fb: `Linéaire : le COP est au dénominateur.` },
+          { t: `triple`, fb: `C’est l’inverse.` },
+          { t: `ne change que si on isole`, fb: `Isoler change le besoin ; le COP change la conversion en électricité.` },
+        ],
+      },
+      {
+        q: `TRI simple =`,
+        opts: [
+          { t: `coût net ÷ gain annuel`, ok: true, fb: `Un temps, en années — pas un pourcentage.` },
+          { t: `gain ÷ coût`, fb: `C’est l’inverse.` },
+          { t: `COP × DJU`, fb: `Ces grandeurs n’ont pas la même unité ; on ne les multiplie pas ainsi.` },
+        ],
+      },
+      {
+        q: `Une VMC double flux agit principalement sur…`,
+        opts: [
+          { t: `le poste ventilation (récupération sur l’air extrait)`, ok: true, fb: `Pas une ITE : elle ne change pas ${tex("U")} des murs.` },
+          { t: `${tex("U")} des planchers`, fb: `Les planchers, c’est de la transmission.` },
+          { t: `le facteur primaire ${tex("f_{\\mathrm{p}}")}`, fb: `${tex("f_{\\mathrm{p}}")} est une convention de conversion DPE, pas un équipement.` },
+        ],
+      },
+    ],
+  };
+
+  function shuffleOpts(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+  Object.keys(QUIZ).forEach((k) => {
+    QUIZ[k].forEach((item) => {
+      item.opts = shuffleOpts(item.opts);
+    });
+  });
+
+  function quizSolved(a) { return store.quiz[a] || {}; }
+  function renderQuiz(a) {
+    const host = $("quiz-" + a);
+    if (!host) return;
+    const solved = quizSolved(a);
+    host.innerHTML = `<p class="quiz-banner">Formative seulement : ces questions entraînent un réflexe. Elles ne donnent aucune valeur à recopier dans le dossier « Mission Réno-Confort ».</p>` + QUIZ[a].map((item, i) => {
+      const done = !!solved[i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      return `<div class="quiz-q${done ? " solved" : ""}" data-a="${a}" data-i="${i}">
+        <p class="q-txt"><span class="q-num">${i + 1}</span>${item.q}</p>
+        <div class="q-opts">${item.opts.map((o, j) => `
+          <button class="opt${done && j === okIdx ? " correct" : ""}${done && j !== okIdx ? " dim" : ""}" type="button" data-j="${j}" ${done ? "disabled" : ""}>
+            <span class="letter">${"ABCD"[j]}</span><span>${o.t}</span>
+          </button>`).join("")}
+        </div>
+        <div class="q-fb good" ${done ? "" : "hidden"}>${done ? item.opts[okIdx].fb + applyHTML(item) : ""}</div>
+      </div>`;
+    }).join("") + statusHTML(a);
+    wireQuiz(host, a);
+  }
+  function applyHTML(item) {
+    if (!item.apply) return "";
+    return `<div><button class="q-apply" type="button" data-apply='${JSON.stringify(item.apply.set)}'>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>${item.apply.label}</button></div>`;
+  }
+  function statusHTML(a) {
+    if (a === "final") return "";
+    const solved = quizSolved(a);
+    const n = QUIZ[a].filter((_, i) => solved[i]).length;
+    const tot = QUIZ[a].length;
+    const star = store.stars[a]
+      ? `<svg class="star-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg> <strong>Étoile décrochée !</strong> Défi validé ${n}/${tot}.`
+      : `Défi : <strong>${n}/${tot}</strong> question${tot > 1 ? "s" : ""} validée${n > 1 ? "s" : ""} — toutes justes = une étoile.`;
+    return `<div class="quiz-status">${star}</div>`;
+  }
+  function wireQuiz(host, a) {
+    host.querySelectorAll(".quiz-q").forEach((qEl) => {
+      const i = +qEl.dataset.i;
+      const item = QUIZ[a][i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      qEl.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const j = +btn.dataset.j;
+          if (a === "final" && store.final.first[i] === undefined) {
+            store.final.first[i] = (j === okIdx);
+            save();
+          }
+          const fb = qEl.querySelector(".q-fb");
+          if (j === okIdx) {
+            btn.classList.add("correct");
+            qEl.classList.add("solved");
+            qEl.querySelectorAll(".opt").forEach((b) => {
+              b.disabled = true;
+              if (+b.dataset.j !== okIdx) b.classList.add("dim");
+            });
+            fb.className = "q-fb good";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[okIdx].fb + applyHTML(item);
+            wireApply(fb, a);
+            if (!store.quiz[a]) store.quiz[a] = {};
+            store.quiz[a][i] = true;
+            save();
+            afterSolve(a);
+          } else {
+            btn.classList.add("wrong");
+            btn.disabled = true;
+            fb.className = "q-fb bad";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[j].fb;
+          }
+          paintStaticTex();
+        });
+      });
+      wireApply(qEl, a);
+    });
+  }
+  function wireApply(scope, a) {
+    scope.querySelectorAll(".q-apply").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", () => {
+        const set = JSON.parse(btn.dataset.apply);
+        Object.entries(set).forEach(([id, val]) => {
+          const inp = $(id);
+          if (!inp) return;
+          inp.value = val;
+          inp.dispatchEvent(new Event("input"));
+          if (inp.tagName === "SELECT") inp.dispatchEvent(new Event("change"));
+        });
+        const section = $("atelier-" + a);
+        const cvs = section && section.querySelector("canvas");
+        if (cvs) cvs.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
+      });
+    });
+  }
+  function afterSolve(a) {
+    if (a === "final") {
+      updateFinalPanel();
+      return;
+    }
+    const solved = quizSolved(a);
+    const all = QUIZ[a].every((_, i) => solved[i]);
+    const statusEl = document.querySelector(`#quiz-${a} .quiz-status`);
+    if (all && !store.stars[a]) {
+      store.stars[a] = true;
+      save();
+      confetti();
+    }
+    if (statusEl) statusEl.outerHTML = statusHTML(a);
+    renderHud();
+  }
+  function updateFinalPanel() {
+    const answered = Object.keys(store.final.first).length;
+    const total = QUIZ.final.length;
+    if (answered < total) {
+      $("final-panel").hidden = true;
+      return;
+    }
+    const score = QUIZ.final.reduce((n, _, i) => n + (store.final.first[i] ? 1 : 0), 0);
+    if (score > store.final.best) {
+      store.final.best = score;
+      save();
+    }
+    $("final-panel").hidden = false;
+    $("final-score").textContent = score + "/" + total;
+    const verdict =
+      score >= 7 ? "Mention « Aulnes d’or » — le bureau d’études vous embauche !" :
+      score >= 5 ? "Solide ! Encore un ou deux réflexes à ancrer." :
+      "Bon entraînement — relisez les « À retenir » puis rejouez.";
+    $("final-verdict").textContent = verdict;
+    if (score >= 7) confetti();
+    renderHud();
+  }
+  $("final-replay").addEventListener("click", () => {
+    store.quiz.final = {};
+    store.final.first = {};
+    save();
+    renderQuiz("final");
+    $("final-panel").hidden = true;
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+  });
+
+  function renderAllQuizzes() {
+    Object.keys(QUIZ).forEach(renderQuiz);
+    updateFinalPanel();
+  }
+
+  function repaintCurrent() {
+    if (current === "home") ensureAnim();
+    else if (UPDATERS[current]) UPDATERS[current]();
+  }
+  function repaintAll() {
+    updateTrans(); updateVent(); updateDju(); updateDpe();
+    updateReno(); updateSys(); updateTri();
+    ensureAnim();
+  }
+
+  function boot() {
+    renderAllQuizzes();
+    paintStaticTex();
+    document.querySelectorAll('input[type="range"]').forEach(syncFill);
+    renderHud();
+    applyTheme(store.theme === "light" ? "light" : "dark");
+  }
+  function whenReady(cb) {
+    if (window.katex) { cb(); return; }
+    let n = 0;
+    const t = setInterval(() => {
+      n += 1;
+      if (window.katex || n > 40) { clearInterval(t); cb(); }
+    }, 50);
+  }
+  whenReady(boot);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab virtuel R1-1 — Méthode de travail universitaire | IUT Mantes</title>
+<style>
+  :root {
+    --sidebar-w: 292px;
+    --credit-h: 3.4rem;
+    --radius: 16px;
+    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "DM Sans", "Segoe UI", sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --bg0: #0c1410;
+    --bg1: #101a14;
+    --bg-glow1: rgba(33, 115, 70, 0.28);
+    --bg-glow2: rgba(201, 162, 39, 0.10);
+    --ink: #e8f4ec;
+    --muted: #9cb3a6;
+    --line: rgba(127, 190, 150, 0.14);
+    --panel: rgba(15, 35, 24, 0.62);
+    --panel-solid: #0f2318;
+    --panel-brd: rgba(127, 190, 150, 0.16);
+    --water: #5dbe8a;
+    --water-deep: #217346;
+    --water-soft: rgba(93, 190, 138, 0.13);
+    --accent: #e0b44a;
+    --ok: #3ecf8e;
+    --warn: #f2b73f;
+    --danger: #f47d7d;
+    --ok-soft: rgba(62, 207, 142, 0.14);
+    --warn-soft: rgba(242, 183, 63, 0.14);
+    --danger-soft: rgba(244, 125, 125, 0.14);
+    --steel: #a9bcc0;
+    --track: rgba(127, 190, 150, 0.18);
+    --cv-bg: linear-gradient(180deg, #12261c, #0c1a14);
+    --cv-brd: rgba(127, 190, 150, 0.18);
+    --shadow: 0 18px 40px rgba(2, 12, 8, 0.5);
+    --glow: 0 0 24px rgba(93, 190, 138, 0.14);
+    --hero-grad: linear-gradient(92deg, #eaf6ef 0%, #7dca9a 62%, #e0b44a 130%);
+    --tok-coude: #e0b44a;
+    --tok-te: #648f76;
+    --tok-vanne: #3ecf8e;
+    --fx1: rgba(93, 190, 138, 0.16);
+    --fx2: rgba(33, 115, 70, 0.22);
+    --fx3: rgba(224, 180, 74, 0.10);
+    --note-bg: rgba(224, 180, 74, 0.08);
+    --step-bg: rgba(93, 190, 138, 0.05);
+    --gold: #ffd166;
+  }
+  :root[data-theme="light"] {
+    --bg0: #eef4f0;
+    --bg1: #f6faf7;
+    --bg-glow1: rgba(223, 243, 232, 0.9);
+    --bg-glow2: rgba(255, 242, 216, 0.8);
+    --ink: #14211b;
+    --muted: #5a6b62;
+    --line: rgba(20, 33, 27, 0.12);
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-solid: #ffffff;
+    --panel-brd: rgba(20, 33, 27, 0.10);
+    --water: #217346;
+    --water-deep: #217346;
+    --water-soft: #d7efe3;
+    --accent: #8a6a12;
+    --ok: #1f7a4c;
+    --warn: #a15c00;
+    --danger: #9b1c1c;
+    --ok-soft: #e5f6ec;
+    --warn-soft: #fff3d9;
+    --danger-soft: #fde8e8;
+    --steel: #3d4f47;
+    --track: #dbe5df;
+    --cv-bg: linear-gradient(180deg, #eef6f1, #f8fbf9);
+    --cv-brd: rgba(20, 33, 27, 0.12);
+    --shadow: 0 10px 30px rgba(20, 33, 27, 0.08);
+    --glow: none;
+    --hero-grad: linear-gradient(92deg, #14211b 0%, #217346 95%);
+    --tok-coude: #8a6a12;
+    --tok-te: #3d4f47;
+    --tok-vanne: #1f7a4c;
+    --fx1: rgba(33, 115, 70, 0.10);
+    --fx2: rgba(93, 190, 138, 0.10);
+    --fx3: rgba(138, 106, 18, 0.07);
+    --note-bg: #fff7f1;
+    --step-bg: #ffffff;
+    --gold: #c98a12;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -12%, var(--bg-glow1) 0%, transparent 55%),
+      radial-gradient(900px 520px at 100% 0%, var(--bg-glow2) 0%, transparent 45%),
+      linear-gradient(180deg, var(--bg1), var(--bg0));
+    background-attachment: fixed;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  ::selection { background: var(--water); color: #06130b; }
+
+  .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bg-fx b { position: absolute; width: 46vw; height: 46vw; border-radius: 50%; filter: blur(90px); opacity: 0.8; }
+  .bg-fx b:nth-child(1) { background: var(--fx1); top: -18vw; left: 22vw; animation: drift1 26s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(2) { background: var(--fx2); bottom: -22vw; right: -10vw; animation: drift2 32s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(3) { background: var(--fx3); top: 30vh; left: -18vw; animation: drift3 38s ease-in-out infinite alternate; }
+  @keyframes drift1 { to { transform: translate(6vw, 8vh) scale(1.12); } }
+  @keyframes drift2 { to { transform: translate(-8vw, -6vh) scale(1.08); } }
+  @keyframes drift3 { to { transform: translate(9vw, -8vh); } }
+  :root[data-theme="dark"] .bg-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(127, 190, 150, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127, 190, 150, 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 80%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-fx b { animation: none !important; }
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  .app { position: relative; z-index: 1; display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+  .sidebar {
+    background: linear-gradient(180deg, #081410 0%, #060f0c 100%);
+    border-right: 1px solid rgba(127, 190, 150, 0.10);
+    color: #e8f4ee;
+    padding: 1.15rem 0.9rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(127, 190, 150, 0.3) transparent;
+  }
+  .brand { display: flex; gap: 0.65rem; align-items: center; padding: 0.25rem 0.4rem 0.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+  .logo {
+    width: 42px; height: 42px; flex: none; display: grid; place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(93, 190, 138, 0.22), rgba(33, 115, 70, 0.30));
+    border: 1px solid rgba(93, 190, 138, 0.35);
+    box-shadow: 0 0 18px rgba(93, 190, 138, 0.18);
+  }
+  .logo svg { width: 22px; height: 22px; }
+  .brand .code { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: #8fd3b0; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
+  .brand h1 { margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 800; line-height: 1.2; }
+  .brand-sub { margin: 0.55rem 0.4rem 0.35rem; font-size: 0.78rem; color: rgba(232, 244, 238, 0.6); line-height: 1.45; }
+  nav.ateliers { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.2rem; }
+  .nav-btn {
+    appearance: none; position: relative; border: 1px solid transparent; background: transparent;
+    color: inherit; text-align: left; padding: 0.55rem 0.65rem; border-radius: 12px; cursor: pointer;
+    font: inherit; display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .nav-btn:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(2px); }
+  .nav-btn:focus-visible { outline: 2px solid #5dbe8a; outline-offset: 2px; }
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(93, 190, 138, 0.16), rgba(93, 190, 138, 0.04));
+    border-color: rgba(93, 190, 138, 0.35);
+    box-shadow: 0 0 20px rgba(93, 190, 138, 0.10);
+  }
+  .nav-btn.active::before {
+    content: ""; position: absolute; left: -1px; top: 18%; bottom: 18%; width: 3px; border-radius: 3px;
+    background: #5dbe8a; box-shadow: 0 0 10px rgba(93, 190, 138, 0.8);
+  }
+  .nav-btn .ic {
+    width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); color: #8fd3b0;
+  }
+  .nav-btn.active .ic { color: #bde8d0; background: rgba(93, 190, 138, 0.14); border-color: rgba(93, 190, 138, 0.3); }
+  .nav-btn .ic svg { width: 16px; height: 16px; }
+  .nav-btn .label { font-size: 0.88rem; font-weight: 650; display: block; }
+  .nav-btn .sub { display: block; font-size: 0.72rem; font-weight: 400; color: rgba(232, 244, 238, 0.5); margin-top: 0.1rem; }
+  .nav-btn .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
+  .nav-btn .idx { font-family: var(--mono); font-size: 0.66rem; color: rgba(143, 211, 176, 0.75); }
+  .nav-btn .marks { display: flex; align-items: center; gap: 0.28rem; }
+  .nav-btn .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 1.5px solid rgba(143, 211, 176, 0.45); background: transparent;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-btn .dot.done { background: #3ecf8e; border-color: #3ecf8e; box-shadow: 0 0 8px rgba(62, 207, 142, 0.7); }
+  .nav-btn .star-ic { width: 12px; height: 12px; color: #ffd166; display: none; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.7)); }
+  .nav-btn .star-ic.on { display: block; }
+  .side-tools { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.10); display: flex; flex-direction: column; gap: 0.6rem; }
+  .progress { padding: 0 0.3rem; }
+  .progress-top { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(232, 244, 238, 0.6); margin-bottom: 0.35rem; }
+  .progress-top b { font-family: var(--mono); color: #8fd3b0; font-weight: 600; }
+  .progress-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .progress-bar i {
+    display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #217346, #5dbe8a);
+    box-shadow: 0 0 10px rgba(93, 190, 138, 0.6);
+    transition: width 0.4s ease;
+  }
+  .progress-bar.gold i { background: linear-gradient(90deg, #b8860b, #ffd166); box-shadow: 0 0 10px rgba(255, 209, 102, 0.55); }
+  .rank { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.72rem; color: rgba(232, 244, 238, 0.6); }
+  .rank b { color: #ffd166; font-size: 0.74rem; font-weight: 700; text-align: right; line-height: 1.3; }
+  .theme-btn {
+    appearance: none; font: inherit; display: flex; align-items: center; gap: 0.55rem;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid rgba(143, 211, 176, 0.28); background: rgba(93, 190, 138, 0.08);
+    color: #cfead8; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+    transition: background 0.18s ease;
+  }
+  .theme-btn:hover { background: rgba(93, 190, 138, 0.15); }
+  .theme-btn:focus-visible { outline: 2px solid #5dbe8a; outline-offset: 2px; }
+  .theme-btn svg { width: 16px; height: 16px; flex: none; }
+
+  .kbd-hint { margin: 0; padding: 0 0.3rem; font-size: 0.7rem; color: rgba(232, 244, 238, 0.42); line-height: 1.45; }
+  .kbd-hint kbd { font-family: var(--mono); font-size: 0.66rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 5px; padding: 0.05rem 0.3rem; }
+
+  .main { padding: 1.5rem 1.75rem calc(2.6rem + var(--credit-h)); max-width: 1240px; width: 100%; margin-inline: auto; position: relative; }
+  .atelier { display: none; }
+  .atelier.active { display: block; animation: rise 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .atelier.active { animation: none; } }
+
+  .hero { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; justify-content: space-between; margin-bottom: 1.1rem; }
+  .eyebrow { margin: 0 0 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--water); }
+  .hero h2 {
+    margin: 0; font-size: clamp(1.5rem, 2.6vw, 1.95rem); font-weight: 800; letter-spacing: -0.01em;
+    background: var(--hero-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin: 0.45rem 0 0; color: var(--muted); max-width: 46rem; line-height: 1.5; font-size: 0.94rem; }
+  .mission {
+    margin: 0.5rem 0 0; display: flex; gap: 0.45rem; align-items: flex-start;
+    font-size: 0.85rem; color: var(--water); max-width: 46rem; line-height: 1.45; font-weight: 550;
+  }
+  .mission svg { width: 14px; height: 14px; flex: none; margin-top: 0.2rem; }
+  .tag {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--water); background: var(--water-soft);
+    border: 1px solid var(--panel-brd); padding: 0.32rem 0.6rem; border-radius: 999px; white-space: nowrap;
+  }
+
+  .grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 1rem; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .viz-stack { display: grid; gap: 0.85rem; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--panel-brd); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    backdrop-filter: blur(16px) saturate(1.15); -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.35s ease;
+  }
+  .viz-stack .card:hover, .grid > .card:hover { transform: translateY(-2px); }
+  .card .hd { padding: 0.8rem 1.05rem; border-bottom: 1px solid var(--line); font-weight: 700; line-height: 1.45; font-size: 0.95rem; }
+  .card .bd { padding: 1rem 1.05rem 1.05rem; }
+  .card .hd-hint { float: right; font-weight: 500; color: var(--muted); font-size: 0.78rem; margin-left: 0.75rem; max-width: 50%; text-align: right; line-height: 1.35; }
+  .coach-ic { width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; color: var(--water); }
+  canvas { width: 100%; height: auto; display: block; background: var(--cv-bg); border-radius: 12px; border: 1px solid var(--cv-brd); }
+  .viz-cap { margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .viz-cap strong { color: var(--ink); font-weight: 650; }
+  .eq-list { margin: 0.55rem 0 0; padding-left: 1.15rem; font-size: 0.86rem; color: var(--steel); line-height: 1.55; }
+  .eq-list li { margin-bottom: 0.35rem; }
+  .eq-list li:last-child { margin-bottom: 0; }
+
+  .controls-card .hd { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .reset-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; color: var(--muted); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.28rem 0.6rem; cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease; white-space: nowrap;
+  }
+  .reset-btn:hover { color: var(--water); border-color: var(--water); }
+  .reset-btn:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .reset-btn svg { width: 12px; height: 12px; }
+  .controls { display: grid; gap: 0.9rem; }
+  .ctrl label { display: block; font-size: 0.86rem; color: var(--muted); margin-bottom: 0.3rem; line-height: 1.45; overflow: hidden; }
+  .ctrl label strong {
+    float: right; color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 0.82rem;
+    white-space: nowrap; margin-left: 0.75rem;
+    background: var(--water-soft); border: 1px solid var(--panel-brd); border-radius: 7px; padding: 0.1rem 0.45rem;
+  }
+  .ctrl .hint { display: block; font-size: 0.75rem; color: var(--muted); margin: -0.1rem 0 0.4rem; line-height: 1.35; opacity: 0.85; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: pointer; --p: 50%; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--water) var(--p), var(--track) var(--p)); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel-solid); border: 2.5px solid var(--water); margin-top: -6px;
+    box-shadow: 0 0 0 4px var(--water-soft), 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: var(--track); }
+  input[type="range"]::-moz-range-progress { height: 6px; border-radius: 999px; background: var(--water); }
+  input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--panel-solid); border: 2.5px solid var(--water); box-shadow: 0 0 0 4px var(--water-soft); }
+  input[type="range"]:focus-visible { outline: 2px solid var(--water); outline-offset: 4px; border-radius: 8px; }
+  select {
+    font: inherit; font-size: 0.86rem; border-radius: 10px; border: 1px solid var(--panel-brd);
+    padding: 0.55rem 0.7rem; background: var(--panel-solid); color: var(--ink); width: 100%; cursor: pointer;
+  }
+  select:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+  .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .kpi { border: 1px solid var(--panel-brd); border-radius: 12px; padding: 0.6rem 0.7rem; background: linear-gradient(160deg, var(--water-soft), transparent 65%); position: relative; }
+  .kpi .k { font-size: 0.76rem; color: var(--muted); letter-spacing: 0.01em; line-height: 1.35; }
+  .kpi .k .katex { font-size: 0.95em; }
+  .kpi .v { font-family: var(--mono); font-size: 1.06rem; font-weight: 650; margin-top: 0.25rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .kpi .v .katex { font-size: 1em; }
+  .kpi.wide { grid-column: 1 / -1; }
+  .kpi.wide .v:has(strong), .kpi.wide .v:has(sub) { font-family: var(--sans); font-size: 0.87rem; font-weight: 500; line-height: 1.45; color: var(--steel); }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+  .badge.lam { background: var(--ok-soft); color: var(--ok); }
+  .badge.tr { background: var(--warn-soft); color: var(--warn); }
+  .badge.turb { background: var(--danger-soft); color: var(--danger); }
+
+  .pedago { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .pedago { grid-template-columns: 1fr; } }
+  .pedago .card .hd { display: flex; align-items: center; gap: 0.5rem; }
+  .pedago .card .hd svg { width: 15px; height: 15px; flex: none; }
+  .pedago .card.retenir .hd { color: var(--water); }
+  .pedago .card.challenge .hd { color: var(--accent); }
+  .pedago .card.retenir { border-top: 2px solid var(--water); }
+  .pedago .card.challenge { border-top: 2px solid var(--accent); }
+  .pedago .card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .pedago ul { margin: 0.1rem 0 0; padding-left: 1.1rem; }
+  .pedago li { margin-bottom: 0.4rem; }
+  .pedago li:last-child { margin-bottom: 0; }
+
+  .note {
+    margin-top: 1rem; padding: 0.85rem 1rem; display: flex; gap: 0.65rem; align-items: flex-start;
+    border-left: 3px solid var(--accent); background: var(--note-bg); border-radius: 0 12px 12px 0;
+    font-size: 0.87rem; color: var(--steel); line-height: 1.5;
+  }
+  .note svg { width: 16px; height: 16px; flex: none; margin-top: 0.15rem; color: var(--accent); }
+
+  .quiz-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .quiz-card > .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-card > .hd svg.trophy { width: 15px; height: 15px; flex: none; }
+  .quiz-q { padding: 0.85rem 0; border-bottom: 1px dashed var(--line); }
+  .quiz-q:first-child { padding-top: 0; }
+  .quiz-q:last-child { border-bottom: none; padding-bottom: 0; }
+  .q-txt { margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink); font-weight: 600; }
+  .q-num {
+    display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px;
+    background: var(--water-soft); color: var(--water); font-family: var(--mono); font-size: 0.72rem;
+    margin-right: 0.5rem; vertical-align: -3px;
+  }
+  .quiz-q.solved .q-num { background: var(--ok-soft); color: var(--ok); }
+  .q-opts { display: grid; gap: 0.45rem; }
+  .opt {
+    appearance: none; font: inherit; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: center;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid var(--panel-brd); background: var(--panel-solid);
+    color: var(--steel); font-size: 0.88rem; line-height: 1.4;
+    transition: border-color 0.15s ease, transform 0.12s ease, background 0.2s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--water); transform: translateX(2px); }
+  .opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .opt .letter {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+    background: var(--water-soft); color: var(--water); flex: none;
+  }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ink); }
+  .opt.correct .letter { background: var(--ok); color: #06281a; }
+  .opt.wrong { border-color: var(--danger); background: var(--danger-soft); opacity: 0.85; animation: shake 0.3s ease; }
+  .opt.wrong .letter { background: var(--danger); color: #2b0a0a; }
+  .opt.dim { opacity: 0.5; }
+  .opt:disabled { cursor: default; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+  .q-fb {
+    margin-top: 0.55rem; padding: 0.6rem 0.75rem; border-radius: 0 10px 10px 0;
+    font-size: 0.84rem; line-height: 1.5; color: var(--steel);
+  }
+  .q-fb.good { border-left: 3px solid var(--ok); background: var(--ok-soft); }
+  .q-fb.bad { border-left: 3px solid var(--danger); background: var(--danger-soft); }
+  .q-apply {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.78rem; font-weight: 650; transition: background 0.15s ease;
+  }
+  .q-apply:hover { background: var(--water-soft); }
+  .q-apply svg { width: 12px; height: 12px; }
+  .quiz-status { margin-top: 0.8rem; font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-status .star-ic { width: 15px; height: 15px; color: var(--gold); }
+  .score-panel {
+    margin-top: 1rem; padding: 1rem 1.1rem; border-radius: 13px;
+    border: 1px solid var(--panel-brd); background: linear-gradient(160deg, var(--water-soft), transparent 70%);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem;
+  }
+  .score-big { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+  .score-lab { font-size: 0.8rem; color: var(--muted); }
+  .score-rank { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
+  .replay-btn {
+    appearance: none; font: inherit; margin-left: auto; padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.8rem; font-weight: 650; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .replay-btn:hover { background: var(--water-soft); }
+  .replay-btn svg { width: 12px; height: 12px; }
+
+  .wipe-card { margin-top: 1rem; border-top: 2px solid var(--danger); }
+  .wipe-card .hd { color: var(--danger); display: flex; align-items: center; gap: 0.5rem; }
+  .wipe-card .hd svg { width: 15px; height: 15px; }
+  .wipe-card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .wipe-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.45rem;
+    margin-top: 0.75rem; padding: 0.55rem 1rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--danger); background: var(--danger-soft); color: var(--danger);
+    font-size: 0.86rem; font-weight: 700;
+  }
+  .wipe-btn:hover { filter: brightness(1.05); }
+  .wipe-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+  .wipe-btn svg { width: 14px; height: 14px; }
+  .toast {
+    position: fixed; z-index: 70; left: 50%; bottom: calc(var(--credit-h) + 1.2rem);
+    transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none;
+    background: var(--panel-solid); color: var(--ink); border: 1px solid var(--ok);
+    border-radius: 12px; padding: 0.7rem 1.1rem; font-size: 0.88rem; font-weight: 650;
+    box-shadow: var(--shadow); transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .quiz-banner {
+    margin: 0 0 0.85rem; font-size: 0.8rem; color: var(--muted); line-height: 1.45;
+    padding: 0.5rem 0.7rem; border-radius: 10px; background: var(--water-soft);
+    border: 1px dashed var(--panel-brd);
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.9rem; }
+  .chip { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid var(--panel-brd); background: var(--water-soft); color: var(--water); }
+  .chip.gold { color: var(--gold); background: var(--warn-soft); }
+  .welcome .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+  @media (max-width: 1100px) { .welcome .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .welcome .steps { grid-template-columns: 1fr; } }
+  .welcome .step { border: 1px solid var(--panel-brd); border-radius: 13px; padding: 0.9rem; background: var(--step-bg); line-height: 1.5; font-size: 0.88rem; color: var(--steel); }
+  .welcome .step b { display: block; margin-bottom: 0.3rem; color: var(--water); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; }
+  .mission-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .mission-card .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; }
+  .mission-card .hd svg { width: 15px; height: 15px; }
+  .mission-card .bd { font-size: 0.92rem; line-height: 1.55; color: var(--steel); }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; margin-top: 0.65rem; font-size: 0.82rem; color: var(--steel); }
+  .legend-row span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .swatch { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .sw-coude { background: var(--tok-coude); }
+  .sw-te { background: var(--tok-te); }
+  .sw-vanne { background: var(--tok-vanne); }
+
+  .gloss-overlay {
+    position: fixed; inset: 0; z-index: 40; display: grid; place-items: center;
+    background: rgba(4, 12, 8, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 1.2rem;
+  }
+  .gloss-overlay[hidden] { display: none; }
+  .gloss-panel {
+    background: var(--panel-solid); color: var(--ink);
+    border: 1px solid var(--panel-brd); border-radius: 18px; box-shadow: var(--shadow);
+    max-width: 680px; width: 100%; max-height: 82vh; overflow-y: auto; padding: 1.3rem 1.5rem 1.5rem;
+  }
+  .gloss-panel h3 { margin: 0 0 0.2rem; font-size: 1.2rem; font-weight: 800; color: var(--water); display: flex; align-items: center; gap: 0.5rem; }
+  .gloss-panel h3 svg { width: 18px; height: 18px; }
+  .gloss-panel .gloss-sub { margin: 0 0 1rem; font-size: 0.82rem; color: var(--muted); }
+  .gloss-panel dl { margin: 0; display: grid; gap: 0.75rem; }
+  .gloss-panel dt { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+  .gloss-panel dd { margin: 0.15rem 0 0; font-size: 0.86rem; line-height: 1.5; color: var(--steel); padding-bottom: 0.6rem; border-bottom: 1px dashed var(--line); }
+  .gloss-panel dd:last-child { border-bottom: none; }
+  .gloss-close {
+    appearance: none; font: inherit; float: right; margin: -0.2rem -0.4rem 0 0;
+    width: 32px; height: 32px; display: grid; place-items: center;
+    border-radius: 50%; border: 1px solid var(--panel-brd); background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 1rem;
+  }
+  .gloss-close:hover { color: var(--danger); border-color: var(--danger); }
+
+  #fx-confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: transparent; border: none; border-radius: 0; width: 100vw; height: 100vh; display: none; }
+
+  .credit-bar {
+    position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; z-index: 20;
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1px;
+    background: rgba(127, 190, 150, 0.12);
+    border-top: 1px solid rgba(127, 190, 150, 0.14);
+    box-shadow: 0 -8px 24px rgba(2, 12, 8, 0.35);
+    min-height: var(--credit-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .credit-cell { background: rgba(8, 22, 16, 0.92); color: #d7efe4; padding: 0.55rem 0.9rem; display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; min-width: 0; }
+  .credit-cell .who { font-size: 0.82rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .credit-cell .role { font-size: 0.68rem; color: rgba(215, 239, 228, 0.68); line-height: 1.3; }
+  .credit-cell.module { background: linear-gradient(135deg, #1a5c38, #217346); text-align: center; align-items: center; }
+  .credit-cell.module .who { font-size: 0.88rem; letter-spacing: 0.01em; white-space: normal; }
+  .credit-cell.iut { text-align: right; align-items: flex-end; }
+
+  .tex, .tex-inline { display: inline; white-space: nowrap; }
+  .tex .katex, .tex-inline .katex, .kpi .k .katex, .hint .katex,
+  .pedago .katex, .card .hd .katex, .ctrl label .katex,
+  .legend-row .katex, .viz-cap .katex, .q-txt .katex, .opt .katex,
+  .q-fb .katex, .gloss-panel .katex, .eq-list .katex {
+    font-size: 1.02em !important; line-height: 1; vertical-align: -0.12em;
+  }
+  .katex-display { display: inline !important; margin: 0 !important; text-align: left !important; }
+
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: sticky; top: 0; z-index: 10; height: auto; overflow: visible; padding-bottom: 0.7rem; }
+    nav.ateliers { flex-direction: row; overflow-x: auto; padding-bottom: 0.3rem; }
+    .nav-btn { flex: none; grid-template-columns: auto auto; }
+    .nav-btn .meta, .nav-btn .sub { display: none; }
+    .side-tools { margin-top: 0.4rem; flex-direction: row; align-items: center; }
+    .progress, .kbd-hint, .brand-sub { display: none; }
+    .credit-bar { left: 0; grid-template-columns: 1fr; }
+    :root { --credit-h: auto; }
+    .credit-cell.iut { text-align: left; align-items: flex-start; }
+    .main { padding: 1.1rem 1rem calc(2rem + 8rem); }
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--track); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+</head>
+<body>
+<div class="bg-fx" aria-hidden="true"><b></b><b></b><b></b></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8fe3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="4" width="17" height="16" rx="2"/>
+          <path d="M3.5 9h17"/>
+          <path d="M9 9v11"/>
+          <path d="M15 9v11"/>
+        </svg>
+      </div>
+      <div>
+        <div class="code">R1-1 · Lab virtuel</div>
+        <h1>Classeur &amp; méthode</h1>
+      </div>
+    </div>
+    <p class="brand-sub">Ateliers interactifs pour sentir la méthode tableur avant le classeur noté. Aucune recette du dossier « Suivi de chantier Excel » n’est fournie ici.</p>
+
+    <nav class="ateliers" aria-label="Ateliers du laboratoire virtuel">
+      <button class="nav-btn active" data-atelier="home" aria-current="page">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></span>
+        <span class="txt"><span class="label">Accueil</span><span class="sub">Mode d’emploi &amp; mission</span></span>
+        <span class="meta"><span class="idx">00</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="refs">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 9v11"/><path d="M16 9v11"/></svg></span>
+        <span class="txt"><span class="label">Références</span><span class="sub">Relative vs $B$1</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="refs" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="refs"></span></span><span class="idx">01</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="unites">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/><path d="M18 10v8"/><path d="m16 16 2 2 3-4"/></svg></span>
+        <span class="txt"><span class="label">Unités</span><span class="sub">m ↔ mm, € ↔ k€</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="unites" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="unites"></span></span><span class="idx">02</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="logique">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v6"/><circle cx="12" cy="4" r="2"/><path d="M12 10 6 16"/><path d="M12 10l6 6"/><rect x="2.5" y="16" width="7" height="5" rx="1"/><rect x="14.5" y="16" width="7" height="5" rx="1"/></svg></span>
+        <span class="txt"><span class="label">Logique SI</span><span class="sub">Seuil 40 h, +25 %</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="logique" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="logique"></span></span><span class="idx">03</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="tva">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 20 4"/><path d="M7 7h.01"/><path d="M17 17h.01"/><circle cx="7.2" cy="7.2" r="2.2"/><circle cx="16.8" cy="16.8" r="2.2"/></svg></span>
+        <span class="txt"><span class="label">HT · TVA · TTC</span><span class="sub">Taux 8,5 % verrouillé</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="tva" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="tva"></span></span><span class="idx">04</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="synthese">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10"/><path d="M12 20V4"/><path d="M19 20v-7"/><path d="M3 20h18"/></svg></span>
+        <span class="txt"><span class="label">Synthèse</span><span class="sub">Postes &amp; SOMME.SI</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="synthese" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="synthese"></span></span><span class="idx">05</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="graphiques">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M4 15l5-6 4 3 6-8"/></svg></span>
+        <span class="txt"><span class="label">Graphiques</span><span class="sub">Axe à zéro vs zoom</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="graphiques" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="graphiques"></span></span><span class="idx">06</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="qualite">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span class="txt"><span class="label">Qualité</span><span class="sub">Erreur, vide, cadenas</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="qualite" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="qualite"></span></span><span class="idx">07</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="defi">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg></span>
+        <span class="txt"><span class="label">Grand contrôle</span><span class="sub">Quiz de synthèse</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="final" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg></span><span class="idx">08</span></span>
+      </button>
+    </nav>
+
+    <div class="side-tools">
+      <div class="progress">
+        <div class="progress-top"><span>Exploration</span><b id="prog-count">0/7</b></div>
+        <div class="progress-bar"><i id="prog-fill"></i></div>
+        <div class="progress-top" style="margin-top:0.5rem;"><span>Étoiles de défi</span><b id="star-count">0/7</b></div>
+        <div class="progress-bar gold"><i id="star-fill"></i></div>
+        <div class="rank"><span>Rang association</span><b id="rank-name">Stagiaire tableur</b></div>
+      </div>
+      <button class="theme-btn" id="gloss-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>Lexique express</span>
+      </button>
+      <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false">
+        <svg id="theme-ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+        <svg id="theme-ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>
+        <span id="theme-label">Passer en mode clair</span>
+      </button>
+      <p class="kbd-hint">Naviguez avec <kbd>←</kbd> <kbd>→</kbd> ou <kbd>0</kbd>–<kbd>8</kbd> · <kbd>L</kbd> = lexique. Accueil : bouton « tout recommencer ». Point vert = exploré, étoile = défi réussi.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="atelier active" id="atelier-home">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">R1-1 · Méthode de travail universitaire</p>
+          <h2>Bienvenue dans le laboratoire virtuel</h2>
+          <p class="lede">Explorez des situations génériques de tableur. Objectif : relier les curseurs à une image mentale solide. Le projet noté reste le classeur Excel + l’oral.</p>
+        </div>
+        <span class="tag">Fichier HTML autonome</span>
+      </div>
+      <div class="viz-stack">
+        <div class="card">
+          <div class="hd">Mini-classeur du gymnase <span class="hd-hint">décor animé — la méthode sérieuse commence à l’atelier 01</span></div>
+          <div class="bd">
+            <canvas id="cv-hero" width="1440" height="400"></canvas>
+            <p class="viz-cap">Un <strong>classeur</strong> miniature, un <strong>casque</strong> de chantier associatif, trois lignes de fournitures. Chaque atelier isole un réflexe : copier juste, convertir, décider, taxer, synthétiser, montrer, sécuriser.</p>
+          </div>
+        </div>
+        <div class="card mission-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Votre mission : le gymnase de Clairmont</div>
+          <div class="bd">
+            <p style="margin:0 0 0.55rem;">L’association <strong>imaginaire</strong> Clairmont Sport aménage un petit gymnase (peinture au sol, quincaillerie, signalétique). Elle vous recrute comme stagiaire tableur. Au fil des ateliers, vous construisez des réflexes — pas un classeur à rendre :</p>
+            <ul style="margin:0 0 0.55rem;padding-left:1.1rem;">
+              <li>chaque atelier se termine par un <strong>Défi express</strong> : réussissez toutes ses questions pour décrocher une <strong>étoile</strong> ;</li>
+              <li>les étoiles font grimper votre <strong>rang</strong> dans la barre de gauche (de Stagiaire tableur à Clairmont d’or) ;</li>
+              <li>terminez par le <strong>Grand contrôle</strong> (atelier 08) : 8 questions toutes thématiques, votre première réponse compte pour le score.</li>
+            </ul>
+            <p style="margin:0;">Clairmont est un terrain d’entraînement : <strong>aucune donnée du vrai sujet</strong> ne s’y cache (autres seuils, autre TVA, petits montants). Les Défis express sont <strong>formatifs</strong> — ils testent un réflexe de méthode, pas le chiffre que vous calculerez dans le dossier noté.</p>
+          </div>
+        </div>
+        <div class="card welcome">
+          <div class="bd">
+            <div class="chip-row">
+              <span class="chip">7 ateliers guidés</span>
+              <span class="chip gold">Défis à étoiles</span>
+              <span class="chip">Lexique intégré</span>
+              <span class="chip">100 % hors-ligne</span>
+              <span class="chip">Anti-spoil garanti</span>
+            </div>
+            <p style="margin:0;"><strong>Comment travailler :</strong> choisissez un atelier à gauche, bougez les curseurs, observez la scène, puis répondez aux Défis express. Ce n’est <em>pas</em> un QCM de projet : réussir ici ne donne aucune formule à coller dans votre classeur noté.</p>
+            <div class="steps">
+              <div class="step"><b>1 · OBSERVER</b>Changez un paramètre. Que se passe-t-il sur le dessin et sur les indicateurs ?</div>
+              <div class="step"><b>2 · NOMMER</b>Associez l’effet au vocabulaire (référence absolue, HT/TTC, critère de somme…). Relisez la boîte à outils du sujet.</div>
+              <div class="step"><b>3 · VALIDER</b>Tentez le Défi express : prédisez avant de cliquer, l’explication tombe tout de suite.</div>
+              <div class="step"><b>4 · TRANSFÉRER</b>Appliquez le raisonnement aux étapes du projet — pas l’inverse, et sans recopier les chiffres d’ici.</div>
+            </div>
+            <div class="note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+              <span>Anti-spoil : les curseurs et les questions utilisent un mini-chantier associatif (seuil 40 h, majoration +25 %, TVA pédagogique 8,5 %, inflation 4 %, montants du type 12,40 €). Si une séance et cet atelier disent la même chose <em>qualitativement</em>, vous êtes sur la bonne voie — le dossier noté « Suivi de chantier Excel », lui, se construit à part.</span>
+            </div>
+          </div>
+        </div>
+        <div class="card wipe-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Tout recommencer</div>
+          <div class="bd">
+            <p style="margin:0;">Remet à zéro les étoiles, les Défis express, le Grand contrôle, les ateliers explorés et tous les curseurs. Utile pour un second passage, un binôme, ou une séance suivante sur le même ordinateur. Le thème clair/sombre est conservé.</p>
+            <button class="wipe-btn" id="wipe-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+              Réinitialiser tous les ateliers
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-refs">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 01</p>
+          <h2>Références : copier sans tout décaler</h2>
+          <p class="lede">Une cellule unique (prix, taux…) doit rester la même quand on recopie une formule. La référence relative, elle, glisse d’une ligne à l’autre.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Mission Clairmont : le prix unitaire 12,40 € est saisi une seule fois — toutes les lignes doivent le lire, pas le voisin du dessous.</p>
+        </div>
+        <span class="tag">Étape 1</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Grille type tableur <span class="hd-hint">or = ancre · vert = copie fidèle · orange = dérive</span></div>
+          <div class="bd">
+            <canvas id="cv-refs" width="1440" height="720"></canvas>
+            <p class="viz-cap">La cellule <strong>B1</strong> (fond or) est le paramètre unique. Les flèches montrent ce que chaque formule copiée « vise ». En relatif, la cible descend d’une ligne à chaque copie — souvent dans le vide. En absolu, toutes les copies restent collées à <span class="tex" data-tex="\$B\$1"></span>.</p>
+            <ul class="eq-list">
+              <li>Référence relative : la copie décale ligne et colonne.</li>
+              <li>Référence absolue : on verrouille l’ancre d’un paramètre unique.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="refs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Nombre de copies vers le bas <strong id="v-nCopies">3</strong></label>
+              <span class="hint">Combien de lignes reçoivent la formule recopiée.</span>
+              <input type="range" id="nCopies" min="1" max="6" step="1" value="3" />
+            </div>
+            <div class="ctrl">
+              <label>Type de référence à recopier</label>
+              <span class="hint">Observez la couleur des cellules copiées et la cible des flèches.</span>
+              <select id="lockAbs">
+                <option value="rel">Relative — la cible glisse (B2, B3…)</option>
+                <option value="abs" selected>Absolue — toutes visent $B$1</option>
+              </select>
+            </div>
+            <div class="readouts" id="out-refs"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : un taux unique se verrouille, une quantité de ligne glisse.</span></div>
+        <div class="bd" id="quiz-refs"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Un paramètre unique (taux, prix, seuil) se lit avec une <strong>référence absolue</strong>.</li>
+          <li>Une grandeur qui change à chaque ligne (quantité, désignation) reste <strong>relative</strong>.</li>
+          <li>Avant de recopier vers le bas : se demander « est-ce que cette cellule doit encore pointer au même endroit ? »</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez en relatif, montez le curseur de copies : où les flèches atterrissent-elles à la 5<sup>e</sup> ligne ?</li>
+          <li>Dans un vrai classeur, on mixe souvent les deux dans la même formule : quantité relative × taux absolu.</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-unites">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 02</p>
+          <h2>Unités : convertir avant d’additionner</h2>
+          <p class="lede">Le mètre et le millimètre, l’euro et le millier d’euros, ne se mélangent pas. Convertir d’abord, calculer ensuite.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/></svg>Mission Clairmont : le devis mélange 2,40 m de bande et 2400 mm de la même bande — ne tombez pas dans le piège.</p>
+        </div>
+        <span class="tag">Étape 2</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Même grandeur, deux écritures <span class="hd-hint">règle + facture miniature</span></div>
+          <div class="bd">
+            <canvas id="cv-unites" width="1440" height="720"></canvas>
+            <p class="viz-cap">À gauche : une longueur en <strong>m</strong> et en <strong>mm</strong> (1 m = 1000 mm). À droite : un montant en <strong>€</strong> et en <strong>k€</strong> (1 k€ = 1000 €). Le bandeau du bas montre une addition honnête… ou le piège du mélange d’unités.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="L_{\mathrm{mm}} = L_{\mathrm{m}}\times 1000"></span></li>
+              <li><span class="tex" data-tex="M_{\mathrm{k€}} = M_{€}/1000"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="unites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Longueur <span class="tex" data-tex="L"></span> <strong id="v-lenM">2,40 m</strong></label>
+              <span class="hint">Petite bande de sol du gymnase — pas une cote du projet noté.</span>
+              <input type="range" id="lenM" min="0.4" max="4.8" step="0.05" value="2.4" />
+            </div>
+            <div class="ctrl">
+              <label>Montant pédagogique <strong id="v-euroAmt">12,40 €</strong></label>
+              <span class="hint">Convertissez-le mentalement en k€ avant de lire l’indicateur.</span>
+              <input type="range" id="euroAmt" min="5" max="40" step="0.1" value="12.4" />
+            </div>
+            <div class="ctrl">
+              <label>Addition des deux longueurs</label>
+              <select id="mixTrap">
+                <option value="ok" selected>Honnête — tout convertir en m d’abord</option>
+                <option value="mix">Piège — additionner  m + mm  tels quels</option>
+              </select>
+            </div>
+            <div class="readouts" id="out-unites"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : 1000, toujours 1000 — mais dans quel sens ?</span></div>
+        <div class="bd" id="quiz-unites"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>On n’additionne que des grandeurs <strong>de même unité</strong>.</li>
+          <li>m ↔ mm et € ↔ k€ : facteur 1000, sens opposé.</li>
+          <li>Un résultat « énorme » ou « microscopique » est souvent un oubli d’unité, pas un vrai coût.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Activez le piège : le bandeau rouge raconte-t-il une longueur plausible pour une bande de sol ?</li>
+          <li>12,40 € en k€ : est-ce 0,0124 ou 12 400 ? Vérifiez le curseur.</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-logique">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 03</p>
+          <h2>Logique SI : une règle, deux branches</h2>
+          <p class="lede">Un SI n’est pas un gadget : il traduit une règle de gestion. Ici, seuil pédagogique 40 h, majoration +25 % au-delà — uniquement sur les heures au-dessus du seuil.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v6"/><path d="M12 10 6 16"/></svg>Mission Clairmont : un bénévolat payé à 12,40 €/h. Au-delà de 40 h, seule la tranche haute est majorée.</p>
+        </div>
+        <span class="tag">Étape 3</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Arbre de décision <span class="hd-hint">la branche active s’allume</span></div>
+          <div class="bd">
+            <canvas id="cv-logique" width="1440" height="720"></canvas>
+            <p class="viz-cap">Le losange teste le <strong>seuil 40 h</strong> (chiffre pédagogique, pas celui du sujet). À gauche : tout est au tarif simple. À droite : 40 h simples + le surplus à <span class="tex" data-tex="+25\,\%"></span>. La jauge du bas sépare les deux parts.</p>
+            <ul class="eq-list">
+              <li>Si heures ≤ 40 : tout au tarif simple.</li>
+              <li>Si heures &gt; 40 : seules les heures au-delà du seuil sont majorées.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="logique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Heures de la semaine <strong id="v-heures">36 h</strong></label>
+              <span class="hint">Passez au-dessus de 40 h pour voir la branche de droite s’allumer.</span>
+              <input type="range" id="heures" min="24" max="52" step="1" value="36" />
+            </div>
+            <div class="ctrl">
+              <label>Tarif simple <strong id="v-tauxH">12,40 €/h</strong></label>
+              <input type="range" id="tauxH" min="8" max="16" step="0.1" value="12.4" />
+            </div>
+            <div class="readouts" id="out-logique"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : la majoration ne repeint pas toute la semaine.</span></div>
+        <div class="bd" id="quiz-logique"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Un SI imbrique une <strong>règle de gestion</strong> : tester, puis choisir une branche.</li>
+          <li>Ici, seule la tranche au-delà du seuil 40 h reçoit +25 %.</li>
+          <li>Les chiffres (40 h, +25 %, 12,40 €/h) sont pédagogiques — la règle du projet noté est dans le sujet, pas ici.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>À 48 h, quelle part du salaire vient de la majoration ? Lisez la jauge.</li>
+          <li>Si le seuil du projet noté est différent, le dessin changerait — pas la logique de l’arbre.</li>
+        </ul></div></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Aucune formule complète à coller dans le classeur noté : retenez le principe (seuil, puis tranche majorée), pas une recette de cellules.</span>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-tva">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 04</p>
+          <h2>HT, TVA, TTC — un taux, une ancre</h2>
+          <p class="lede">Le taux est unique : on le stocke dans une cellule, on le verrouille, on calcule TVA puis TTC. Le taux pédagogique d’ici vaut <strong>8,5 %</strong> — ce n’est pas celui du dossier noté.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 20 4"/></svg>Mission Clairmont : trois petites lignes (12,40 € HT…) partagent le même taux verrouillé.</p>
+        </div>
+        <span class="tag">Étape 4</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Empilement HT + TVA = TTC <span class="hd-hint">cadenas = taux unique</span></div>
+          <div class="bd">
+            <canvas id="cv-tva" width="1440" height="720"></canvas>
+            <p class="viz-cap">Barre du bas : <strong>HT</strong>. Segment or : <strong>TVA</strong>. Contour : <strong>TTC</strong>. À droite, la cellule taux est cadenasée : toutes les lignes lui empruntent le même pourcentage.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="\mathrm{TVA}=\mathrm{HT}\times t"></span></li>
+              <li><span class="tex" data-tex="\mathrm{TTC}=\mathrm{HT}+\mathrm{TVA}=\mathrm{HT}\,(1+t)"></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="tva"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Montant HT (ligne pédagogique) <strong id="v-ht">12,40 €</strong></label>
+              <span class="hint">Petit montant volontaire — rien à recopier dans le projet.</span>
+              <input type="range" id="ht" min="5" max="48" step="0.1" value="12.4" />
+            </div>
+            <div class="ctrl">
+              <label>Taux pédagogique <span class="tex" data-tex="t"></span> <strong id="v-tauxTva">8,5 %</strong></label>
+              <span class="hint">Ce n’est pas le taux du sujet noté. Ici on apprend le geste, pas le chiffre.</span>
+              <input type="range" id="tauxTva" min="5" max="12" step="0.1" value="8.5" />
+            </div>
+            <div class="readouts" id="out-tva"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : le taux est un paramètre, pas une constante tapée 20 fois.</span></div>
+        <div class="bd" id="quiz-tva"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>HT → TVA → TTC : deux calculs, un taux.</li>
+          <li>Référence absolue pour un taux unique, sinon la copie vers le bas « décroche ».</li>
+          <li>Changer le taux dans la cellule ancre doit tout recalculer — c’est le test du bon classeur.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Montez le taux : la bande or grossit, le HT (vert) reste le même. Est-ce bien ce que vous attendiez ?</li>
+          <li>Si le TTC était saisi à la main au lieu d’être calculé, que se passerait-il en changeant le taux ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-synthese">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 05</p>
+          <h2>Synthèse : trois postes, un critère</h2>
+          <p class="lede">Sommer n’est pas tout additionner. On filtre sur un <strong>critère</strong> (le nom du poste) et on additionne une <strong>autre</strong> colonne (les montants). L’inflation pédagogique (4 % par défaut) n’est qu’un curseur de sensibilité.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10"/><path d="M12 20V4"/></svg>Mission Clairmont : Peinture, Quincaillerie, Signalétique — trois mini-lignes, pas le budget du projet noté.</p>
+        </div>
+        <span class="tag">Étape 5</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Barres par poste <span class="hd-hint">le critère n’est pas la valeur sommée</span></div>
+          <div class="bd">
+            <canvas id="cv-synthese" width="1440" height="720"></canvas>
+            <p class="viz-cap">Les noms (colonne critère, teinte or) ne se somment pas. Ce sont les <strong>montants</strong> (colonne valeurs, teinte verte) que l’on additionne, et seulement pour le poste choisi. Un tableau croisé dynamique (TCD) fait la même idée à plus grande échelle.</p>
+            <ul class="eq-list">
+              <li>SOMME.SI : plage du critère · critère · plage à sommer.</li>
+              <li>Le critère (texte) ≠ le contenu à sommer (nombres).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="synthese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Inflation pédagogique des montants <strong id="v-infl">4 %</strong></label>
+              <span class="hint">Curseur de sensibilité — ce n’est pas le scénario du dossier noté.</span>
+              <input type="range" id="infl" min="0" max="8" step="0.5" value="4" />
+            </div>
+            <div class="ctrl">
+              <label>Critère affiché (idée SOMME.SI)</label>
+              <select id="filtrePoste">
+                <option value="0" selected>Tous les postes (somme globale)</option>
+                <option value="1">Seulement « Peinture »</option>
+                <option value="2">Seulement « Quincaillerie »</option>
+                <option value="3">Seulement « Signalétique »</option>
+              </select>
+            </div>
+            <div class="readouts" id="out-synthese"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : on cherche dans une colonne, on additionne une autre.</span></div>
+        <div class="bd" id="quiz-synthese"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Trois rôles : où chercher le critère, quel critère, quoi sommer.</li>
+          <li>Un KPI doit être <strong>lié</strong> au calcul, pas recopié en dur.</li>
+          <li>Le TCD groupe et somme : même idée, autre outil.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Filtrez « Quincaillerie » : les deux autres barres s’éteignent-elles ? Le total affiché correspond-il à une seule barre ?</li>
+          <li>Poussez l’inflation : les hauteurs bougent, les noms restent. C’est bien le principe « critère ≠ valeurs ».</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-graphiques">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 06</p>
+          <h2>Graphiques : l’axe doit montrer le zéro</h2>
+          <p class="lede">La même série peut raconter deux histoires. Un axe qui commence à 0 est honnête. Un zoom qui coupe le bas dramatise un écart minuscule.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M4 15l5-6 4 3 6-8"/></svg>Mission Clairmont : trois semaines de consommables du local (98, 100, 103 €) — variation pédagogique, pas un suivi de chantier.</p>
+        </div>
+        <span class="tag">Étape 6</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Même série, deux lectures <span class="hd-hint">basculez l’axe</span></div>
+          <div class="bd">
+            <canvas id="cv-graphiques" width="1440" height="720"></canvas>
+            <p class="viz-cap">Les trois barres sont <strong>les mêmes nombres</strong>. Seul le minimum de l’axe vertical change. Un graphique de rapport doit laisser voir le zéro, sinon on vend une « explosion » qui n’existe pas.</p>
+            <ul class="eq-list">
+              <li>Axe honnête : le zéro est visible.</li>
+              <li>Zoom trompeur : l’œil lit une pente, pas un écart relatif.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="graphiques"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Amplitude de la 3<sup>e</sup> semaine <strong id="v-amp">+3 €</strong></label>
+              <span class="hint">Écart volontairement petit pour sentir l’effet du zoom.</span>
+              <input type="range" id="amp" min="0" max="12" step="0.5" value="3" />
+            </div>
+            <div class="ctrl">
+              <label>Lecture de l’axe vertical</label>
+              <select id="zoomAxe">
+                <option value="0" selected>Honnête — l’axe commence à 0</option>
+                <option value="1">Zoom trompeur — l’axe commence près des données</option>
+              </select>
+            </div>
+            <div class="readouts" id="out-graphiques"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : un graphique de rapport montre le zéro.</span></div>
+        <div class="bd" id="quiz-graphiques"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Un graphique doit montrer le zéro dès que l’on compare des grandeurs positives (coûts, quantités).</li>
+          <li>Titre, légende, unités : sans eux, le dessin ne dit rien.</li>
+          <li>Le zoom n’est pas interdit en analyse exploratoire — il est trompeur dans un livrable.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez en zoom trompeur : l’écart vous paraît-il soudain « grave » ? Relisez le KPI d’écart relatif.</li>
+          <li>Remettez l’amplitude à 0 : que reste-t-il à raconter ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-qualite">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 07</p>
+          <h2>Qualité : erreur, cellule vide, protection</h2>
+          <p class="lede">Un classeur professionnel ne laisse pas une erreur brute, ne confond pas vide et zéro, et protège les formules. Démonstration qualitative — pas une recette à coller.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6Z"/></svg>Mission Clairmont : trois codes fournitures (BAN, TAP, PEI). Une clé inconnue doit dire « Non trouvé », pas crier une erreur.</p>
+        </div>
+        <span class="tag">Étape 7</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Trois réflexes de robustesse <span class="hd-hint">table miniature à 3 lignes</span></div>
+          <div class="bd">
+            <canvas id="cv-qualite" width="1440" height="720"></canvas>
+            <p class="viz-cap">Gauche : recherche d’un code. Centre : une cellule <strong>vide</strong> n’est pas un zéro. Droite : cadenas sur les formules (protection). Le principe SIERREUR : encapsuler une formule à risque pour afficher un message clair.</p>
+            <ul class="eq-list">
+              <li>Erreur brute : le lecteur voit un code machine.</li>
+              <li>Message de repli : le lecteur comprend « non trouvé ».</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="qualite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Clé cherchée dans la mini-table <strong id="v-cle">BAN</strong></label>
+              <span class="hint">1–3 existent ; 4 est volontairement absente.</span>
+              <input type="range" id="cle" min="1" max="4" step="1" value="1" />
+            </div>
+            <div class="ctrl">
+              <label>Affichage en cas d’échec</label>
+              <select id="wrapErr">
+                <option value="0">Formule nue — erreur brute visible</option>
+                <option value="1" selected>Message de repli — principe SIERREUR</option>
+              </select>
+            </div>
+            <div class="ctrl">
+              <label>Protection des cellules formule</label>
+              <select id="prot">
+                <option value="0">Saisie libre (tout le monde peut écraser)</option>
+                <option value="1" selected>Cadenas — formules protégées</option>
+              </select>
+            </div>
+            <div class="readouts" id="out-qualite"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : un livrable se lit, il ne crie pas #N/A.</span></div>
+        <div class="bd" id="quiz-qualite"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>SIERREUR (principe) : un message lisible à la place d’une erreur brute.</li>
+          <li>Une cellule vide n’est pas un zéro : décider ce que « pas de donnée » veut dire.</li>
+          <li>Protéger les formules évite qu’un clic malheureux casse le classeur.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Passez la clé à 4, puis basculez « formule nue » : lisez la différence.</li>
+          <li>La « valeur cible » (outil de simulation) cherche un <em>entrée</em> pour qu’une formule atteigne un objectif — ce n’est pas un graphique. Pas de scénario du projet ici.</li>
+        </ul></div></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Aucune enveloppe de recherche, aucun nom de feuille du sujet : seulement le réflexe « message clair / vide ≠ 0 / cadenas ».</span>
+      </div>
+    </section>
+
+    <section class="atelier" id="atelier-defi">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 08</p>
+          <h2>Le Grand contrôle du gymnase</h2>
+          <p class="lede">8 questions, toutes thématiques confondues. Votre <strong>première réponse</strong> à chaque question compte pour le score — mais vous pouvez continuer jusqu’à trouver la bonne, l’explication vient toujours.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/></svg>Mission Clairmont : l’entretien final — 7/8 ou plus décroche la mention « Clairmont d’or ».</p>
+        </div>
+        <span class="tag">Synthèse 01–07</span>
+      </div>
+      <div class="card quiz-card" style="margin-top:0;">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Grand contrôle <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16l-1 4H5z"/><path d="M4 14a8 8 0 0 1 16 0"/></svg>Casque souffle : relis « À retenir » des ateliers avant de te lancer.</span></div>
+        <div class="bd">
+          <div id="quiz-final"></div>
+          <div class="score-panel" id="final-panel" hidden>
+            <div>
+              <div class="score-big" id="final-score">0/8</div>
+              <div class="score-lab">premières réponses correctes</div>
+            </div>
+            <div class="score-rank" id="final-verdict"></div>
+            <button class="replay-btn" id="final-replay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Rejouer</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Ce quiz vérifie les réflexes qualitatifs, pas le projet noté : les valeurs utilisées sont celles de Clairmont (8,5 %, 40 h, 12,40 €) et le raisonnement prime sur le chiffre.</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="gloss-overlay" id="gloss" hidden>
+  <div class="gloss-panel" role="dialog" aria-modal="true" aria-label="Lexique express">
+    <button class="gloss-close" id="gloss-close" type="button" aria-label="Fermer le lexique">✕</button>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>Lexique express</h3>
+    <p class="gloss-sub">Le vocabulaire du tableur, en français courant. Fermez avec ✕, Échap ou un clic hors de la fiche.</p>
+    <dl>
+      <dt>Référence relative</dt>
+      <dd>Adresse qui glisse quand on recopie une formule (une ligne plus bas, la cible descend d’une ligne). Utile pour une quantité propre à chaque ligne.</dd>
+      <dt>Référence absolue</dt>
+      <dd>Adresse verrouillée (on « cadenasse » ligne et colonne). Utile pour un taux, un prix, un seuil saisi une seule fois.</dd>
+      <dt>HT / TVA / TTC</dt>
+      <dd>Hors taxes : le montant avant impôt. TVA : la taxe, égale au HT multiplié par le taux. TTC : HT + TVA, ce que paie le client.</dd>
+      <dt>KPI (indicateur de performance)</dt>
+      <dd>Chiffre mis en avant sur un tableau de bord (total, écart, poste dominant…). Il doit être <em>lié</em> aux calculs, pas recopié à la main.</dd>
+      <dt>TCD (tableau croisé dynamique)</dt>
+      <dd>Outil qui groupe des lignes selon un champ (poste, semaine…) et calcule une synthèse (somme, nombre…). On actualise la source après un ajout de colonne.</dd>
+      <dt>SOMME.SI</dt>
+      <dd>Somme sélective : on indique où chercher le critère, quel critère, et quelle plage sommer. Le critère n’est pas la valeur additionnée.</dd>
+      <dt>SIERREUR</dt>
+      <dd>Gaine de confort autour d’une formule à risque : si le calcul échoue, on affiche un message lisible au lieu d’une erreur brute.</dd>
+      <dt>Valeur cible</dt>
+      <dd>Outil de simulation : on fixe l’objectif d’une formule, l’outil cherche l’entrée qui y mène. Ce n’est ni un graphique ni une recette du projet noté.</dd>
+      <dt>Cellule vide</dt>
+      <dd>Absence de donnée. Ce n’est pas automatiquement zéro : un total peut mentir si l’on traite le vide comme 0 sans l’avoir décidé.</dd>
+      <dt>Protection</dt>
+      <dd>Cadenas sur les cellules formule : on laisse libres les saisies, on verrouille ce qui calcule, pour ne pas écraser un modèle d’un clic.</dd>
+      <dt>Axe à zéro</dt>
+      <dd>Sur un histogramme de coûts ou de quantités, l’axe vertical part de 0. Un zoom qui coupe le bas dramatise un écart minuscule.</dd>
+    </dl>
+  </div>
+</div>
+
+<canvas id="fx-confetti"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<footer class="credit-bar" aria-label="Crédit et identification du module">
+  <div class="credit-cell">
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="credit-cell module">
+    <div class="who">R 1-1 Méthode de travail universitaire</div>
+    <div class="role">Laboratoire virtuel pédagogique</div>
+  </div>
+  <div class="credit-cell iut">
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const TAU = Math.PI * 2;
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (id) => document.getElementById(id);
+  const fmt = (x, n = 2) => Number(x).toLocaleString("fr-FR", {
+    maximumFractionDigits: n,
+    minimumFractionDigits: n,
+  });
+  const euro = (x) => fmt(x, 2) + "\u00a0€";
+
+  const THEMES = {
+    dark: {
+      ink: "#e8f4ec", muted: "#9cb3a6", faint: "rgba(156,179,166,0.5)",
+      ok: "#3ecf8e", warn: "#f2b73f", danger: "#f47d7d",
+      accent: "#e0b44a", water: "#5dbe8a", waterDeep: "#217346", steel: "#a9bcc0",
+      sheet: "#163326", sheetHead: "#217346", sheetLine: "rgba(127,190,150,0.28)",
+      cell: "#1a3a2a", cellAlt: "#142e22", gold: "#ffd166",
+      hat: "#e0b44a", hatBand: "#217346", gym: "#2a4a38",
+      barA: "#5dbe8a", barB: "#e0b44a", barC: "#6fa8c9",
+      confetti: ["#5dbe8a", "#e0b44a", "#3ecf8e", "#f2b73f", "#8fe3b8", "#ffd166"],
+      glow: true,
+    },
+    light: {
+      ink: "#14211b", muted: "#5a6b62", faint: "rgba(90,107,98,0.45)",
+      ok: "#1f7a4c", warn: "#a15c00", danger: "#9b1c1c",
+      accent: "#8a6a12", water: "#217346", waterDeep: "#217346", steel: "#3d4f47",
+      sheet: "#ffffff", sheetHead: "#217346", sheetLine: "rgba(20,33,27,0.14)",
+      cell: "#f4faf6", cellAlt: "#e8f3ec", gold: "#c98a12",
+      hat: "#d4a017", hatBand: "#217346", gym: "#d7efe3",
+      barA: "#217346", barB: "#c98a12", barC: "#3d6a8a",
+      confetti: ["#217346", "#c98a12", "#1f7a4c", "#a15c00", "#5dbe8a", "#e0b44a"],
+      glow: false,
+    },
+  };
+  let P = THEMES.dark;
+
+  function view(cv) {
+    const ctx = cv.getContext("2d");
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    const w = cv.width / 2, h = cv.height / 2;
+    ctx.clearRect(0, 0, w, h);
+    return { ctx, w, h };
+  }
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+  function cell(ctx, x, y, w, h, fill, stroke, txt, tc, bold) {
+    ctx.fillStyle = fill;
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeRect(x, y, w, h);
+    if (txt != null) {
+      ctx.fillStyle = tc || P.ink;
+      ctx.font = (bold ? "650 " : "500 ") + "11px 'IBM Plex Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(txt, x + w / 2, y + h / 2 + 0.5);
+    }
+  }
+
+  function texHTML(src, display = false) {
+    if (window.katex) {
+      try {
+        return katex.renderToString(src, { throwOnError: false, displayMode: display, output: "html" });
+      } catch (_) { /* fall through */ }
+    }
+    return `<span class="tex-fallback">${src}</span>`;
+  }
+  function paintStaticTex() {
+    document.querySelectorAll(".tex[data-tex]").forEach((el) => {
+      el.innerHTML = texHTML(el.getAttribute("data-tex"));
+      el.classList.add("tex-inline");
+    });
+  }
+  function kpiHTML(items) {
+    return items.map((it) => {
+      const k = it.texK ? texHTML(it.texK) + (it.kSuffix ? " " + it.kSuffix : "") : it.k;
+      return `<div class="kpi${it.wide ? " wide" : ""}"><div class="k">${k}</div><div class="v">${it.v}</div></div>`;
+    }).join("");
+  }
+
+  const ORDER = ["home", "refs", "unites", "logique", "tva", "synthese", "graphiques", "qualite", "defi"];
+  const buttons = [...document.querySelectorAll(".nav-btn")];
+  const ateliers = [...document.querySelectorAll(".atelier")];
+  let current = "home";
+
+  function show(id) {
+    current = id;
+    buttons.forEach((b) => {
+      const on = b.dataset.atelier === id;
+      b.classList.toggle("active", on);
+      if (on) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    ateliers.forEach((a) => a.classList.toggle("active", a.id === "atelier-" + id));
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    setTimeout(() => {
+      paintStaticTex();
+      repaintCurrent();
+      ensureAnim();
+    }, 0);
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => show(b.dataset.atelier)));
+
+  window.addEventListener("keydown", (e) => {
+    const t = e.target.tagName;
+    if (t === "INPUT" || t === "SELECT" || t === "TEXTAREA") return;
+    if (e.key === "Escape") { closeGloss(); return; }
+    if (e.key === "l" || e.key === "L") { toggleGloss(); return; }
+    const i = ORDER.indexOf(current);
+    if (e.key === "ArrowRight" && i < ORDER.length - 1) show(ORDER[i + 1]);
+    else if (e.key === "ArrowLeft" && i > 0) show(ORDER[i - 1]);
+    else if (/^[0-8]$/.test(e.key)) show(ORDER[+e.key]);
+  });
+
+  const STORE_KEY = "r11_lab_virtuel";
+  let store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme: "dark" };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      store = Object.assign(store, s);
+      store.final = Object.assign({ first: {}, best: -1 }, s.final || {});
+    }
+  } catch (_) { /* stockage indisponible */ }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (_) { /* ignore */ }
+  }
+
+  const EXPLORABLE = ["refs", "unites", "logique", "tva", "synthese", "graphiques", "qualite"];
+  function starCount() { return EXPLORABLE.filter((k) => store.stars[k]).length; }
+  function rankName() {
+    const s = starCount();
+    const f = store.final.best;
+    if (s >= 7 && f >= 7) return "Clairmont d’or · association";
+    if (s >= 6) return "Chef·fe de projet associatif";
+    if (s >= 4) return "Chargé·e d’études junior";
+    if (s >= 2) return "Technicien·ne classeur";
+    return "Stagiaire tableur";
+  }
+  function renderHud() {
+    let n = 0;
+    EXPLORABLE.forEach((k) => {
+      if (store.explored[k]) n += 1;
+      const dot = document.querySelector(`.dot[data-dot="${k}"]`);
+      if (dot) dot.classList.toggle("done", !!store.explored[k]);
+      const st = document.querySelector(`.star-ic[data-star="${k}"]`);
+      if (st) st.classList.toggle("on", !!store.stars[k]);
+    });
+    const stFinal = document.querySelector('.star-ic[data-star="final"]');
+    if (stFinal) stFinal.classList.toggle("on", store.final.best >= 7);
+    $("prog-count").textContent = n + "/7";
+    $("prog-fill").style.width = (n / 7 * 100) + "%";
+    const sc = starCount();
+    $("star-count").textContent = sc + "/7";
+    $("star-fill").style.width = (sc / 7 * 100) + "%";
+    $("rank-name").textContent = rankName();
+  }
+  function markExplored(key) {
+    if (!EXPLORABLE.includes(key) || store.explored[key]) return;
+    store.explored[key] = true;
+    save();
+    renderHud();
+  }
+
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    P = THEMES[t];
+    store.theme = t;
+    save();
+    const dark = t === "dark";
+    $("theme-ic-sun").style.display = dark ? "" : "none";
+    $("theme-ic-moon").style.display = dark ? "none" : "";
+    $("theme-label").textContent = dark ? "Passer en mode clair" : "Passer en mode sombre";
+    $("theme-btn").setAttribute("aria-pressed", String(!dark));
+    repaintAll();
+  }
+  $("theme-btn").addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+
+  function toggleGloss() {
+    const gl = $("gloss");
+    if (gl.hidden) { gl.hidden = false; paintStaticTex(); }
+    else gl.hidden = true;
+  }
+  function closeGloss() { $("gloss").hidden = true; }
+  $("gloss-btn").addEventListener("click", toggleGloss);
+  $("gloss-close").addEventListener("click", closeGloss);
+  $("gloss").addEventListener("click", (e) => { if (e.target === $("gloss")) closeGloss(); });
+
+  let confettiParts = [];
+  let confettiOn = false;
+  function confetti() {
+    if (RM) return;
+    const cv = $("fx-confetti");
+    cv.width = innerWidth;
+    cv.height = innerHeight;
+    cv.style.display = "block";
+    const cols = P.confetti;
+    for (let i = 0; i < 90; i++) {
+      confettiParts.push({
+        x: innerWidth * (0.2 + Math.random() * 0.6),
+        y: -20 - Math.random() * 80,
+        vx: (Math.random() - 0.5) * 3.2,
+        vy: 2 + Math.random() * 3.4,
+        rot: Math.random() * TAU,
+        vr: (Math.random() - 0.5) * 0.3,
+        s: 4 + Math.random() * 5,
+        c: cols[i % cols.length],
+        drop: Math.random() < 0.4,
+      });
+    }
+    if (!confettiOn) { confettiOn = true; requestAnimationFrame(confettiLoop); }
+  }
+  function confettiLoop() {
+    const cv = $("fx-confetti");
+    const ctx = cv.getContext("2d");
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    confettiParts.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05;
+      p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      if (p.drop) {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.s / 2, 0, TAU);
+        ctx.fill();
+      } else {
+        ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      }
+      ctx.restore();
+    });
+    confettiParts = confettiParts.filter((p) => p.y < cv.height + 30);
+    if (confettiParts.length > 0) requestAnimationFrame(confettiLoop);
+    else { confettiOn = false; cv.style.display = "none"; }
+  }
+
+  function hat(ctx, x, y, s) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ctx.fillStyle = P.hat;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 22, 8, 0, 0, TAU);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-16, -2);
+    ctx.quadraticCurveTo(0, -22, 16, -2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = P.hatBand;
+    ctx.fillRect(-14, -6, 28, 5);
+    ctx.restore();
+  }
+
+  function drawHero(t) {
+    const cv = $("cv-hero");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const pulse = RM ? 0 : (Math.sin((t || 0) * 0.003) + 1) / 2;
+
+    rr(ctx, 18, 16, 430, h - 32, 10);
+    ctx.fillStyle = P.sheet;
+    ctx.fill();
+    ctx.strokeStyle = P.sheetLine;
+    ctx.stroke();
+    ctx.fillStyle = P.sheetHead;
+    rr(ctx, 18, 16, 430, 26, 10);
+    ctx.fill();
+    ctx.fillRect(18, 30, 430, 12);
+    ctx.fillStyle = "#f4fff8";
+    ctx.font = "650 11px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Classeur — Gymnase de Clairmont.xlsx", 32, 29);
+
+    const ox = 36, oy = 52, cw = 78, ch = 22;
+    const heads = ["", "A", "B", "C", "D"];
+    const rows = [
+      ["1", "Poste", "Qté", "PU", "Montant"],
+      ["2", "Peinture", "1", "12,40", "12,40"],
+      ["3", "Bande", "2", "12,40", "24,80"],
+      ["4", "Plots", "3", "3,20", "9,60"],
+    ];
+    for (let c = 0; c < 5; c++) {
+      cell(ctx, ox + c * cw, oy, cw, 18, P.sheetHead, P.sheetLine, heads[c], "#f4fff8", true);
+    }
+    const hi = RM ? 1 : 1 + Math.floor(((t || 0) / 900) % 3);
+    rows.forEach((r, i) => {
+      for (let c = 0; c < 5; c++) {
+        const fill = (i === hi && c > 0) ? (P.glow ? "rgba(93,190,138,0.28)" : "rgba(33,115,70,0.18)") : (i % 2 ? P.cellAlt : P.cell);
+        cell(ctx, ox + c * cw, oy + 18 + i * ch, cw, ch, fill, P.sheetLine, r[c], c === 0 ? P.muted : P.ink, c === 0);
+      }
+    });
+
+    ctx.fillStyle = P.gym;
+    rr(ctx, 470, 70, 220, 90, 8);
+    ctx.fill();
+    ctx.strokeStyle = P.water;
+    ctx.stroke();
+    ctx.fillStyle = P.sheetHead;
+    ctx.beginPath();
+    ctx.moveTo(470, 78);
+    ctx.lineTo(580, 42);
+    ctx.lineTo(690, 78);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = P.gold;
+    ctx.fillRect(568, 108, 24, 52);
+    ctx.fillStyle = P.ink;
+    ctx.font = "650 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Gymnase associatif", 580, 176);
+
+    hat(ctx, 580, 58 + pulse * 3, 1.15);
+
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 11px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("3 lignes · PU 12,40 € · terrain d’entraînement", 36, h - 18);
+  }
+
+  function updateRefs() {
+    const n = +$("nCopies").value;
+    const abs = $("lockAbs").value === "abs";
+    $("v-nCopies").textContent = String(n);
+    const cv = $("cv-refs");
+    const { ctx, w, h } = view(cv);
+    const ox = 48, oy = 36, cw = 92, ch = 32;
+    const cols = ["", "A", "B", "C"];
+    const labels = ["Désignation", "PU (ancre)", "Montant"];
+    for (let c = 0; c < 4; c++) {
+      cell(ctx, ox + c * cw, oy, cw, 24, P.sheetHead, P.sheetLine, cols[c], "#f4fff8", true);
+    }
+    cell(ctx, ox, oy + 24, cw, ch, P.cellAlt, P.sheetLine, "1", P.muted, true);
+    cell(ctx, ox + cw, oy + 24, cw, ch, P.cell, P.sheetLine, "Paramètre", P.ink);
+    cell(ctx, ox + 2 * cw, oy + 24, cw, ch, P.gold, P.sheetLine, "12,40 €", "#1a1204", true);
+    cell(ctx, ox + 3 * cw, oy + 24, cw, ch, P.cell, P.sheetLine, abs ? "$B$1" : "B1", P.ink);
+
+    ctx.fillStyle = P.gold;
+    ctx.font = "650 10px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("ancre unique", ox + 2 * cw + 6, oy + 18);
+
+    const lines = ["Peinture sol", "Bande adhésive", "Plot signal", "Scotch chantier", "Vis inox", "Craie terrain"];
+    for (let i = 0; i < 6; i++) {
+      const row = i + 2;
+      const y = oy + 24 + row * ch - ch;
+      const on = i < n;
+      const drift = !abs;
+      const fill = !on ? P.cellAlt : (drift ? "rgba(224,180,74,0.28)" : "rgba(62,207,142,0.22)");
+      cell(ctx, ox, y, cw, ch, P.cellAlt, P.sheetLine, String(row), P.muted, true);
+      cell(ctx, ox + cw, y, cw, ch, on ? fill : P.cell, P.sheetLine, on ? lines[i] : "", P.ink);
+      const target = abs ? "B1" : ("B" + row);
+      cell(ctx, ox + 2 * cw, y, cw, ch, on ? (drift ? "rgba(244,125,125,0.18)" : fill) : P.cell, P.sheetLine, on ? (abs ? "12,40" : "—") : "", on && drift ? P.danger : P.ink);
+      cell(ctx, ox + 3 * cw, y, cw, ch, on ? fill : P.cell, P.sheetLine, on ? (abs ? "× $B$1" : "× " + target) : "", P.ink);
+
+      if (on) {
+        ctx.strokeStyle = abs ? P.ok : P.warn;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        const x0 = ox + 3 * cw + 8;
+        const y0 = y + ch / 2;
+        const x1 = ox + 2 * cw + cw / 2;
+        const y1 = abs ? oy + 24 + ch / 2 : y + ch / 2;
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1 + 30, y1);
+        ctx.stroke();
+      }
+    }
+
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(abs ? "Toutes les copies restent collées à B1 (cadenas)." : "Chaque copie vise une nouvelle ligne — souvent vide.", ox, h - 22);
+
+    const badge = abs
+      ? `<span class="badge lam">Ancre verrouillée</span>`
+      : `<span class="badge tr">Dérive relative</span>`;
+    $("out-refs").innerHTML = kpiHTML([
+      { k: "Cellule ancre", v: "B1 · 12,40 €" },
+      { k: "Copies visibles", v: String(n) },
+      { k: "Type", v: abs ? "absolue ($B$1)" : "relative (B2, B3…)" },
+      { k: "Diagnostic", v: badge, wide: true },
+    ]);
+  }
+
+  function updateUnites() {
+    const L = +$("lenM").value;
+    const e = +$("euroAmt").value;
+    const mix = $("mixTrap").value === "mix";
+    $("v-lenM").textContent = fmt(L, 2) + " m";
+    $("v-euroAmt").textContent = euro(e);
+    const mm = L * 1000;
+    const ke = e / 1000;
+    const extraM = 0.8;
+    const honnete = L + extraM;
+    const piege = L + extraM * 1000;
+
+    const cv = $("cv-unites");
+    const { ctx, w, h } = view(cv);
+
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Longueur de bande", 28, 28);
+    const maxM = 5.6;
+    const yR = 58;
+    ctx.strokeStyle = P.steel;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(28, yR);
+    ctx.lineTo(340, yR);
+    ctx.stroke();
+    const xL = 28 + (L / maxM) * 312;
+    ctx.fillStyle = P.water;
+    ctx.fillRect(28, yR - 8, xL - 28, 16);
+    ctx.fillStyle = P.ink;
+    ctx.font = "650 12px 'IBM Plex Mono', monospace";
+    ctx.fillText(fmt(L, 2) + " m", 28, yR + 28);
+    ctx.fillStyle = P.accent;
+    ctx.fillText(fmt(mm, 0) + " mm", 28, yR + 48);
+
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.fillText("Montant (facture miniature)", 380, 28);
+    const xE = 380 + (e / 40) * 280;
+    ctx.fillStyle = P.barA;
+    rr(ctx, 380, 48, Math.max(12, xE - 380), 28, 6);
+    ctx.fill();
+    ctx.fillStyle = P.ink;
+    ctx.font = "650 12px 'IBM Plex Mono', monospace";
+    ctx.fillText(euro(e), 380, 96);
+    ctx.fillStyle = P.accent;
+    ctx.fillText(fmt(ke, 4) + " k€", 380, 116);
+
+    const boxY = 160;
+    rr(ctx, 28, boxY, w - 56, 170, 12);
+    ctx.fillStyle = mix ? "rgba(244,125,125,0.12)" : "rgba(62,207,142,0.10)";
+    ctx.fill();
+    ctx.strokeStyle = mix ? P.danger : P.ok;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 14px 'DM Sans', sans-serif";
+    ctx.fillText(mix ? "Piège : on additionne m + mm tels quels" : "Honnête : on convertit tout en m, puis on additionne", 48, boxY + 28);
+    ctx.font = "500 13px 'IBM Plex Mono', monospace";
+    ctx.fillText("Bande A = " + fmt(L, 2) + " m", 48, boxY + 58);
+    ctx.fillText("Bande B = 0,80 m  (= 800 mm)", 48, boxY + 82);
+    ctx.font = "700 16px 'IBM Plex Mono', monospace";
+    ctx.fillStyle = mix ? P.danger : P.ok;
+    ctx.fillText(mix
+      ? fmt(L, 2) + " + 800  →  " + fmt(piege, 1) + "  (unité absurde)"
+      : fmt(L, 2) + " m + 0,80 m  →  " + fmt(honnete, 2) + " m", 48, boxY + 128);
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.fillText(mix ? "Un résultat énorme est souvent un mélange d’unités, pas un vrai métrage." : "Même grandeur, même unité : le total redevient lisible.", 48, boxY + 154);
+
+    const badge = mix
+      ? `<span class="badge turb">Mélange d’unités</span>`
+      : `<span class="badge lam">Unités alignées</span>`;
+    $("out-unites").innerHTML = kpiHTML([
+      { texK: "L_{\\mathrm{mm}}", kSuffix: "(millimètres)", v: fmt(mm, 0) + " mm" },
+      { k: "Montant en k€", v: fmt(ke, 4) + " k€" },
+      { k: "Somme affichée", v: mix ? fmt(piege, 1) + " (piège)" : fmt(honnete, 2) + " m" },
+      { k: "Diagnostic", v: badge, wide: true },
+    ]);
+  }
+
+  const SEUIL = 40;
+  const MAJ = 0.25;
+  function updateLogique() {
+    const h = +$("heures").value;
+    const t = +$("tauxH").value;
+    $("v-heures").textContent = h + " h";
+    $("v-tauxH").textContent = euro(t) + "/h";
+    const over = Math.max(0, h - SEUIL);
+    const baseH = Math.min(h, SEUIL);
+    const partSimple = baseH * t;
+    const partMajo = over * t * (1 + MAJ);
+    const total = partSimple + partMajo;
+    const branch = h > SEUIL;
+
+    const cv = $("cv-logique");
+    const { ctx, w, h: H } = view(cv);
+
+    ctx.fillStyle = P.water;
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 28);
+    ctx.lineTo(w / 2 + 70, 78);
+    ctx.lineTo(w / 2 - 70, 78);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#06281a";
+    ctx.font = "700 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("heures ≤ 40 ?", w / 2, 62);
+
+    function box(x, y, tw, th, on, title, lines) {
+      rr(ctx, x, y, tw, th, 10);
+      ctx.fillStyle = on ? "rgba(62,207,142,0.18)" : P.cell;
+      ctx.fill();
+      ctx.strokeStyle = on ? P.ok : P.sheetLine;
+      ctx.lineWidth = on ? 2.2 : 1;
+      ctx.stroke();
+      ctx.fillStyle = on ? P.ok : P.muted;
+      ctx.font = "700 12px 'DM Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(title, x + tw / 2, y + 22);
+      ctx.fillStyle = P.ink;
+      ctx.font = "500 11px 'DM Sans', sans-serif";
+      lines.forEach((ln, i) => ctx.fillText(ln, x + tw / 2, y + 44 + i * 16));
+    }
+    ctx.strokeStyle = !branch ? P.ok : P.faint;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 20, 78);
+    ctx.lineTo(150, 110);
+    ctx.stroke();
+    ctx.strokeStyle = branch ? P.warn : P.faint;
+    ctx.beginPath();
+    ctx.moveTo(w / 2 + 20, 78);
+    ctx.lineTo(w - 150, 110);
+    ctx.stroke();
+
+    box(48, 118, 250, 88, !branch, "OUI — tarif simple", [baseH + " h × " + euro(t), "= " + euro(partSimple)]);
+    box(w - 298, 118, 250, 88, branch, "NON — tranche +25 %", [
+      SEUIL + " h simples + " + over + " h majorées",
+      euro(partSimple) + " + " + euro(partMajo),
+    ]);
+
+    const gy = 236, gw = w - 96, gx = 48;
+    rr(ctx, gx, gy, gw, 36, 8);
+    ctx.fillStyle = P.cell;
+    ctx.fill();
+    const p1 = partSimple / Math.max(total, 1);
+    ctx.fillStyle = P.barA;
+    rr(ctx, gx, gy, Math.max(8, gw * p1), 36, 8);
+    ctx.fill();
+    if (over > 0) {
+      ctx.fillStyle = P.accent;
+      ctx.fillRect(gx + gw * p1, gy, gw * (1 - p1), 36);
+    }
+    ctx.fillStyle = P.ink;
+    ctx.font = "650 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Part simple  " + euro(partSimple) + (over ? "    ·    majoration  " + euro(partMajo) : "    ·    pas de majoration"), gx + gw / 2, gy + 22);
+
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Seuil pédagogique 40 h · majoration +25 % seulement au-delà — pas la règle du projet noté.", 48, H - 18);
+
+    const badge = branch
+      ? `<span class="badge tr">Branche majorée</span>`
+      : `<span class="badge lam">Sous le seuil</span>`;
+    $("out-logique").innerHTML = kpiHTML([
+      { k: "Heures simples", v: baseH + " h" },
+      { k: "Heures majorées", v: over + " h" },
+      { k: "Salaire pédagogique", v: euro(total) },
+      { k: "Diagnostic", v: badge, wide: true },
+    ]);
+  }
+
+  function updateTva() {
+    const ht = +$("ht").value;
+    const tPct = +$("tauxTva").value;
+    $("v-ht").textContent = euro(ht);
+    $("v-tauxTva").textContent = fmt(tPct, 1) + " %";
+    const t = tPct / 100;
+    const tva = ht * t;
+    const ttc = ht + tva;
+    const cv = $("cv-tva");
+    const { ctx, w, h } = view(cv);
+    const max = 60;
+    const bh = 44;
+    const x0 = 48, bw = 420;
+    const wHt = (ht / max) * bw;
+    const wTva = (tva / max) * bw;
+    const wTtc = (ttc / max) * bw;
+
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Empilement d’une ligne", x0, 28);
+
+    ctx.fillStyle = P.barA;
+    rr(ctx, x0, 48, Math.max(8, wHt), bh, 8);
+    ctx.fill();
+    ctx.fillStyle = "#06281a";
+    ctx.font = "650 12px 'DM Sans', sans-serif";
+    ctx.fillText("HT  " + euro(ht), x0 + 12, 74);
+
+    ctx.fillStyle = P.accent;
+    rr(ctx, x0, 104, Math.max(8, wTva), bh, 8);
+    ctx.fill();
+    ctx.fillStyle = "#1a1204";
+    ctx.fillText("TVA  " + euro(tva), x0 + 12, 130);
+
+    ctx.strokeStyle = P.water;
+    ctx.lineWidth = 2.4;
+    rr(ctx, x0, 160, Math.max(12, wTtc), bh, 8);
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.fillText("TTC  " + euro(ttc), x0 + 12, 186);
+
+    rr(ctx, 500, 48, 190, 156, 12);
+    ctx.fillStyle = P.cell;
+    ctx.fill();
+    ctx.strokeStyle = P.gold;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = P.gold;
+    ctx.font = "700 11px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("$B$1  cadenas", 595, 72);
+    ctx.fillStyle = P.ink;
+    ctx.font = "800 28px 'IBM Plex Mono', monospace";
+    ctx.fillText(fmt(tPct, 1) + " %", 595, 118);
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 11px 'DM Sans', sans-serif";
+    ctx.fillText("taux unique partagé", 595, 148);
+    ctx.fillText("par les 3 lignes", 595, 166);
+
+    const rows = [ht, 8.9, 3.2];
+    rows.forEach((v, i) => {
+      const y = 230 + i * 32;
+      cell(ctx, 48, y, 70, 28, P.cellAlt, P.sheetLine, "L" + (i + 1), P.muted, true);
+      cell(ctx, 118, y, 110, 28, P.cell, P.sheetLine, euro(v), P.ink);
+      cell(ctx, 228, y, 130, 28, "rgba(224,180,74,0.2)", P.sheetLine, "× $B$1", P.ink);
+      cell(ctx, 358, y, 130, 28, "rgba(62,207,142,0.16)", P.sheetLine, euro(v * (1 + t)), P.ink);
+      ctx.strokeStyle = P.gold;
+      ctx.beginPath();
+      ctx.moveTo(488, y + 14);
+      ctx.lineTo(520, 110);
+      ctx.stroke();
+    });
+
+    $("out-tva").innerHTML = kpiHTML([
+      { k: "TVA", v: euro(tva) },
+      { k: "TTC", v: euro(ttc) },
+      { texK: "t", kSuffix: "(taux pédagogique)", v: fmt(tPct, 1) + " %" },
+      { k: "Lecture", v: `<span class="badge lam">Taux ancré en $B$1</span>`, wide: true },
+    ]);
+  }
+
+  const POSTES = [
+    { name: "Peinture", base: 12.4, col: "barA" },
+    { name: "Quincaillerie", base: 28.5, col: "barB" },
+    { name: "Signalétique", base: 18.9, col: "barC" },
+  ];
+  function updateSynthese() {
+    const inf = +$("infl").value;
+    const f = +$("filtrePoste").value;
+    $("v-infl").textContent = fmt(inf, 1) + " %";
+    const vals = POSTES.map((p) => p.base * (1 + inf / 100));
+    const shown = vals.map((v, i) => (f === 0 || f === i + 1) ? v : 0);
+    const tot = shown.reduce((a, b) => a + b, 0);
+    const cv = $("cv-synthese");
+    const { ctx, w, h } = view(cv);
+    const max = 40 * 1.08;
+    const bw = 70;
+    const baseY = 280;
+    POSTES.forEach((p, i) => {
+      const v = vals[i];
+      const on = f === 0 || f === i + 1;
+      const bh = (v / max) * 200;
+      const x = 80 + i * 160;
+      ctx.globalAlpha = on ? 1 : 0.22;
+      ctx.fillStyle = P[p.col];
+      rr(ctx, x, baseY - bh, bw, bh, 8);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = on ? P.gold : P.muted;
+      ctx.font = "700 12px 'DM Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(p.name, x + bw / 2, baseY + 22);
+      ctx.fillStyle = P.ink;
+      ctx.font = "650 12px 'IBM Plex Mono', monospace";
+      ctx.fillText(euro(v), x + bw / 2, baseY - bh - 10);
+      rr(ctx, x, 36, bw, 28, 6);
+      ctx.fillStyle = on ? "rgba(224,180,74,0.25)" : P.cell;
+      ctx.fill();
+      ctx.strokeStyle = P.gold;
+      ctx.stroke();
+      ctx.fillStyle = P.gold;
+      ctx.font = "650 10px 'DM Sans', sans-serif";
+      ctx.fillText("critère", x + bw / 2, 54);
+    });
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Noms (or) = critère. Montants (barres) = plage à sommer. L’inflation change les hauteurs, pas les noms.", 48, h - 18);
+
+    const crit = f === 0 ? "tous" : POSTES[f - 1].name;
+    $("out-synthese").innerHTML = kpiHTML([
+      { k: "Critère actif", v: crit },
+      { k: "Somme sélective", v: euro(tot) },
+      { k: "Inflation", v: fmt(inf, 1) + " %" },
+      { k: "Lecture", v: `<span class="badge lam">critère ≠ valeurs sommées</span>`, wide: true },
+    ]);
+  }
+
+  function updateGraphiques() {
+    const amp = +$("amp").value;
+    const zoom = $("zoomAxe").value === "1";
+    $("v-amp").textContent = "+" + fmt(amp, 1) + " €";
+    const data = [98, 100, 100 + amp];
+    const ymin = zoom ? Math.min(...data) - 2 : 0;
+    const ymax = Math.max(110, Math.max(...data) + 4);
+    const cv = $("cv-graphiques");
+    const { ctx, w, h } = view(cv);
+    const ox = 64, oy = 36, gw = 520, gh = 250;
+    ctx.strokeStyle = P.steel;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(ox, oy + gh);
+    ctx.lineTo(ox + gw, oy + gh);
+    ctx.stroke();
+    const ticks = 5;
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 10px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "right";
+    for (let i = 0; i <= ticks; i++) {
+      const val = ymin + (ymax - ymin) * (i / ticks);
+      const y = oy + gh - (i / ticks) * gh;
+      ctx.fillText(fmt(val, 0), ox - 8, y + 3);
+      ctx.strokeStyle = P.sheetLine;
+      ctx.beginPath();
+      ctx.moveTo(ox, y);
+      ctx.lineTo(ox + gw, y);
+      ctx.stroke();
+    }
+    const labels = ["S1", "S2", "S3"];
+    data.forEach((v, i) => {
+      const x = ox + 70 + i * 150;
+      const bh = ((v - ymin) / (ymax - ymin)) * gh;
+      ctx.fillStyle = i === 2 ? P.accent : P.barA;
+      rr(ctx, x, oy + gh - bh, 56, Math.max(2, bh), 6);
+      ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "650 11px 'IBM Plex Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(euro(v), x + 28, oy + gh - bh - 8);
+      ctx.fillStyle = P.muted;
+      ctx.fillText(labels[i], x + 28, oy + gh + 18);
+    });
+    ctx.fillStyle = zoom ? P.danger : P.ok;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(zoom ? "Zoom trompeur — le zéro a disparu" : "Axe honnête — le zéro est visible", ox, h - 22);
+
+    const rel = (data[2] - data[0]) / data[0] * 100;
+    const badge = zoom
+      ? `<span class="badge turb">Lecture dramatisee</span>`
+      : `<span class="badge lam">Lecture honnête</span>`;
+    $("out-graphiques").innerHTML = kpiHTML([
+      { k: "Min. de l’axe", v: fmt(ymin, 0) + " €" },
+      { k: "Écart S1 → S3", v: fmt(rel, 1) + " %" },
+      { k: "Série", v: data.map((v) => fmt(v, 0)).join(" · ") + " €" },
+      { k: "Diagnostic", v: badge, wide: true },
+    ]);
+  }
+
+  const STOCK = [
+    { code: "BAN", name: "Bande", px: 12.4 },
+    { code: "TAP", name: "Tapis", px: 3.2 },
+    { code: "PEI", name: "Peinture", px: 8.9 },
+  ];
+  function updateQualite() {
+    const k = +$("cle").value;
+    const wrap = $("wrapErr").value === "1";
+    const prot = $("prot").value === "1";
+    const hit = k >= 1 && k <= 3 ? STOCK[k - 1] : null;
+    $("v-cle").textContent = hit ? hit.code : "ZZZ";
+    const cv = $("cv-qualite");
+    const { ctx, w, h } = view(cv);
+
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Mini-table (3 lignes)", 28, 26);
+    STOCK.forEach((s, i) => {
+      const y = 40 + i * 28;
+      const on = hit && hit.code === s.code;
+      cell(ctx, 28, y, 70, 26, on ? "rgba(62,207,142,0.25)" : P.cell, P.sheetLine, s.code, P.ink, true);
+      cell(ctx, 98, y, 110, 26, on ? "rgba(62,207,142,0.18)" : P.cellAlt, P.sheetLine, s.name, P.ink);
+      cell(ctx, 208, y, 90, 26, P.cell, P.sheetLine, euro(s.px), P.ink);
+    });
+
+    rr(ctx, 330, 40, 170, 84, 10);
+    ctx.fillStyle = hit ? "rgba(62,207,142,0.14)" : (wrap ? "rgba(224,180,74,0.14)" : "rgba(244,125,125,0.16)");
+    ctx.fill();
+    ctx.strokeStyle = hit ? P.ok : (wrap ? P.warn : P.danger);
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Résultat recherche", 415, 62);
+    ctx.font = "700 16px 'IBM Plex Mono', monospace";
+    ctx.fillStyle = hit ? P.ok : (wrap ? P.warn : P.danger);
+    ctx.fillText(hit ? euro(hit.px) : (wrap ? "Non trouvé" : "#N/A"), 415, 96);
+
+    rr(ctx, 520, 40, 170, 84, 10);
+    ctx.fillStyle = P.cell;
+    ctx.fill();
+    ctx.strokeStyle = P.sheetLine;
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Cellule vide", 605, 62);
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 11px 'DM Sans', sans-serif";
+    ctx.fillText("(aucune saisie)", 605, 80);
+    ctx.fillStyle = P.warn;
+    ctx.font = "650 12px 'DM Sans', sans-serif";
+    ctx.fillText("vide ≠ 0", 605, 104);
+
+    rr(ctx, 330, 146, 360, 90, 10);
+    ctx.fillStyle = prot ? "rgba(93,190,138,0.12)" : "rgba(244,125,125,0.10)";
+    ctx.fill();
+    ctx.strokeStyle = prot ? P.ok : P.danger;
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(prot ? "Cadenas : les formules sont protégées" : "Saisie libre : un clic peut écraser une formule", 348, 176);
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.fillText(prot ? "On laisse libres les cellules de saisie, on verrouille ce qui calcule." : "Sans protection, le modèle casse au premier copier-coller malheureux.", 348, 204);
+    if (prot) {
+      ctx.fillStyle = P.gold;
+      ctx.font = "700 18px sans-serif";
+      ctx.fillText("🔒", 650, 188);
+    }
+
+    ctx.fillStyle = P.muted;
+    ctx.font = "500 12px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Principe SIERREUR : un message lisible à la place d’une erreur brute. Pas de recette à coller.", 28, h - 18);
+
+    const badge = hit
+      ? `<span class="badge lam">Correspondance</span>`
+      : (wrap ? `<span class="badge tr">Repli lisible</span>` : `<span class="badge turb">Erreur brute</span>`);
+    $("out-qualite").innerHTML = kpiHTML([
+      { k: "Clé", v: hit ? hit.code : "ZZZ (absente)" },
+      { k: "Affichage", v: hit ? euro(hit.px) : (wrap ? "Non trouvé" : "#N/A") },
+      { k: "Protection", v: prot ? "formules cadenasées" : "saisie libre" },
+      { k: "Diagnostic", v: badge, wide: true },
+    ]);
+  }
+
+  let animOn = false;
+  function ensureAnim() {
+    if (RM) return;
+    if (current === "home" && !animOn) {
+      animOn = true;
+      requestAnimationFrame(tick);
+    }
+  }
+  function tick(t) {
+    if (current === "home") {
+      drawHero(t);
+      animOn = true;
+      requestAnimationFrame(tick);
+    } else {
+      animOn = false;
+    }
+  }
+
+  function syncFill(inp) {
+    if (inp.type !== "range") return;
+    const p = ((+inp.value - +inp.min) / (+inp.max - +inp.min)) * 100;
+    inp.style.setProperty("--p", p + "%");
+  }
+  const GROUPS = {
+    refs: ["nCopies", "lockAbs"],
+    unites: ["lenM", "euroAmt", "mixTrap"],
+    logique: ["heures", "tauxH"],
+    tva: ["ht", "tauxTva"],
+    synthese: ["infl", "filtrePoste"],
+    graphiques: ["amp", "zoomAxe"],
+    qualite: ["cle", "wrapErr", "prot"],
+  };
+  const UPDATERS = {
+    refs: updateRefs,
+    unites: updateUnites,
+    logique: updateLogique,
+    tva: updateTva,
+    synthese: updateSynthese,
+    graphiques: updateGraphiques,
+    qualite: updateQualite,
+  };
+  const DEFAULTS = {};
+  Object.entries(GROUPS).forEach(([key, ids]) => {
+    ids.forEach((id) => {
+      const inp = $(id);
+      DEFAULTS[id] = inp.tagName === "SELECT" ? inp.value : inp.getAttribute("value");
+      const handler = () => {
+        syncFill(inp);
+        markExplored(key);
+        UPDATERS[key]();
+      };
+      inp.addEventListener("input", handler);
+      if (inp.tagName === "SELECT") inp.addEventListener("change", handler);
+    });
+  });
+  function resetGroup(key) {
+    GROUPS[key].forEach((id) => {
+      const inp = $(id);
+      inp.value = DEFAULTS[id];
+      syncFill(inp);
+    });
+    UPDATERS[key]();
+  }
+  document.querySelectorAll(".reset-btn").forEach((btn) => {
+    btn.addEventListener("click", () => resetGroup(btn.dataset.reset));
+  });
+
+  let toastTimer;
+  function showToast(msg) {
+    const el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+  $("wipe-btn").addEventListener("click", () => {
+    const ok = window.confirm(
+      "Remettre à zéro tout le laboratoire ?\n\nÉtoiles, Défis express, Grand contrôle, ateliers explorés et curseurs seront effacés. Le thème clair/sombre est conservé."
+    );
+    if (!ok) return;
+    const theme = store.theme === "light" ? "light" : "dark";
+    store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme };
+    save();
+    Object.keys(GROUPS).forEach(resetGroup);
+    renderAllQuizzes();
+    $("final-panel").hidden = true;
+    renderHud();
+    show("home");
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    showToast("Progression remise à zéro — vous pouvez tout refaire.");
+  });
+
+  const tex = (s) => `<span class="tex" data-tex="${s}"></span>`;
+  const QUIZ = {
+    refs: [
+      {
+        q: `Un prix unitaire est saisi <strong>une seule fois</strong>. Pour que chaque ligne recopiée le lise encore, on utilise…`,
+        opts: [
+          { t: `une référence absolue (ancre verrouillée)`, ok: true, fb: `Oui : un paramètre unique ne doit pas glisser. C’est le réflexe « cadenas » de l’atelier.` },
+          { t: `une référence relative, pour suivre la ligne`, fb: `Le relatif est parfait pour une quantité de ligne, pas pour un prix unique : la cible descendrait dans le vide.` },
+          { t: `aucune référence : on retape le prix à chaque ligne`, fb: `Alors changer le prix forcerait 20 corrections. Un classeur lie, il ne recopie pas à la main.` },
+        ],
+        apply: { set: { lockAbs: "abs", nCopies: 5 }, label: "Voir sur le schéma : 5 copies absolues" },
+      },
+      {
+        q: `On recopie une formule d’une ligne vers celle d’en dessous. Une référence relative…`,
+        opts: [
+          { t: `reste collée à la même cellule`, fb: `Ça, c’est le comportement d’une référence absolue.` },
+          { t: `décale sa cible d’une ligne`, ok: true, fb: `Exact : B2 devient B3, etc. Observez les flèches oranges.` },
+          { t: `efface la formule`, fb: `La copie conserve une formule — mais sa cible a glissé.` },
+        ],
+        apply: { set: { lockAbs: "rel", nCopies: 4 }, label: "Voir la dérive relative" },
+      },
+      {
+        q: `Dans une même formule, on veut « quantité de la ligne × prix unique ». Le bon réflexe est…`,
+        opts: [
+          { t: `quantité relative et prix en référence absolue`, ok: true, fb: `Les deux types cohabitent : ce qui change à chaque ligne glisse, ce qui est unique reste ancré.` },
+          { t: `tout en absolu`, fb: `Alors toutes les lignes liraient la même quantité — faux.` },
+          { t: `tout en relatif`, fb: `Le prix unique dériverait, comme dans le mode orange de l’atelier.` },
+        ],
+      },
+    ],
+    unites: [
+      {
+        q: `2,40 m, c’est combien de millimètres ?`,
+        opts: [
+          { t: `240 mm`, fb: `Il manque un zéro : 1 m = 1000 mm, donc 2,40 m = 2400 mm.` },
+          { t: `2400 mm`, ok: true, fb: `Oui : facteur 1000. Vérifiez le curseur « longueur ».` },
+          { t: `0,0024 mm`, fb: `Vous avez divisé au lieu de multiplier.` },
+        ],
+        apply: { set: { lenM: 2.4 }, label: "Voir 2,40 m sur la règle" },
+      },
+      {
+        q: `12,40 € exprimés en k€, c’est…`,
+        opts: [
+          { t: `0,0124 k€`, ok: true, fb: `1 k€ = 1000 €, donc on divise. Le KPI « montant en k€ » le montre.` },
+          { t: `12 400 k€`, fb: `Vous avez multiplié : ce serait énorme pour une bande adhésive.` },
+          { t: `12,40 k€`, fb: `k€ n’est pas un synonyme d’euro : le k vaut 1000.` },
+        ],
+        apply: { set: { euroAmt: 12.4 }, label: "Voir 12,40 € → k€" },
+      },
+      {
+        q: `Pourquoi ne pas additionner 2,40 m et 800 mm « tels quels » ?`,
+        opts: [
+          { t: `Parce qu’on n’additionne que des grandeurs de même unité`, ok: true, fb: `Le bandeau rouge du piège fabrique un total absurde. Convertir d’abord.` },
+          { t: `Parce que le millimètre n’existe pas en tableur`, fb: `Le tableur calcule des nombres : c’est à vous de leur donner une unité cohérente.` },
+          { t: `Parce que 800 est trop petit pour compter`, fb: `800 mm = 0,80 m : ce n’est pas négligeable, il faut juste convertir.` },
+        ],
+        apply: { set: { mixTrap: "mix" }, label: "Voir le piège d’addition" },
+      },
+    ],
+    logique: [
+      {
+        q: `36 h, seuil pédagogique 40 h. Y a-t-il une majoration +25 % ?`,
+        opts: [
+          { t: `Non : on est sous le seuil, tout est au tarif simple`, ok: true, fb: `La branche gauche s’allume. Passez au-dessus de 40 h pour voir l’autre.` },
+          { t: `Oui, toute la semaine est majorée`, fb: `La majoration ne repeint pas la semaine : elle ne touche que la tranche au-delà du seuil.` },
+          { t: `Oui, mais seulement 4 h (40 − 36)`, fb: `36 &lt; 40 : il n’y a pas d’heures au-delà du seuil.` },
+        ],
+        apply: { set: { heures: 36 }, label: "Voir 36 h sur l’arbre" },
+      },
+      {
+        q: `48 h, seuil 40 h. Quelles heures reçoivent +25 % ?`,
+        opts: [
+          { t: `Les 8 h au-delà du seuil seulement`, ok: true, fb: `40 h simples + 8 h majorées. La jauge sépare les deux parts.` },
+          { t: `Les 48 h`, fb: `Ce serait une lecture trop brutale de la règle : le SI isole la tranche haute.` },
+          { t: `Aucune : 48 est un multiple de 8`, fb: `Le multiple n’a rien à voir : on compare à 40.` },
+        ],
+        apply: { set: { heures: 48 }, label: "Voir 48 h (branche droite)" },
+      },
+      {
+        q: `Un SI, dans un classeur de gestion, sert surtout à…`,
+        opts: [
+          { t: `traduire une règle (si seuil dépassé, alors… )`, ok: true, fb: `Exact : ce n’est pas un gadget. On imbrique une règle, on n’invente pas un chiffre.` },
+          { t: `faire joli dans une cellule`, fb: `Le SI a un effet : il choisit une branche. L’arbre de l’atelier le montre.` },
+          { t: `remplacer toutes les références absolues`, fb: `Ce sont deux outils différents : ancre vs décision.` },
+        ],
+      },
+    ],
+    tva: [
+      {
+        q: `Si le HT reste fixe et que le taux augmente, le TTC…`,
+        opts: [
+          { t: `augmente (la TVA grossit)`, ok: true, fb: `La barre verte (HT) ne bouge pas ; la bande or (TVA) s’allonge ; le contour TTC suit.` },
+          { t: `reste égal au HT`, fb: `TTC = HT + TVA. S’il y a une taxe, le TTC est plus grand.` },
+          { t: `diminue`, fb: `Un taux plus fort prélève plus, il n’offre pas de remise.` },
+        ],
+        apply: { set: { ht: 12.4, tauxTva: 11 }, label: "Voir un taux plus haut" },
+      },
+      {
+        q: `Pourquoi verrouiller le taux (référence absolue) ?`,
+        opts: [
+          { t: `Parce que c’est un paramètre unique partagé par toutes les lignes`, ok: true, fb: `Les flèches de l’atelier convergent vers $B$1. Une copie relative décrocherait le taux.` },
+          { t: `Parce que la TVA se calcule sans HT`, fb: `La TVA se calcule à partir du HT. Le cadenas concerne le taux, pas le HT.` },
+          { t: `Parce que 8,5 % est le taux du projet noté`, fb: `Non : 8,5 % est pédagogique. Le taux du dossier se lit dans le sujet, pas ici.` },
+        ],
+      },
+      {
+        q: `TTC, c’est…`,
+        opts: [
+          { t: `HT + TVA, ou HT × (1 + taux)`, ok: true, fb: `Les deux écritures disent la même chose. Les équations sous le schéma les rappellent.` },
+          { t: `seulement la taxe`, fb: `La taxe, c’est la TVA. Le TTC est le total payé.` },
+          { t: `HT − TVA`, fb: `On additionne la taxe, on ne la retranche pas du HT.` },
+        ],
+      },
+    ],
+    synthese: [
+      {
+        q: `Dans une somme sélective, le critère (nom du poste)…`,
+        opts: [
+          { t: `sert à filtrer, ce n’est pas la colonne que l’on additionne`, ok: true, fb: `Les pastilles or = noms. Les barres = montants. Trois rôles : où chercher, quoi chercher, quoi sommer.` },
+          { t: `est additionné avec les montants`, fb: `On n’additionne pas des mots. On additionne les nombres des lignes dont le nom matche.` },
+          { t: `remplace le TCD`, fb: `Le TCD groupe et somme à plus grande échelle ; l’idée « critère ≠ valeurs » est la même.` },
+        ],
+        apply: { set: { filtrePoste: "2" }, label: "Voir le filtre Quincaillerie" },
+      },
+      {
+        q: `Un KPI de tableau de bord doit…`,
+        opts: [
+          { t: `être lié au calcul, pour se mettre à jour tout seul`, ok: true, fb: `Recopier un chiffre en dur, c’est mentir dès la prochaine saisie.` },
+          { t: `être tapé à la main « pour figéer le rapport »`, fb: `Un livrable figé à la main n’est plus un tableau de bord.` },
+          { t: `utiliser uniquement des pourcentages`, fb: `Un total en euros est un KPI tout à fait légitime.` },
+        ],
+      },
+      {
+        q: `L’inflation pédagogique du curseur change…`,
+        opts: [
+          { t: `les hauteurs (valeurs), pas les noms de postes`, ok: true, fb: `C’est exactement « critère ≠ contenu à sommer ».` },
+          { t: `les noms de postes`, fb: `Peinture reste Peinture. Seuls les montants sont rejoués.` },
+          { t: `le taux de TVA 8,5 %`, fb: `L’inflation est un autre levier, vu à l’atelier 05.` },
+        ],
+        apply: { set: { infl: 8 }, label: "Voir l’inflation à 8 %" },
+      },
+    ],
+    graphiques: [
+      {
+        q: `Pour comparer des coûts positifs dans un livrable, l’axe vertical…`,
+        opts: [
+          { t: `doit montrer le zéro`, ok: true, fb: `Sinon l’œil lit une « explosion » qui n’existe pas. Basculez le menu « zoom trompeur ».` },
+          { t: `doit commencer juste sous le minimum, pour zoomer`, fb: `Utile en exploration, trompeur dans un rapport.` },
+          { t: `n’a pas d’importance`, fb: `L’atelier montre que la même série raconte deux histoires.` },
+        ],
+        apply: { set: { zoomAxe: "1" }, label: "Voir le zoom trompeur" },
+      },
+      {
+        q: `On bascule de l’axe à 0 vers un zoom près des données. Les nombres…`,
+        opts: [
+          { t: `restent identiques : seule la lecture change`, ok: true, fb: `Les KPI de série ne bougent pas. C’est l’échelle qui ment.` },
+          { t: `sont multipliés par 10`, fb: `Aucune donnée n’est recalculée.` },
+          { t: `passent en k€ tout seuls`, fb: `L’unité n’a pas changé : ce sont toujours des euros pédagogiques.` },
+        ],
+        apply: { set: { zoomAxe: "0", amp: 3 }, label: "Revenir à l’axe honnête" },
+      },
+      {
+        q: `Un graphique de rapport a surtout besoin…`,
+        opts: [
+          { t: `d’un titre, d’une légende, d’unités, et d’un axe lisible`, ok: true, fb: `Sans ça, le dessin ne dit rien — même avec de beaux verts Excel.` },
+          { t: `d’effets 3D`, fb: `Le 3D masque les hauteurs. Sobriété.` },
+          { t: `de cacher le zéro pour « faire vivant »`, fb: `C’est précisément le piège de cet atelier.` },
+        ],
+      },
+    ],
+    qualite: [
+      {
+        q: `Une recherche de code échoue. Le réflexe professionnel est…`,
+        opts: [
+          { t: `afficher un message lisible (principe SIERREUR)`, ok: true, fb: `« Non trouvé » se lit. #N/A se subit. Passez la clé à 4.` },
+          { t: `laisser l’erreur brute pour « alerter fort »`, fb: `Un livrable se lit par un jury, pas par un débogueur.` },
+          { t: `mettre 0, pour que les totaux passent`, fb: `0 mentirait : ce n’est pas « ça coûte zéro », c’est « on n’a pas trouvé ».` },
+        ],
+        apply: { set: { cle: 4, wrapErr: "1" }, label: "Voir la clé absente + repli" },
+      },
+      {
+        q: `Une cellule vide, dans un calcul, …`,
+        opts: [
+          { t: `n’est pas automatiquement un zéro`, ok: true, fb: `« Pas de donnée » et « zéro » sont deux décisions différentes.` },
+          { t: `vaut toujours 0`, fb: `Beaucoup de formules le traitent comme 0 — d’où les totaux silencieux. Il faut l’avoir décidé.` },
+          { t: `bloque Excel définitivement`, fb: `Le tableur continue. C’est le sens métier qui peut être faux.` },
+        ],
+      },
+      {
+        q: `Protéger les cellules formule, c’est…`,
+        opts: [
+          { t: `laisser libres les saisies, cadenas sur ce qui calcule`, ok: true, fb: `Le cadenas de droite de l’atelier : un clic malheureux n’écrase plus le modèle.` },
+          { t: `mot de passe sur tout le fichier, y compris les saisies`, fb: `Alors plus personne ne peut travailler. On protège le calcul, pas la vie.` },
+          { t: `inutile dès qu’il y a SIERREUR`, fb: `Deux filets différents : message vs écrasement.` },
+        ],
+        apply: { set: { prot: "1" }, label: "Voir le cadenas" },
+      },
+    ],
+    final: [
+      {
+        q: `Un taux unique recopié vers le bas se verrouille avec…`,
+        opts: [
+          { t: `une référence absolue`, ok: true, fb: `Le cadenas de l’atelier 01 / 04.` },
+          { t: `une référence relative`, fb: `Le relatif glisse : le taux « décroche ».` },
+          { t: `un graphique`, fb: `Le graphique montre, il ne verrouille pas une adresse.` },
+        ],
+      },
+      {
+        q: `Avant d’additionner des longueurs, on…`,
+        opts: [
+          { t: `convertit tout dans la même unité`, ok: true, fb: `Le piège m + mm de l’atelier 02.` },
+          { t: `multiplie par la TVA`, fb: `La taxe n’a rien à voir avec un métrage.` },
+          { t: `zoom l’axe à 0`, fb: `Réflexe du graphique, pas des unités.` },
+        ],
+      },
+      {
+        q: `Seuil 40 h, +25 % : la majoration s’applique…`,
+        opts: [
+          { t: `seulement aux heures au-delà du seuil`, ok: true, fb: `L’arbre SI de l’atelier 03.` },
+          { t: `à toutes les heures de la semaine`, fb: `Ce serait une autre règle de gestion — pas celle dessinée ici.` },
+          { t: `uniquement si on est pile à 40 h`, fb: `À 40 h pile, on est encore sur la branche « simple ».` },
+        ],
+      },
+      {
+        q: `TTC =`,
+        opts: [
+          { t: `HT + TVA`, ok: true, fb: `Ou HT × (1 + taux). Atelier 04.` },
+          { t: `HT − TVA`, fb: `On ajoute la taxe.` },
+          { t: `TVA seule`, fb: `La TVA n’est que la bande or.` },
+        ],
+      },
+      {
+        q: `Dans une somme sélective, on additionne…`,
+        opts: [
+          { t: `les montants des lignes dont le critère matche`, ok: true, fb: `Critère (texte) ≠ plage à sommer (nombres).` },
+          { t: `les noms de postes`, fb: `On ne somme pas des mots.` },
+          { t: `toutes les colonnes du classeur`, fb: `Ce serait l’inverse d’un filtre.` },
+        ],
+      },
+      {
+        q: `Un histogramme de coûts dans un livrable doit…`,
+        opts: [
+          { t: `montrer le zéro sur l’axe vertical`, ok: true, fb: `Atelier 06 : le zoom trompeur est un piège de lecture.` },
+          { t: `couper l’axe pour dramatiser`, fb: `Interdit dans un rapport honnête.` },
+          { t: `partir de 100 par convention`, fb: `Aucune convention de ce type.` },
+        ],
+      },
+      {
+        q: `Le principe SIERREUR, c’est…`,
+        opts: [
+          { t: `un message lisible à la place d’une erreur brute`, ok: true, fb: `Atelier 07. Pas une formule à coller dans le projet.` },
+          { t: `effacer les formules à risque`, fb: `On les gaine, on ne les jette pas.` },
+          { t: `remplacer toute recherche par un 0`, fb: `0 mentirait sur un code introuvable.` },
+        ],
+      },
+      {
+        q: `Les chiffres de ce laboratoire (8,5 %, 40 h, 12,40 €)…`,
+        opts: [
+          { t: `sont pédagogiques : on transfère le raisonnement, pas les valeurs, vers le dossier noté`, ok: true, fb: `Anti-spoil respecté. Le « Suivi de chantier Excel » se construit à part.` },
+          { t: `sont ceux du projet noté, à recopier`, fb: `Non : le bandeau d’accueil l’interdit.` },
+          { t: `remplacent le classeur à rendre`, fb: `Ceci est un terrain d’entraînement, pas le livrable.` },
+        ],
+      },
+    ],
+  };
+
+  function shuffleOpts(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+  Object.keys(QUIZ).forEach((k) => {
+    QUIZ[k].forEach((item) => {
+      item.opts = shuffleOpts(item.opts);
+    });
+  });
+
+  function quizSolved(a) { return store.quiz[a] || {}; }
+  function renderQuiz(a) {
+    const host = $("quiz-" + a);
+    if (!host) return;
+    const solved = quizSolved(a);
+    host.innerHTML = `<p class="quiz-banner">Formative seulement : ces questions entraînent un réflexe. Elles ne donnent aucune valeur à recopier dans le dossier Suivi de chantier Excel.</p>` + QUIZ[a].map((item, i) => {
+      const done = !!solved[i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      return `<div class="quiz-q${done ? " solved" : ""}" data-a="${a}" data-i="${i}">
+        <p class="q-txt"><span class="q-num">${i + 1}</span>${item.q}</p>
+        <div class="q-opts">${item.opts.map((o, j) => `
+          <button class="opt${done && j === okIdx ? " correct" : ""}${done && j !== okIdx ? " dim" : ""}" type="button" data-j="${j}" ${done ? "disabled" : ""}>
+            <span class="letter">${"ABCD"[j]}</span><span>${o.t}</span>
+          </button>`).join("")}
+        </div>
+        <div class="q-fb good" ${done ? "" : "hidden"}>${done ? item.opts[okIdx].fb + applyHTML(item) : ""}</div>
+      </div>`;
+    }).join("") + statusHTML(a);
+    wireQuiz(host, a);
+  }
+  function applyHTML(item) {
+    if (!item.apply) return "";
+    return `<div><button class="q-apply" type="button" data-apply='${JSON.stringify(item.apply.set)}'>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>${item.apply.label}</button></div>`;
+  }
+  function statusHTML(a) {
+    if (a === "final") return "";
+    const solved = quizSolved(a);
+    const n = QUIZ[a].filter((_, i) => solved[i]).length;
+    const tot = QUIZ[a].length;
+    const star = store.stars[a]
+      ? `<svg class="star-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg> <strong>Étoile décrochée !</strong> Défi validé ${n}/${tot}.`
+      : `Défi : <strong>${n}/${tot}</strong> question${tot > 1 ? "s" : ""} validée${n > 1 ? "s" : ""} — toutes justes = une étoile.`;
+    return `<div class="quiz-status">${star}</div>`;
+  }
+  function wireQuiz(host, a) {
+    host.querySelectorAll(".quiz-q").forEach((qEl) => {
+      const i = +qEl.dataset.i;
+      const item = QUIZ[a][i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      qEl.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const j = +btn.dataset.j;
+          if (a === "final" && store.final.first[i] === undefined) {
+            store.final.first[i] = (j === okIdx);
+            save();
+          }
+          const fb = qEl.querySelector(".q-fb");
+          if (j === okIdx) {
+            btn.classList.add("correct");
+            qEl.classList.add("solved");
+            qEl.querySelectorAll(".opt").forEach((b) => {
+              b.disabled = true;
+              if (+b.dataset.j !== okIdx) b.classList.add("dim");
+            });
+            fb.className = "q-fb good";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[okIdx].fb + applyHTML(item);
+            wireApply(fb, a);
+            if (!store.quiz[a]) store.quiz[a] = {};
+            store.quiz[a][i] = true;
+            save();
+            afterSolve(a);
+          } else {
+            btn.classList.add("wrong");
+            btn.disabled = true;
+            fb.className = "q-fb bad";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[j].fb;
+          }
+          paintStaticTex();
+        });
+      });
+      wireApply(qEl, a);
+    });
+  }
+  function wireApply(scope, a) {
+    scope.querySelectorAll(".q-apply").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", () => {
+        const set = JSON.parse(btn.dataset.apply);
+        Object.entries(set).forEach(([id, val]) => {
+          const inp = $(id);
+          if (!inp) return;
+          inp.value = val;
+          inp.dispatchEvent(new Event("input"));
+        });
+        const section = $("atelier-" + a);
+        const cvs = section && section.querySelector("canvas");
+        if (cvs) cvs.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
+      });
+    });
+  }
+  function afterSolve(a) {
+    if (a === "final") {
+      updateFinalPanel();
+      return;
+    }
+    const solved = quizSolved(a);
+    const all = QUIZ[a].every((_, i) => solved[i]);
+    const statusEl = document.querySelector(`#quiz-${a} .quiz-status`);
+    if (all && !store.stars[a]) {
+      store.stars[a] = true;
+      save();
+      confetti();
+    }
+    if (statusEl) statusEl.outerHTML = statusHTML(a);
+    renderHud();
+  }
+  function updateFinalPanel() {
+    const answered = Object.keys(store.final.first).length;
+    const total = QUIZ.final.length;
+    if (answered < total) {
+      $("final-panel").hidden = true;
+      return;
+    }
+    const score = QUIZ.final.reduce((n, _, i) => n + (store.final.first[i] ? 1 : 0), 0);
+    if (score > store.final.best) {
+      store.final.best = score;
+      save();
+    }
+    $("final-panel").hidden = false;
+    $("final-score").textContent = score + "/" + total;
+    const verdict =
+      score >= 7 ? "Mention « Clairmont d’or » — l’association vous garde !" :
+      score >= 5 ? "Solide ! Encore un ou deux réflexes à ancrer." :
+      "Bon entraînement — relisez les « À retenir » puis rejouez.";
+    $("final-verdict").textContent = verdict;
+    if (score >= 7) confetti();
+    renderHud();
+  }
+  $("final-replay").addEventListener("click", () => {
+    store.quiz.final = {};
+    store.final.first = {};
+    save();
+    renderQuiz("final");
+    $("final-panel").hidden = true;
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+  });
+
+  function renderAllQuizzes() {
+    Object.keys(QUIZ).forEach(renderQuiz);
+    updateFinalPanel();
+  }
+
+  function repaintCurrent() {
+    if (current === "home") drawHero(0);
+    else if (UPDATERS[current]) UPDATERS[current]();
+  }
+  function repaintAll() {
+    drawHero(0);
+    Object.keys(UPDATERS).forEach((k) => UPDATERS[k]());
+    ensureAnim();
+  }
+
+  function boot() {
+    renderAllQuizzes();
+    paintStaticTex();
+    document.querySelectorAll('input[type="range"]').forEach(syncFill);
+    renderHud();
+    applyTheme(store.theme === "light" ? "light" : "dark");
+    ensureAnim();
+  }
+
+  function whenReady(cb) {
+    if (window.katex) { cb(); return; }
+    let n = 0;
+    const t = setInterval(() => {
+      n += 1;
+      if (window.katex || n > 40) {
+        clearInterval(t);
+        cb();
+      }
+    }, 50);
+  }
+  whenReady(boot);
+})();
+</script>
+</body>
+</html>

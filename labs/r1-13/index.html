@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab virtuel R1-13 — Fonctions des composants des bâtiments | IUT Mantes</title>
+<style>
+  :root {
+    --sidebar-w: 292px;
+    --credit-h: 3.4rem;
+    --radius: 16px;
+    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "DM Sans", "Segoe UI", sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --bg0: #0a120e;
+    --bg1: #101a15;
+    --bg-glow1: rgba(74, 93, 78, 0.38);
+    --bg-glow2: rgba(166, 124, 82, 0.14);
+    --ink: #e8f0ea;
+    --muted: #9bb0a4;
+    --line: rgba(143, 191, 154, 0.14);
+    --panel: rgba(18, 32, 26, 0.62);
+    --panel-solid: #15221c;
+    --panel-brd: rgba(143, 191, 154, 0.16);
+    --water: #8fbf9a;
+    --water-deep: #4a5d4e;
+    --water-soft: rgba(143, 191, 154, 0.13);
+    --accent: #c9a27a;
+    --ok: #3ecf8e;
+    --warn: #f2b73f;
+    --danger: #f47d7d;
+    --ok-soft: rgba(62, 207, 142, 0.14);
+    --warn-soft: rgba(242, 183, 63, 0.14);
+    --danger-soft: rgba(244, 125, 125, 0.14);
+    --steel: #b5c4bc;
+    --track: rgba(143, 191, 154, 0.18);
+    --cv-bg: linear-gradient(180deg, #15241e, #101a15);
+    --cv-brd: rgba(143, 191, 154, 0.18);
+    --shadow: 0 18px 40px rgba(4, 10, 8, 0.5);
+    --glow: 0 0 24px rgba(143, 191, 154, 0.14);
+    --hero-grad: linear-gradient(92deg, #eaf3ee 0%, #8fbf9a 62%, #c9a27a 130%);
+    --tok-coude: #c9a27a;
+    --tok-te: #6d8a78;
+    --tok-vanne: #3ecf8e;
+    --fx1: rgba(143, 191, 154, 0.16);
+    --fx2: rgba(74, 93, 78, 0.28);
+    --fx3: rgba(201, 162, 122, 0.12);
+    --note-bg: rgba(201, 162, 122, 0.08);
+    --step-bg: rgba(143, 191, 154, 0.05);
+    --gold: #ffd166;
+  }
+  :root[data-theme="light"] {
+    --bg0: #ebe7e0;
+    --bg1: #f5f3ef;
+    --bg-glow1: rgba(226, 235, 228, 0.95);
+    --bg-glow2: rgba(243, 230, 214, 0.9);
+    --ink: #1c2320;
+    --muted: #5c6b66;
+    --line: rgba(28, 35, 32, 0.12);
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-solid: #ffffff;
+    --panel-brd: rgba(28, 35, 32, 0.10);
+    --water: #4a5d4e;
+    --water-deep: #4a5d4e;
+    --water-soft: #e2ebe4;
+    --accent: #a67c52;
+    --ok: #1f7a4c;
+    --warn: #a15c00;
+    --danger: #9b1c1c;
+    --ok-soft: #e5f6ec;
+    --warn-soft: #fff3d9;
+    --danger-soft: #fde8e8;
+    --steel: #3d4f5f;
+    --track: #dbe3dc;
+    --cv-bg: linear-gradient(180deg, #f0f2ee, #fafaf8);
+    --cv-brd: rgba(28, 35, 32, 0.12);
+    --shadow: 0 10px 30px rgba(28, 35, 32, 0.08);
+    --glow: none;
+    --hero-grad: linear-gradient(92deg, #1c2320 0%, #4a5d4e 95%);
+    --tok-coude: #a67c52;
+    --tok-te: #3d4f5f;
+    --tok-vanne: #1f7a4c;
+    --fx1: rgba(74, 93, 78, 0.10);
+    --fx2: rgba(143, 191, 154, 0.12);
+    --fx3: rgba(166, 124, 82, 0.08);
+    --note-bg: #fff8f1;
+    --step-bg: #ffffff;
+    --gold: #c98a12;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -12%, var(--bg-glow1) 0%, transparent 55%),
+      radial-gradient(900px 520px at 100% 0%, var(--bg-glow2) 0%, transparent 45%),
+      linear-gradient(180deg, var(--bg1), var(--bg0));
+    background-attachment: fixed;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  ::selection { background: var(--water); color: #0a120e; }
+
+  .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bg-fx b { position: absolute; width: 46vw; height: 46vw; border-radius: 50%; filter: blur(90px); opacity: 0.8; }
+  .bg-fx b:nth-child(1) { background: var(--fx1); top: -18vw; left: 22vw; animation: drift1 26s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(2) { background: var(--fx2); bottom: -22vw; right: -10vw; animation: drift2 32s ease-in-out infinite alternate; }
+  .bg-fx b:nth-child(3) { background: var(--fx3); top: 30vh; left: -18vw; animation: drift3 38s ease-in-out infinite alternate; }
+  @keyframes drift1 { to { transform: translate(6vw, 8vh) scale(1.12); } }
+  @keyframes drift2 { to { transform: translate(-8vw, -6vh) scale(1.08); } }
+  @keyframes drift3 { to { transform: translate(9vw, -8vh); } }
+  :root[data-theme="dark"] .bg-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(143, 191, 154, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143, 191, 154, 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 80%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-fx b { animation: none !important; }
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  .app { position: relative; z-index: 1; display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+  .sidebar {
+    background: linear-gradient(180deg, #2f3a34 0%, #1a211e 100%);
+    border-right: 1px solid rgba(184, 212, 192, 0.10);
+    color: #eef3ef;
+    padding: 1.15rem 0.9rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(184, 212, 192, 0.3) transparent;
+  }
+  .brand { display: flex; gap: 0.65rem; align-items: center; padding: 0.25rem 0.4rem 0.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+  .logo {
+    width: 42px; height: 42px; flex: none; display: grid; place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(143, 191, 154, 0.22), rgba(74, 93, 78, 0.35));
+    border: 1px solid rgba(143, 191, 154, 0.38);
+    box-shadow: 0 0 18px rgba(143, 191, 154, 0.16);
+  }
+  .logo svg { width: 22px; height: 22px; }
+  .brand .code { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: #b8d4c0; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
+  .brand h1 { margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 800; line-height: 1.2; }
+  .brand-sub { margin: 0.55rem 0.4rem 0.35rem; font-size: 0.78rem; color: rgba(238, 243, 239, 0.6); line-height: 1.45; }
+  nav.ateliers { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.2rem; }
+  .nav-btn {
+    appearance: none; position: relative; border: 1px solid transparent; background: transparent;
+    color: inherit; text-align: left; padding: 0.55rem 0.65rem; border-radius: 12px; cursor: pointer;
+    font: inherit; display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .nav-btn:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(2px); }
+  .nav-btn:focus-visible { outline: 2px solid #8fbf9a; outline-offset: 2px; }
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(184, 212, 192, 0.16), rgba(184, 212, 192, 0.04));
+    border-color: rgba(184, 212, 192, 0.35);
+    box-shadow: 0 0 20px rgba(143, 191, 154, 0.10);
+  }
+  .nav-btn.active::before {
+    content: ""; position: absolute; left: -1px; top: 18%; bottom: 18%; width: 3px; border-radius: 3px;
+    background: #8fbf9a; box-shadow: 0 0 10px rgba(143, 191, 154, 0.8);
+  }
+  .nav-btn .ic {
+    width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); color: #b8d4c0;
+  }
+  .nav-btn.active .ic { color: #e8f4ec; background: rgba(143, 191, 154, 0.16); border-color: rgba(143, 191, 154, 0.32); }
+  .nav-btn .ic svg { width: 16px; height: 16px; }
+  .nav-btn .label { font-size: 0.88rem; font-weight: 650; display: block; }
+  .nav-btn .sub { display: block; font-size: 0.72rem; font-weight: 400; color: rgba(238, 243, 239, 0.5); margin-top: 0.1rem; }
+  .nav-btn .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
+  .nav-btn .idx { font-family: var(--mono); font-size: 0.66rem; color: rgba(184, 212, 192, 0.75); }
+  .nav-btn .marks { display: flex; align-items: center; gap: 0.28rem; }
+  .nav-btn .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 1.5px solid rgba(184, 212, 192, 0.45); background: transparent;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-btn .dot.done { background: #3ecf8e; border-color: #3ecf8e; box-shadow: 0 0 8px rgba(62, 207, 142, 0.7); }
+  .nav-btn .star-ic { width: 12px; height: 12px; color: #ffd166; display: none; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.7)); }
+  .nav-btn .star-ic.on { display: block; }
+  .side-tools { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.10); display: flex; flex-direction: column; gap: 0.6rem; }
+  .progress { padding: 0 0.3rem; }
+  .progress-top { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(238, 243, 239, 0.6); margin-bottom: 0.35rem; }
+  .progress-top b { font-family: var(--mono); color: #b8d4c0; font-weight: 600; }
+  .progress-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .progress-bar i {
+    display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #4a5d4e, #8fbf9a);
+    box-shadow: 0 0 10px rgba(143, 191, 154, 0.55);
+    transition: width 0.4s ease;
+  }
+  .progress-bar.gold i { background: linear-gradient(90deg, #b8860b, #ffd166); box-shadow: 0 0 10px rgba(255, 209, 102, 0.55); }
+  .rank { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.72rem; color: rgba(238, 243, 239, 0.6); }
+  .rank b { color: #ffd166; font-size: 0.74rem; font-weight: 700; text-align: right; line-height: 1.3; }
+  .theme-btn {
+    appearance: none; font: inherit; display: flex; align-items: center; gap: 0.55rem;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid rgba(184, 212, 192, 0.28); background: rgba(143, 191, 154, 0.08);
+    color: #dce8e1; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+    transition: background 0.18s ease;
+  }
+  .theme-btn:hover { background: rgba(143, 191, 154, 0.15); }
+  .theme-btn:focus-visible { outline: 2px solid #8fbf9a; outline-offset: 2px; }
+  .theme-btn svg { width: 16px; height: 16px; flex: none; }
+  .kbd-hint { margin: 0; padding: 0 0.3rem; font-size: 0.7rem; color: rgba(238, 243, 239, 0.42); line-height: 1.45; }
+  .kbd-hint kbd { font-family: var(--mono); font-size: 0.66rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 5px; padding: 0.05rem 0.3rem; }
+
+  .main { padding: 1.5rem 1.75rem calc(2.6rem + var(--credit-h)); max-width: 1240px; width: 100%; margin-inline: auto; position: relative; }
+  .atelier { display: none; }
+  .atelier.active { display: block; animation: rise 0.32s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .atelier.active { animation: none; } }
+
+  .hero { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; justify-content: space-between; margin-bottom: 1.1rem; }
+  .eyebrow { margin: 0 0 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--water); }
+  .hero h2 {
+    margin: 0; font-size: clamp(1.5rem, 2.6vw, 1.95rem); font-weight: 800; letter-spacing: -0.01em;
+    background: var(--hero-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin: 0.45rem 0 0; color: var(--muted); max-width: 46rem; line-height: 1.5; font-size: 0.94rem; }
+  .mission {
+    margin: 0.5rem 0 0; display: flex; gap: 0.45rem; align-items: flex-start;
+    font-size: 0.85rem; color: var(--water); max-width: 46rem; line-height: 1.45; font-weight: 550;
+  }
+  .mission svg { width: 14px; height: 14px; flex: none; margin-top: 0.2rem; }
+  .tag {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--water); background: var(--water-soft);
+    border: 1px solid var(--panel-brd); padding: 0.32rem 0.6rem; border-radius: 999px; white-space: nowrap;
+  }
+
+  .grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 1rem; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .viz-stack { display: grid; gap: 0.85rem; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--panel-brd); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    backdrop-filter: blur(16px) saturate(1.15); -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.35s ease;
+  }
+  .viz-stack .card:hover, .grid > .card:hover { transform: translateY(-2px); }
+  .card .hd { padding: 0.8rem 1.05rem; border-bottom: 1px solid var(--line); font-weight: 700; line-height: 1.45; font-size: 0.95rem; }
+  .card .bd { padding: 1rem 1.05rem 1.05rem; }
+  .card .hd-hint { float: right; font-weight: 500; color: var(--muted); font-size: 0.78rem; margin-left: 0.75rem; max-width: 50%; text-align: right; line-height: 1.35; }
+  .coach-ic { width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; color: var(--water); }
+  canvas { width: 100%; height: auto; display: block; background: var(--cv-bg); border-radius: 12px; border: 1px solid var(--cv-brd); }
+  .viz-cap { margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .viz-cap strong { color: var(--ink); font-weight: 650; }
+  .eq-list { margin: 0.55rem 0 0; padding-left: 1.15rem; font-size: 0.84rem; color: var(--muted); line-height: 1.55; }
+  .eq-list li { margin: 0 0 0.28rem; }
+
+  .controls-card .hd { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .reset-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; color: var(--muted); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.28rem 0.6rem; cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease; white-space: nowrap;
+  }
+  .reset-btn:hover { color: var(--water); border-color: var(--water); }
+  .reset-btn:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .reset-btn svg { width: 12px; height: 12px; }
+  .controls { display: grid; gap: 0.9rem; }
+  .ctrl label { display: block; font-size: 0.86rem; color: var(--muted); margin-bottom: 0.3rem; line-height: 1.45; overflow: hidden; }
+  .ctrl label strong {
+    float: right; color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 0.82rem;
+    white-space: nowrap; margin-left: 0.75rem;
+    background: var(--water-soft); border: 1px solid var(--panel-brd); border-radius: 7px; padding: 0.1rem 0.45rem;
+  }
+  .ctrl .hint { display: block; font-size: 0.75rem; color: var(--muted); margin: -0.1rem 0 0.4rem; line-height: 1.35; opacity: 0.85; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: pointer; --p: 50%; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--water) var(--p), var(--track) var(--p)); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel-solid); border: 2.5px solid var(--water); margin-top: -6px;
+    box-shadow: 0 0 0 4px var(--water-soft), 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: var(--track); }
+  input[type="range"]::-moz-range-progress { height: 6px; border-radius: 999px; background: var(--water); }
+  input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--panel-solid); border: 2.5px solid var(--water); box-shadow: 0 0 0 4px var(--water-soft); }
+  input[type="range"]:focus-visible { outline: 2px solid var(--water); outline-offset: 4px; border-radius: 8px; }
+  select {
+    font: inherit; font-size: 0.86rem; border-radius: 10px; border: 1px solid var(--panel-brd);
+    padding: 0.55rem 0.7rem; background: var(--panel-solid); color: var(--ink); width: 100%; cursor: pointer;
+  }
+  select:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+  .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .kpi { border: 1px solid var(--panel-brd); border-radius: 12px; padding: 0.6rem 0.7rem; background: linear-gradient(160deg, var(--water-soft), transparent 65%); position: relative; }
+  .kpi .k { font-size: 0.76rem; color: var(--muted); letter-spacing: 0.01em; line-height: 1.35; }
+  .kpi .k .katex { font-size: 0.95em; }
+  .kpi .v { font-family: var(--mono); font-size: 1.06rem; font-weight: 650; margin-top: 0.25rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .kpi .v .katex { font-size: 1em; }
+  .kpi.wide { grid-column: 1 / -1; }
+  .kpi.wide .v:has(strong), .kpi.wide .v:has(sub) { font-family: var(--sans); font-size: 0.87rem; font-weight: 500; line-height: 1.45; color: var(--steel); }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+  .badge.ok, .badge.lam { background: var(--ok-soft); color: var(--ok); }
+  .badge.warn, .badge.tr { background: var(--warn-soft); color: var(--warn); }
+  .badge.bad, .badge.turb { background: var(--danger-soft); color: var(--danger); }
+
+  .pedago { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .pedago { grid-template-columns: 1fr; } }
+  .pedago .card .hd { display: flex; align-items: center; gap: 0.5rem; }
+  .pedago .card .hd svg { width: 15px; height: 15px; flex: none; }
+  .pedago .card.retenir .hd { color: var(--water); }
+  .pedago .card.challenge .hd { color: var(--accent); }
+  .pedago .card.retenir { border-top: 2px solid var(--water); }
+  .pedago .card.challenge { border-top: 2px solid var(--accent); }
+  .pedago .card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .pedago ul { margin: 0.1rem 0 0; padding-left: 1.1rem; }
+  .pedago li { margin-bottom: 0.4rem; }
+  .pedago li:last-child { margin-bottom: 0; }
+
+  .note {
+    margin-top: 1rem; padding: 0.85rem 1rem; display: flex; gap: 0.65rem; align-items: flex-start;
+    border-left: 3px solid var(--accent); background: var(--note-bg); border-radius: 0 12px 12px 0;
+    font-size: 0.87rem; color: var(--steel); line-height: 1.5;
+  }
+  .note svg { width: 16px; height: 16px; flex: none; margin-top: 0.15rem; color: var(--accent); }
+
+  .quiz-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .quiz-card > .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-card > .hd svg.trophy { width: 15px; height: 15px; flex: none; }
+  .quiz-q { padding: 0.85rem 0; border-bottom: 1px dashed var(--line); }
+  .quiz-q:first-child { padding-top: 0; }
+  .quiz-q:last-child { border-bottom: none; padding-bottom: 0; }
+  .q-txt { margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink); font-weight: 600; }
+  .q-num {
+    display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px;
+    background: var(--water-soft); color: var(--water); font-family: var(--mono); font-size: 0.72rem;
+    margin-right: 0.5rem; vertical-align: -3px;
+  }
+  .quiz-q.solved .q-num { background: var(--ok-soft); color: var(--ok); }
+  .q-opts { display: grid; gap: 0.45rem; }
+  .opt {
+    appearance: none; font: inherit; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: center;
+    padding: 0.55rem 0.7rem; border-radius: 11px;
+    border: 1px solid var(--panel-brd); background: var(--panel-solid);
+    color: var(--steel); font-size: 0.88rem; line-height: 1.4;
+    transition: border-color 0.15s ease, transform 0.12s ease, background 0.2s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--water); transform: translateX(2px); }
+  .opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+  .opt .letter {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+    background: var(--water-soft); color: var(--water); flex: none;
+  }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ink); }
+  .opt.correct .letter { background: var(--ok); color: #06281a; }
+  .opt.wrong { border-color: var(--danger); background: var(--danger-soft); opacity: 0.85; animation: shake 0.3s ease; }
+  .opt.wrong .letter { background: var(--danger); color: #2b0a0a; }
+  .opt.dim { opacity: 0.5; }
+  .opt:disabled { cursor: default; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+  .q-fb {
+    margin-top: 0.55rem; padding: 0.6rem 0.75rem; border-radius: 0 10px 10px 0;
+    font-size: 0.84rem; line-height: 1.5; color: var(--steel);
+  }
+  .q-fb.good { border-left: 3px solid var(--ok); background: var(--ok-soft); }
+  .q-fb.bad { border-left: 3px solid var(--danger); background: var(--danger-soft); }
+  .q-apply {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.78rem; font-weight: 650; transition: background 0.15s ease;
+  }
+  .q-apply:hover { background: var(--water-soft); }
+  .q-apply svg { width: 12px; height: 12px; }
+  .quiz-status { margin-top: 0.8rem; font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .quiz-status .star-ic { width: 15px; height: 15px; color: var(--gold); }
+  .score-panel {
+    margin-top: 1rem; padding: 1rem 1.1rem; border-radius: 13px;
+    border: 1px solid var(--panel-brd); background: linear-gradient(160deg, var(--water-soft), transparent 70%);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem;
+  }
+  .score-big { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+  .score-lab { font-size: 0.8rem; color: var(--muted); }
+  .score-rank { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
+  .replay-btn {
+    appearance: none; font: inherit; margin-left: auto; padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1px solid var(--water); background: transparent; color: var(--water);
+    font-size: 0.8rem; font-weight: 650; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .replay-btn:hover { background: var(--water-soft); }
+  .replay-btn svg { width: 12px; height: 12px; }
+
+  .wipe-card { margin-top: 1rem; border-top: 2px solid var(--danger); }
+  .wipe-card .hd { color: var(--danger); display: flex; align-items: center; gap: 0.5rem; }
+  .wipe-card .hd svg { width: 15px; height: 15px; }
+  .wipe-card .bd { font-size: 0.9rem; line-height: 1.5; color: var(--steel); }
+  .wipe-btn {
+    appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 0.45rem;
+    margin-top: 0.75rem; padding: 0.55rem 1rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--danger); background: var(--danger-soft); color: var(--danger);
+    font-size: 0.86rem; font-weight: 700;
+  }
+  .wipe-btn:hover { filter: brightness(1.05); }
+  .wipe-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+  .wipe-btn svg { width: 14px; height: 14px; }
+  .toast {
+    position: fixed; z-index: 70; left: 50%; bottom: calc(var(--credit-h) + 1.2rem);
+    transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none;
+    background: var(--panel-solid); color: var(--ink); border: 1px solid var(--ok);
+    border-radius: 12px; padding: 0.7rem 1.1rem; font-size: 0.88rem; font-weight: 650;
+    box-shadow: var(--shadow); transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .quiz-banner {
+    margin: 0 0 0.85rem; font-size: 0.8rem; color: var(--muted); line-height: 1.45;
+    padding: 0.5rem 0.7rem; border-radius: 10px; background: var(--water-soft);
+    border: 1px dashed var(--panel-brd);
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.9rem; }
+  .chip { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid var(--panel-brd); background: var(--water-soft); color: var(--water); }
+  .chip.gold { color: var(--gold); background: var(--warn-soft); }
+  .welcome .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+  @media (max-width: 1100px) { .welcome .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .welcome .steps { grid-template-columns: 1fr; } }
+  .welcome .step { border: 1px solid var(--panel-brd); border-radius: 13px; padding: 0.9rem; background: var(--step-bg); line-height: 1.5; font-size: 0.88rem; color: var(--steel); }
+  .welcome .step b { display: block; margin-bottom: 0.3rem; color: var(--water); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; }
+  .mission-card { margin-top: 1rem; border-top: 2px solid var(--gold); }
+  .mission-card .hd { color: var(--gold); display: flex; align-items: center; gap: 0.5rem; }
+  .mission-card .hd svg { width: 15px; height: 15px; }
+  .mission-card .bd { font-size: 0.92rem; line-height: 1.55; color: var(--steel); }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; margin-top: 0.65rem; font-size: 0.82rem; color: var(--steel); }
+  .legend-row span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .swatch { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .sw-a { background: var(--tok-coude); }
+  .sw-b { background: var(--water); }
+  .sw-c { background: var(--steel); }
+
+  .gloss-overlay {
+    position: fixed; inset: 0; z-index: 40; display: grid; place-items: center;
+    background: rgba(8, 14, 11, 0.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 1.2rem;
+  }
+  .gloss-overlay[hidden] { display: none; }
+  .gloss-panel {
+    background: var(--panel-solid); color: var(--ink);
+    border: 1px solid var(--panel-brd); border-radius: 18px; box-shadow: var(--shadow);
+    max-width: 680px; width: 100%; max-height: 82vh; overflow-y: auto; padding: 1.3rem 1.5rem 1.5rem;
+  }
+  .gloss-panel h3 { margin: 0 0 0.2rem; font-size: 1.2rem; font-weight: 800; color: var(--water); display: flex; align-items: center; gap: 0.5rem; }
+  .gloss-panel h3 svg { width: 18px; height: 18px; }
+  .gloss-panel .gloss-sub { margin: 0 0 1rem; font-size: 0.82rem; color: var(--muted); }
+  .gloss-panel dl { margin: 0; display: grid; gap: 0.75rem; }
+  .gloss-panel dt { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+  .gloss-panel dd { margin: 0.15rem 0 0; font-size: 0.86rem; line-height: 1.5; color: var(--steel); padding-bottom: 0.6rem; border-bottom: 1px dashed var(--line); }
+  .gloss-panel dd:last-child { border-bottom: none; }
+  .gloss-close {
+    appearance: none; font: inherit; float: right; margin: -0.2rem -0.4rem 0 0;
+    width: 32px; height: 32px; display: grid; place-items: center;
+    border-radius: 50%; border: 1px solid var(--panel-brd); background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 1rem;
+  }
+  .gloss-close:hover { color: var(--danger); border-color: var(--danger); }
+
+  #fx-confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: transparent; border: none; border-radius: 0; width: 100vw; height: 100vh; display: none; }
+
+  .credit-bar {
+    position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; z-index: 20;
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1px;
+    background: rgba(143, 191, 154, 0.12);
+    border-top: 1px solid rgba(143, 191, 154, 0.14);
+    box-shadow: 0 -8px 24px rgba(4, 10, 8, 0.35);
+    min-height: var(--credit-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .credit-cell { background: rgba(18, 28, 22, 0.92); color: #dce8e1; padding: 0.55rem 0.9rem; display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; min-width: 0; }
+  .credit-cell .who { font-size: 0.82rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .credit-cell .role { font-size: 0.68rem; color: rgba(220, 232, 225, 0.68); line-height: 1.3; }
+  .credit-cell.module { background: linear-gradient(135deg, #3d5244, #4a5d4e); text-align: center; align-items: center; }
+  .credit-cell.module .who { font-size: 0.82rem; letter-spacing: 0.01em; white-space: normal; }
+  .credit-cell.iut { text-align: right; align-items: flex-end; }
+
+  .tex, .tex-inline { display: inline; white-space: nowrap; }
+  .tex .katex, .tex-inline .katex, .kpi .k .katex, .hint .katex,
+  .pedago .katex, .card .hd .katex, .ctrl label .katex,
+  .legend-row .katex, .viz-cap .katex, .q-txt .katex, .opt .katex,
+  .q-fb .katex, .gloss-panel .katex, .eq-list .katex {
+    font-size: 1.02em !important; line-height: 1; vertical-align: -0.12em;
+  }
+  .katex-display { display: inline !important; margin: 0 !important; text-align: left !important; }
+
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: sticky; top: 0; z-index: 10; height: auto; overflow: visible; padding-bottom: 0.7rem; }
+    nav.ateliers { flex-direction: row; overflow-x: auto; padding-bottom: 0.3rem; }
+    .nav-btn { flex: none; grid-template-columns: auto auto; }
+    .nav-btn .meta, .nav-btn .sub { display: none; }
+    .side-tools { margin-top: 0.4rem; flex-direction: row; align-items: center; }
+    .progress, .kbd-hint, .brand-sub { display: none; }
+    .credit-bar { left: 0; grid-template-columns: 1fr; }
+    :root { --credit-h: auto; }
+    .credit-cell.iut { text-align: left; align-items: flex-start; }
+    .main { padding: 1.1rem 1rem calc(2rem + 8rem); }
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--track); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+</head>
+<body>
+<div class="bg-fx" aria-hidden="true"><b></b><b></b><b></b></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#b8d4c0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="6.2" rx="6" ry="2.1"/>
+          <path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/>
+          <path d="M6 12.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="code">R1-13 · Lab virtuel</div>
+        <h1>Métrologie essai</h1>
+      </div>
+    </div>
+    <p class="brand-sub">Ateliers pour sentir types A/B, propagation et décisions de conformité. Aucune donnée du sujet noté n’est fournie ici.</p>
+
+    <nav class="ateliers" aria-label="Ateliers du laboratoire virtuel">
+      <button class="nav-btn active" data-atelier="home" aria-current="page">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></span>
+        <span class="txt"><span class="label">Accueil</span><span class="sub">Mode d’emploi &amp; mission</span></span>
+        <span class="meta"><span class="idx">00</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="ab">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V9"/><path d="M12 19V5"/><path d="M19 19v-7"/></svg></span>
+        <span class="txt"><span class="label">Types A &amp; B</span><span class="sub">Dispersion vs instrument</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="ab" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="ab"></span></span><span class="idx">01</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="compose">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 7 11L12 12Z"/></svg></span>
+        <span class="txt"><span class="label">Composition</span><span class="sub">u<sub>c</sub> &amp; contributions</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="compose" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="compose"></span></span><span class="idx">02</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="prop">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="6" height="8" rx="1"/><rect x="15" y="8" width="6" height="8" rx="1"/><path d="M9 12h6"/></svg></span>
+        <span class="txt"><span class="label">Propagation</span><span class="sub">A, F → σ</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="prop" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="prop"></span></span><span class="idx">03</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="conform">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><circle cx="12" cy="12" r="2.2"/><path d="M12 5v3"/><path d="m8.5 16.5 3.5 3 3.5-3"/></svg></span>
+        <span class="txt"><span class="label">Élargie &amp; conformité</span><span class="sub">k, L<sub>spec</sub>, verdict</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="conform" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="conform"></span></span><span class="idx">04</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="lot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="17" cy="12" r="2"/></svg></span>
+        <span class="txt"><span class="label">Lot multi-éprouvettes</span><span class="sub">Critères + réserve</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="lot" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="lot"></span></span><span class="idx">05</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="budget">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M6 16V9"/><path d="M12 16V5"/><path d="M18 16v-6"/></svg></span>
+        <span class="txt"><span class="label">Budget d’incertitudes</span><span class="sub">Où investir ?</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="budget" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg><span class="dot" data-dot="budget"></span></span><span class="idx">06</span></span>
+      </button>
+      <button class="nav-btn" data-atelier="defi">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg></span>
+        <span class="txt"><span class="label">Grand contrôle</span><span class="sub">Quiz de synthèse</span></span>
+        <span class="meta"><span class="marks"><svg class="star-ic" data-star="final" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg></span><span class="idx">07</span></span>
+      </button>
+    </nav>
+
+    <div class="side-tools">
+      <div class="progress">
+        <div class="progress-top"><span>Exploration</span><b id="prog-count">0/6</b></div>
+        <div class="progress-bar"><i id="prog-fill"></i></div>
+        <div class="progress-top" style="margin-top:0.5rem;"><span>Étoiles de défi</span><b id="star-count">0/6</b></div>
+        <div class="progress-bar gold"><i id="star-fill"></i></div>
+        <div class="rank"><span>Rang labo Pierreclaire</span><b id="rank-name">Stagiaire métrologue</b></div>
+      </div>
+      <button class="theme-btn" id="gloss-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>Lexique express</span>
+      </button>
+      <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false">
+        <svg id="theme-ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+        <svg id="theme-ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>
+        <span id="theme-label">Passer en mode clair</span>
+      </button>
+      <p class="kbd-hint">Naviguez avec <kbd>←</kbd> <kbd>→</kbd> ou <kbd>0</kbd>–<kbd>7</kbd> · <kbd>L</kbd> = lexique. Accueil : bouton « tout recommencer ». Point vert = exploré, étoile = défi réussi.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="atelier active" id="atelier-home">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">R 1-13 · Fonctions des composants des bâtiments</p>
+          <h2>Bienvenue dans le laboratoire virtuel</h2>
+          <p class="lede">Explorez des situations génériques de métrologie sur essai de compression. Objectif : relier curseurs, formules et décisions chantier. Le projet noté reste le dossier + l’oral.</p>
+        </div>
+        <span class="tag">Fichier HTML autonome</span>
+      </div>
+      <div class="viz-stack">
+        <div class="card">
+          <div class="hd">Le banc de Pierreclaire <span class="hd-hint">décor animé — la physique sérieuse commence à l’atelier 01</span></div>
+          <div class="bd">
+            <canvas id="cv-hero" width="1440" height="400"></canvas>
+            <p class="viz-cap">Trois cylindres du même gâchage attendent la presse : le <strong>ploton</strong> n’est pas une seule mesure. Chaque atelier isole un maillon — dispersion, instrument, propagation, verdict.</p>
+          </div>
+        </div>
+        <div class="card mission-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Votre mission : le labo Pierreclaire</div>
+          <div class="bd">
+            <p style="margin:0 0 0.55rem;">La commune imaginaire de <strong>Clairval</strong> construit un petit kiosque de jardin. Le laboratoire <strong>Pierreclaire</strong> vous recrute comme stagiaire pour suivre un <strong>ploton d’éprouvettes</strong> de ce gâchage fictif. Au fil des ateliers, vous remontez toute la chaîne — de la répétition au budget d’incertitudes :</p>
+            <ul style="margin:0 0 0.55rem;padding-left:1.1rem;">
+              <li>chaque atelier se termine par un <strong>Défi express</strong> : réussissez toutes ses questions pour décrocher une <strong>étoile</strong> ;</li>
+              <li>les étoiles font grimper votre <strong>rang</strong> dans la barre de gauche (de Stagiaire métrologue à Chef·fe de labo) ;</li>
+              <li>terminez par le <strong>Grand contrôle</strong> (atelier 07) : 6 questions toutes thématiques, votre première réponse compte pour le score.</li>
+            </ul>
+            <p style="margin:0;">Pierreclaire est un terrain d’entraînement : <strong>aucune donnée du vrai sujet</strong> ne s’y cache. Les Défis express sont <strong>formatifs</strong> — ils testent un réflexe métrologique, pas le chiffre que vous calculerez dans les notes de projet.</p>
+          </div>
+        </div>
+        <div class="card welcome">
+          <div class="bd">
+            <div class="chip-row">
+              <span class="chip">6 ateliers guidés</span>
+              <span class="chip gold">Défis à étoiles</span>
+              <span class="chip">Lexique intégré</span>
+              <span class="chip">100 % hors-ligne</span>
+              <span class="chip">Anti-spoil garanti</span>
+            </div>
+            <p style="margin:0;"><strong>Comment travailler :</strong> choisissez un atelier à gauche, bougez les curseurs, observez la scène, puis répondez aux Défis express. Ce n’est <em>pas</em> un QCM de projet : réussir ici ne donne aucune valeur à recopier dans vos notes de calcul.</p>
+            <div class="steps">
+              <div class="step"><b>1 · OBSERVER</b>Changez un paramètre. Que se passe-t-il sur le dessin et sur les indicateurs ?</div>
+              <div class="step"><b>2 · NOMMER</b>Associez l’effet à <span class="tex" data-tex="u_A"></span>, <span class="tex" data-tex="u_B"></span>, <span class="tex" data-tex="u_c"></span>, <span class="tex" data-tex="U"></span>… Relisez les boîtes à outils.</div>
+              <div class="step"><b>3 · VALIDER</b>Tentez le Défi express : prédisez avant de cliquer, l’explication tombe tout de suite.</div>
+              <div class="step"><b>4 · TRANSFÉRER</b>Appliquez le raisonnement aux étapes du projet — pas l’inverse.</div>
+            </div>
+            <div class="note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+              <span>Anti-spoil : les curseurs et les questions utilisent un kiosque fictif (autres diamètres, autres forces, autre classe). Si une vidéo et cet atelier disent la même chose <em>qualitativement</em>, vous êtes sur la bonne voie — le dossier noté, lui, se calcule à part.</span>
+            </div>
+          </div>
+        </div>
+        <div class="card wipe-card">
+          <div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Tout recommencer</div>
+          <div class="bd">
+            <p style="margin:0;">Remet à zéro les étoiles, les Défis express, le Grand contrôle, les ateliers explorés et tous les curseurs. Utile pour un second passage, un binôme, ou une séance suivante sur le même ordinateur. Le thème clair/sombre est conservé.</p>
+            <button class="wipe-btn" id="wipe-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+              Réinitialiser tous les ateliers
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 Types A/B -->
+    <section class="atelier" id="atelier-ab">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 01</p>
+          <h2>Incertitudes de type A et de type B</h2>
+          <p class="lede">Deux familles d’incertitude : la dispersion des répétitions, et ce que l’instrument impose même sans répéter.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : un ploton arrive du kiosque de Clairval — séparez ce qui vient de la forme / de l’opérateur, et ce qui vient de l’afficheur.</p>
+        </div>
+        <span class="tag">Étape 1</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Comparaison visuelle <span class="hd-hint">barres = contribution à <span class="tex" data-tex="u_c"></span></span></div>
+          <div class="bd">
+            <canvas id="cv-ab" width="1440" height="680"></canvas>
+            <p class="viz-cap">Type A : dispersion des répétitions (opérateur, ovalisation…). Type B : résolution d’instrument (hypothèse rectangulaire). Les pourcentages comparent les <strong>carrés</strong> <span class="tex" data-tex="u_i^{2}/u_c^{2}"></span>.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="u_A=s/\sqrt{n}"></span> — incertitude sur la <em>moyenne</em>, pas l’écart-type seul.</li>
+              <li><span class="tex" data-tex="u_B=(\mathrm{résolution}/2)/\sqrt{3}"></span> — demi-division, loi rectangulaire.</li>
+            </ul>
+            <div class="legend-row">
+              <span><i class="swatch sw-a"></i> Type A</span>
+              <span><i class="swatch sw-b"></i> Type B</span>
+              <span><i class="swatch sw-c"></i> Composée <span class="tex" data-tex="u_c"></span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="ab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Nombre de répétitions <span class="tex" data-tex="n"></span> <strong id="v-n">8</strong></label>
+              <span class="hint">Augmenter <span class="tex" data-tex="n"></span> diminue <span class="tex" data-tex="u_A=s/\sqrt{n}"></span>.</span>
+              <input type="range" id="n" min="3" max="20" step="1" value="8" />
+            </div>
+            <div class="ctrl">
+              <label>Écart-type expérimental <span class="tex" data-tex="s"></span> <strong id="v-s">0,18 mm</strong></label>
+              <input type="range" id="s" min="0.05" max="1.5" step="0.01" value="0.18" />
+            </div>
+            <div class="ctrl">
+              <label>Résolution d’affichage <strong id="v-res">0,05 mm</strong></label>
+              <span class="hint"><span class="tex" data-tex="u_B=(\mathrm{résolution}/2)/\sqrt{3}"></span></span>
+              <input type="range" id="res" min="0.01" max="1" step="0.01" value="0.05" />
+            </div>
+            <div class="readouts" id="out-ab"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : A = répétitions, B = ce que l’outil impose même sans répéter.</span></div>
+        <div class="bd" id="quiz-ab"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="u_A=s/\sqrt{n}"></span> : incertitude sur la <em>moyenne</em>, pas l’écart-type seul.</li>
+          <li><span class="tex" data-tex="u_B"></span> résolution : demi-division / <span class="tex" data-tex="\sqrt{3}"></span>.</li>
+          <li>Source dominante = plus grand <span class="tex" data-tex="u_i^{2}"></span>, pas forcément l’instrument « le plus visible ».</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Sans toucher <span class="tex" data-tex="s"></span>, multipliez <span class="tex" data-tex="n"></span> par 4. <span class="tex" data-tex="u_A"></span> est-elle divisée par 2 ou par 4 ?</li>
+          <li>Trouvez un réglage où le type B dépasse 50 % de contribution, puis un où le type A domine nettement.</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 02 Composition -->
+    <section class="atelier" id="atelier-compose">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 02</p>
+          <h2>Incertitude composée &amp; contributions</h2>
+          <p class="lede">On n’ajoute pas les incertitudes comme des longueurs : on additionne les <em>variances</em>.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : avant de parler de « précision globale », composez <span class="tex" data-tex="u_c"></span> et lisez qui pèse vraiment.</p>
+        </div>
+        <span class="tag">Étape 1</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Composition quadratique <span class="hd-hint"><span class="tex" data-tex="u_c=\sqrt{u_A^{2}+u_B^{2}}"></span></span></div>
+          <div class="bd">
+            <canvas id="cv-compose" width="1440" height="680"></canvas>
+            <p class="viz-cap">La barre totale n’est <strong>pas</strong> la somme arithmétique de <span class="tex" data-tex="u_A"></span> et <span class="tex" data-tex="u_B"></span> : on additionne les variances. Une petite composante change peu <span class="tex" data-tex="u_c"></span>.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="u_c=\sqrt{\sum u_i^{2}}"></span> (sources indépendantes).</li>
+              <li>Contribution <span class="tex" data-tex="(\%)=u_i^{2}/u_c^{2}\times 100"></span>.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="compose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="u_A"></span> (type A) <strong id="v-uA">0,08 mm</strong></label>
+              <input type="range" id="uA" min="0.01" max="0.5" step="0.01" value="0.08" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="u_B"></span> (type B) <strong id="v-uB">0,04 mm</strong></label>
+              <input type="range" id="uB" min="0.005" max="0.4" step="0.005" value="0.04" />
+            </div>
+            <div class="readouts" id="out-compose"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : le petit terme disparaît presque dans le carré.</span></div>
+        <div class="bd" id="quiz-compose"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="u_c=\sqrt{\sum u_i^{2}}"></span> (sources indépendantes).</li>
+          <li>Contribution <span class="tex" data-tex="(\%)=u_i^{2}/u_c^{2}\times 100"></span>.</li>
+          <li>Arrondi GUM : au plus 2 chiffres significatifs sur <span class="tex" data-tex="u_c"></span>, puis aligner la moyenne.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Fixez <span class="tex" data-tex="u_A"></span> autour de 0,08. À partir de quelle <span class="tex" data-tex="u_B"></span> la contribution B dépasse-t-elle ~20 % ?</li>
+          <li>Si <span class="tex" data-tex="u_B\ll u_A"></span>, changer d’instrument améliore-t-il beaucoup <span class="tex" data-tex="u_c"></span> ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 03 Propagation -->
+    <section class="atelier" id="atelier-prop">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 03</p>
+          <h2>Propagation : section et résistance</h2>
+          <p class="lede">Mesurer <span class="tex" data-tex="D"></span> et <span class="tex" data-tex="F"></span> ne donne pas directement l’incertitude sur <span class="tex" data-tex="\sigma"></span> : il faut propager.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : la presse donne <span class="tex" data-tex="F"></span>, le pied à coulisse donne <span class="tex" data-tex="D"></span> — il reste à arriver à <span class="tex" data-tex="\sigma"></span>.</p>
+        </div>
+        <span class="tag">Étape 2</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Chaîne <span class="tex" data-tex="D\to A\to\sigma"></span> <span class="hd-hint">incertitudes relatives</span></div>
+          <div class="bd">
+            <canvas id="cv-prop" width="1440" height="720"></canvas>
+            <p class="viz-cap">Les encadrés suivent le calcul : diamètre → section → contrainte. Les pourcentages disent <strong>qui</strong> alimente <span class="tex" data-tex="u(\sigma)"></span>.</p>
+            <ul class="eq-list">
+              <li>Pour <span class="tex" data-tex="A=\pi D^{2}/4"></span> : <span class="tex" data-tex="u(A)/A=2\,u(D)/D"></span>.</li>
+              <li>Pour <span class="tex" data-tex="\sigma=F/A"></span> : <span class="tex" data-tex="u(\sigma)/\sigma=\sqrt{(u(F)/F)^{2}+(u(A)/A)^{2}}"></span>.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes (valeurs génériques)</span><button class="reset-btn" type="button" data-reset="prop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Diamètre <span class="tex" data-tex="D"></span> <strong id="v-D">118 mm</strong></label>
+              <input type="range" id="D" min="100" max="200" step="1" value="118" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="u_c(D)"></span> <strong id="v-uD">0,15 mm</strong></label>
+              <input type="range" id="uD" min="0.02" max="0.5" step="0.01" value="0.15" />
+            </div>
+            <div class="ctrl">
+              <label>Force <span class="tex" data-tex="F"></span> <strong id="v-F">380 kN</strong></label>
+              <input type="range" id="F" min="200" max="800" step="5" value="380" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="u_c(F)"></span> <strong id="v-uF">4,5 kN</strong></label>
+              <span class="hint">Souvent dominante sur <span class="tex" data-tex="\sigma"></span> en compression.</span>
+              <input type="range" id="uF" min="0.5" max="15" step="0.1" value="4.5" />
+            </div>
+            <div class="readouts" id="out-prop"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : un <span class="tex" data-tex="D^{2}"></span> double l’incertitude relative du diamètre.</span></div>
+        <div class="bd" id="quiz-prop"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Puissance <span class="tex" data-tex="D^{n}"></span> : facteur <span class="tex" data-tex="|n|"></span> sur l’incertitude relative.</li>
+          <li>Quotient : somme quadratique des relatives.</li>
+          <li>Comparer les contributions de <span class="tex" data-tex="F"></span> et de <span class="tex" data-tex="D"></span> avant d’investir.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>À <span class="tex" data-tex="D"></span> et <span class="tex" data-tex="F"></span> fixes, doublez <span class="tex" data-tex="u(D)"></span> : <span class="tex" data-tex="u(\sigma)"></span> bouge-t-elle beaucoup ?</li>
+          <li>Puis doublez <span class="tex" data-tex="u(F)"></span> : quel levier est le plus efficace ici ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 04 Conformité -->
+    <section class="atelier" id="atelier-conform">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 04</p>
+          <h2>Incertitude élargie &amp; verdict de conformité</h2>
+          <p class="lede">Un chiffre nu ne suffit pas : on compare tout l’intervalle <span class="tex" data-tex="[\bar\sigma-U,\,\bar\sigma+U]"></span> à la limite.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : le bureau d’études de Clairval veut un verdict, pas un seul nombre.</p>
+        </div>
+        <span class="tag">Étape 3</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Droite numérique <span class="hd-hint"><span class="tex" data-tex="[\bar\sigma-U,\,\bar\sigma+U]"></span> vs <span class="tex" data-tex="L_{\mathrm{spec}}"></span></span></div>
+          <div class="bd">
+            <canvas id="cv-conform" width="1440" height="600"></canvas>
+            <p class="viz-cap"><strong>Conforme</strong> : tout l’intervalle au-dessus de <span class="tex" data-tex="L_{\mathrm{spec}}"></span>. <strong>Zone de doute</strong> : chevauchement. <strong>Non conforme</strong> : tout l’intervalle en dessous. Passez de <span class="tex" data-tex="k=2"></span> (~95 %) à <span class="tex" data-tex="k=3"></span> (~99,7 %) pour voir le verdict changer.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="U=k\,u_c"></span> : plus <span class="tex" data-tex="k"></span> est grand, plus l’intervalle est large.</li>
+              <li>Chevauchement ⇒ on <strong>ne déclare pas</strong> la conformité (zone de doute).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes (exemple générique)</span><button class="reset-btn" type="button" data-reset="conform"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label>Résistance moyenne <span class="tex" data-tex="\bar\sigma"></span> <strong id="v-sig">26,4 MPa</strong></label>
+              <input type="range" id="sig" min="20" max="40" step="0.1" value="26.4" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="u_c(\sigma)"></span> <strong id="v-uc">0,55 MPa</strong></label>
+              <input type="range" id="uc" min="0.05" max="2" step="0.05" value="0.55" />
+            </div>
+            <div class="ctrl">
+              <label>Facteur d’élargissement <span class="tex" data-tex="k"></span> <strong id="v-k">2 (~95 %)</strong></label>
+              <select id="k">
+                <option value="1">k = 1 (~68 %)</option>
+                <option value="2" selected>k = 2 (~95 %, standard)</option>
+                <option value="3">k = 3 (~99,7 %)</option>
+              </select>
+            </div>
+            <div class="ctrl">
+              <label>Limite de spécification <span class="tex" data-tex="L_{\mathrm{spec}}"></span> <strong id="v-Lspec">25,0 MPa</strong></label>
+              <span class="hint">Exemple pédagogique (classe fictive de Clairval) — pas la valeur du sujet.</span>
+              <input type="range" id="Lspec" min="20" max="35" step="0.5" value="25" />
+            </div>
+            <div class="readouts" id="out-conform"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : <span class="tex" data-tex="k=3"></span> élargit — le verdict peut basculer en doute.</span></div>
+        <div class="bd" id="quiz-conform"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="U=k\,u_c"></span> : plus <span class="tex" data-tex="k"></span> est grand, plus l’intervalle est large.</li>
+          <li>Chevauchement ⇒ on <strong>ne déclare pas</strong> la conformité (zone de doute).</li>
+          <li>Un PV « courant » s’appuie souvent sur ~95 % (<span class="tex" data-tex="k=2"></span>) — le choix exact se discute dans le dossier, pas ici.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Réglez un cas conforme à <span class="tex" data-tex="k=2"></span> qui tombe en doute à <span class="tex" data-tex="k=3"></span>.</li>
+          <li>Sans changer <span class="tex" data-tex="\bar\sigma"></span>, comment sortir de la zone de doute en jouant sur <span class="tex" data-tex="u_c"></span> ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 05 Lot -->
+    <section class="atelier" id="atelier-lot">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 05</p>
+          <h2>Campagne multi-éprouvettes (lot)</h2>
+          <p class="lede">Un lot n’est pas une éprouvette : trois cylindres révèlent la variabilité matière.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : trois cylindres du même gâchage du kiosque — le ploton parle plus fort qu’un seul essai.</p>
+        </div>
+        <span class="tag">Étape 4</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Trois résistances + critères simplifiés</div>
+          <div class="bd">
+            <canvas id="cv-lot" width="1440" height="720"></canvas>
+            <p class="viz-cap">Règle pédagogique (esprit chantier) : chaque <span class="tex" data-tex="\sigma_i\ge f_{ck}-4"></span> MPa, et <span class="tex" data-tex="\bar\sigma_{\mathrm{lot}}\ge f_{ck}"></span>. Si l’intervalle à 95 % sur la moyenne chevauche <span class="tex" data-tex="f_{ck}"></span> ⇒ formuler une <strong>réserve</strong>.</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="u(\bar\sigma)=s/\sqrt{n}"></span> avec <span class="tex" data-tex="n-1"></span> dans <span class="tex" data-tex="s"></span>.</li>
+              <li>« Conforme avec réserve » est un message chantier légitime.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="lot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\sigma_1"></span> <strong id="v-s1">27,2 MPa</strong></label>
+              <input type="range" id="s1" min="18" max="40" step="0.1" value="27.2" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\sigma_2"></span> <strong id="v-s2">29,8 MPa</strong></label>
+              <input type="range" id="s2" min="18" max="40" step="0.1" value="29.8" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="\sigma_3"></span> <strong id="v-s3">24,1 MPa</strong></label>
+              <input type="range" id="s3" min="18" max="40" step="0.1" value="24.1" />
+            </div>
+            <div class="ctrl">
+              <label><span class="tex" data-tex="f_{ck}"></span> (classe fictive) <strong id="v-fck">32 MPa</strong></label>
+              <input type="range" id="fck" min="20" max="40" step="1" value="32" />
+            </div>
+            <div class="readouts" id="out-lot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : un cylindre faible peut faire basculer le lot même si la moyenne tient.</span></div>
+        <div class="bd" id="quiz-lot"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li>Trois cylindres révèlent la <strong>variabilité matière</strong> absente du mono-essai.</li>
+          <li><span class="tex" data-tex="u(\bar\sigma)=s/\sqrt{n}"></span> avec <span class="tex" data-tex="n-1"></span> dans <span class="tex" data-tex="s"></span>.</li>
+          <li>« Conforme avec réserve » est un message chantier légitime.</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Baissez une seule <span class="tex" data-tex="\sigma_i"></span> sous <span class="tex" data-tex="f_{ck}-4"></span> : quel critère bascule ?</li>
+          <li>Augmentez la dispersion à moyenne fixe : la réserve apparaît-elle ?</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- 06 Budget -->
+    <section class="atelier" id="atelier-budget">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 06</p>
+          <h2>Budget d’incertitudes (force)</h2>
+          <p class="lede">On investit d’abord sur la source qui pèse le plus dans <span class="tex" data-tex="u_c"></span>, pas sur l’outil le plus « visible ».</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : le budget métrologie est limité — où dépenser le prochain euro ?</p>
+        </div>
+        <span class="tag">Étape 5</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="hd">Sources → composition → où investir</div>
+          <div class="bd">
+            <canvas id="cv-budget" width="1440" height="720"></canvas>
+            <p class="viz-cap">Exemple presse : étalonnage (<span class="tex" data-tex="u_{\mathrm{cal}}=U_{\mathrm{cal}}/2"></span>), dérive (rectangulaire), résolution. On investit d’abord sur la plus forte contribution %, pas sur le pied à coulisse « parce qu’il se voit ».</p>
+            <ul class="eq-list">
+              <li><span class="tex" data-tex="u_{\mathrm{cal}}=U_{\mathrm{cal}}/k"></span> (souvent <span class="tex" data-tex="k=2"></span>).</li>
+              <li>Rectangulaire : <span class="tex" data-tex="u=a/\sqrt{3}"></span>.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card controls-card">
+          <div class="hd"><span>Commandes</span><button class="reset-btn" type="button" data-reset="budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Réinitialiser</button></div>
+          <div class="bd controls">
+            <div class="ctrl">
+              <label><span class="tex" data-tex="U_{\mathrm{cal}}"></span> (certificat, k=2) <strong id="v-Ucal">5,2 kN</strong></label>
+              <input type="range" id="Ucal" min="1" max="10" step="0.1" value="5.2" />
+            </div>
+            <div class="ctrl">
+              <label>Demi-étendue dérive <span class="tex" data-tex="a_{\mathrm{dér}}"></span> <strong id="v-ader">2,4 kN</strong></label>
+              <input type="range" id="ader" min="0.5" max="8" step="0.1" value="2.4" />
+            </div>
+            <div class="ctrl">
+              <label>Résolution afficheur force <strong id="v-rF">0,5 kN</strong></label>
+              <input type="range" id="rF" min="0.1" max="5" step="0.1" value="0.5" />
+            </div>
+            <div class="readouts" id="out-budget"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card quiz-card">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Défi express — décrochez l’étoile <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : le levier, c’est le % le plus haut, pas l’outil le plus cher d’aspect.</span></div>
+        <div class="bd" id="quiz-budget"></div>
+      </div>
+      <div class="pedago">
+        <div class="card retenir"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>À retenir</div><div class="bd"><ul>
+          <li><span class="tex" data-tex="u_{\mathrm{cal}}=U_{\mathrm{cal}}/k"></span> (souvent <span class="tex" data-tex="k=2"></span>).</li>
+          <li>Rectangulaire : <span class="tex" data-tex="u=a/\sqrt{3}"></span>.</li>
+          <li>Levier d’investissement = source dominante du budget, pas le réflexe « racheter un pied à coulisse ».</li>
+        </ul></div></div>
+        <div class="card challenge"><div class="hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>Pour aller plus loin</div><div class="bd"><ul>
+          <li>Réduisez uniquement la résolution : la contribution change-t-elle vraiment ?</li>
+          <li>Pour faire baisser nettement <span class="tex" data-tex="u_c(F)"></span>, faut-il plutôt l’étalonnage ou la dérive dans votre réglage ?</li>
+        </ul></div></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Le PV, l’avis et l’oral du projet s’appuient sur ces raisonnements : cet atelier prépare le message « où investir », sans rédiger le rapport à votre place.</span>
+      </div>
+    </section>
+
+    <!-- 07 Grand contrôle -->
+    <section class="atelier" id="atelier-defi">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Atelier 07</p>
+          <h2>Le Grand contrôle du labo Pierreclaire</h2>
+          <p class="lede">6 questions, toutes thématiques confondues. Votre <strong>première réponse</strong> à chaque question compte pour le score — mais vous pouvez continuer jusqu’à trouver la bonne, l’explication vient toujours.</p>
+          <p class="mission"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Mission Pierreclaire : l’entretien final — 5/6 ou plus décroche la mention « Pierreclaire d’or ».</p>
+        </div>
+        <span class="tag">Synthèse 01–06</span>
+      </div>
+      <div class="card quiz-card" style="margin-top:0;">
+        <div class="hd"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4.5a1.5 1.5 0 0 0 0 3H7"/><path d="M17 6h2.5a1.5 1.5 0 0 1 0 3H17"/></svg>Grand contrôle <span class="hd-hint"><svg class="coach-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6.2" rx="6" ry="2.1"/><path d="M6 6.2v11.2c0 1.15 2.7 2.1 6 2.1s6-.95 6-2.1V6.2"/></svg>Clairon souffle : relis « À retenir » des ateliers avant de te lancer.</span></div>
+        <div class="bd">
+          <div id="quiz-final"></div>
+          <div class="score-panel" id="final-panel" hidden>
+            <div>
+              <div class="score-big" id="final-score">0/6</div>
+              <div class="score-lab">premières réponses correctes</div>
+            </div>
+            <div class="score-rank" id="final-verdict"></div>
+            <button class="replay-btn" id="final-replay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Rejouer</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.3 1 2.1h5c0-.8.3-1.6 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+        <span>Ce quiz vérifie les réflexes qualitatifs, pas le projet noté : les valeurs utilisées sont génériques et le raisonnement prime sur le chiffre.</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="gloss-overlay" id="gloss" hidden>
+  <div class="gloss-panel" role="dialog" aria-modal="true" aria-label="Lexique express">
+    <button class="gloss-close" id="gloss-close" type="button" aria-label="Fermer le lexique">✕</button>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>Lexique express</h3>
+    <p class="gloss-sub">Le vocabulaire de la métrologie d’essai, en français courant. Fermez avec ✕, Échap ou un clic hors de la fiche.</p>
+    <dl>
+      <dt>Incertitude de type A <span class="tex" data-tex="u_A"></span></dt>
+      <dd>Celle qu’on estime en <strong>répétant</strong> la mesure : dispersion observée (opérateur, ovalisation, placement…). Formule type : <span class="tex" data-tex="u_A=s/\sqrt{n}"></span> — c’est l’incertitude sur la <em>moyenne</em>, pas l’écart-type tout seul.</dd>
+      <dt>Incertitude de type B <span class="tex" data-tex="u_B"></span></dt>
+      <dd>Celle qu’on déduit d’informations <strong>sans statistique de répétitions</strong> : résolution d’afficheur, certificat d’étalonnage, dérive… Souvent une loi rectangulaire : <span class="tex" data-tex="u=a/\sqrt{3}"></span>.</dd>
+      <dt>Incertitude-type composée <span class="tex" data-tex="u_c"></span></dt>
+      <dd>On n’additionne pas les <span class="tex" data-tex="u_i"></span> comme des longueurs : <span class="tex" data-tex="u_c=\sqrt{\sum u_i^{2}}"></span> (sources indépendantes). Une petite source pèse très peu.</dd>
+      <dt>Contribution (%)</dt>
+      <dd>Part de chaque source dans <span class="tex" data-tex="u_c"></span> : <span class="tex" data-tex="u_i^{2}/u_c^{2}"></span>. C’est elle qui dit où investir, pas « l’outil le plus visible ».</dd>
+      <dt>Propagation</dt>
+      <dd>Passer de grandeurs mesurées (<span class="tex" data-tex="D"></span>, <span class="tex" data-tex="F"></span>) à une grandeur calculée (<span class="tex" data-tex="\sigma=F/A"></span>). Un <span class="tex" data-tex="D^{2}"></span> double l’incertitude relative du diamètre sur la section.</dd>
+      <dt>Incertitude élargie <span class="tex" data-tex="U=k\,u_c"></span></dt>
+      <dd><span class="tex" data-tex="k=2"></span> ≈ 95 % ; <span class="tex" data-tex="k=3"></span> ≈ 99,7 %. Plus <span class="tex" data-tex="k"></span> est grand, plus l’intervalle est large — donc plus on est « sévère » pour déclarer la conformité.</dd>
+      <dt>Zone de doute</dt>
+      <dd>L’intervalle <span class="tex" data-tex="[\bar\sigma-U,\,\bar\sigma+U]"></span> chevauche la limite <span class="tex" data-tex="L_{\mathrm{spec}}"></span> : on <strong>ne déclare pas</strong> la conformité. Ce n’est ni un oui franc, ni un non franc.</dd>
+      <dt>Lot / ploton d’éprouvettes</dt>
+      <dd>Plusieurs spécimens du même gâchage. Un seul cylindre ne voit pas la variabilité matière. Critères individuels + moyenne + éventuellement une <strong>réserve</strong> si l’intervalle sur la moyenne chevauche <span class="tex" data-tex="f_{ck}"></span>.</dd>
+      <dt>Budget d’incertitudes</dt>
+      <dd>Inventaire des sources (étalonnage, dérive, résolution…) puis composition. On dépense d’abord sur la contribution dominante — rarement sur le pied à coulisse « par réflexe ».</dd>
+      <dt>GUM</dt>
+      <dd>Guide pour l’expression de l’incertitude de mesure : le cadre international derrière <span class="tex" data-tex="u_A"></span>, <span class="tex" data-tex="u_B"></span>, <span class="tex" data-tex="u_c"></span> et <span class="tex" data-tex="U"></span>. Ici on en retient les réflexes, pas une recette à copier dans le dossier.</dd>
+    </dl>
+  </div>
+</div>
+
+<canvas id="fx-confetti"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<footer class="credit-bar" aria-label="Crédit et identification du module">
+  <div class="credit-cell">
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="credit-cell module">
+    <div class="who">R 1-13 Fonctions des composants des bâtiments</div>
+    <div class="role">Laboratoire virtuel pédagogique</div>
+  </div>
+  <div class="credit-cell iut">
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const TAU = Math.PI * 2;
+  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const $ = (id) => document.getElementById(id);
+  const fmt = (x, n = 2) => Number(x).toLocaleString("fr-FR", {
+    maximumFractionDigits: n,
+    minimumFractionDigits: n,
+  });
+
+  const THEMES = {
+    dark: {
+      ink: "#e8f0ea", muted: "#9bb0a4", faint: "rgba(155,176,164,0.5)",
+      ok: "#3ecf8e", warn: "#f2b73f", danger: "#f47d7d",
+      accent: "#c9a27a", water: "#8fbf9a", steel: "#b5c4bc",
+      typeA: "#c9a27a", typeB: "#6d9a7c", typeC: "#8aa0a8",
+      panel: "#1a2620", stroke: "#6d9a7c", paper: "#121c18",
+      bench: "#1d2e26", press: "#8aa0a8", cyl: "#c9a27a",
+      confetti: ["#8fbf9a", "#c9a27a", "#3ecf8e", "#f2b73f", "#b8d4c0", "#ffd166"],
+    },
+    light: {
+      ink: "#1c2320", muted: "#5c6b66", faint: "rgba(92,107,102,0.45)",
+      ok: "#1f7a4c", warn: "#a15c00", danger: "#9b1c1c",
+      accent: "#a67c52", water: "#4a5d4e", steel: "#3d4f5f",
+      typeA: "#a67c52", typeB: "#4a5d4e", typeC: "#3d4f5f",
+      panel: "#ffffff", stroke: "#4a5d4e", paper: "#f5f3ef",
+      bench: "#d7ddd6", press: "#3d4f5f", cyl: "#a67c52",
+      confetti: ["#4a5d4e", "#a67c52", "#1f7a4c", "#a15c00", "#8fbf9a", "#c98a12"],
+    },
+  };
+  let P = THEMES.dark;
+
+  function view(cv) {
+    const ctx = cv.getContext("2d");
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    const w = cv.width / 2, h = cv.height / 2;
+    ctx.clearRect(0, 0, w, h);
+    return { ctx, w, h };
+  }
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function texHTML(src, display = false) {
+    if (window.katex) {
+      try {
+        return katex.renderToString(src, { throwOnError: false, displayMode: display, output: "html" });
+      } catch (_) { /* fall through */ }
+    }
+    return `<span class="tex-fallback">${src}</span>`;
+  }
+  function paintStaticTex() {
+    document.querySelectorAll(".tex[data-tex]").forEach((el) => {
+      el.innerHTML = texHTML(el.getAttribute("data-tex"));
+      el.classList.add("tex-inline");
+    });
+  }
+  function kpiHTML(items) {
+    return items.map((it) => {
+      const k = it.texK ? texHTML(it.texK) + (it.kSuffix ? " " + it.kSuffix : "") : it.k;
+      return `<div class="kpi${it.wide ? " wide" : ""}"><div class="k">${k}</div><div class="v">${it.v}</div></div>`;
+    }).join("");
+  }
+
+  const ORDER = ["home", "ab", "compose", "prop", "conform", "lot", "budget", "defi"];
+  const buttons = [...document.querySelectorAll(".nav-btn")];
+  const ateliers = [...document.querySelectorAll(".atelier")];
+  let current = "home";
+
+  function show(id) {
+    current = id;
+    buttons.forEach((b) => {
+      const on = b.dataset.atelier === id;
+      b.classList.toggle("active", on);
+      if (on) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    ateliers.forEach((a) => a.classList.toggle("active", a.id === "atelier-" + id));
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    setTimeout(() => {
+      paintStaticTex();
+      repaintCurrent();
+      ensureAnim();
+    }, 0);
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => show(b.dataset.atelier)));
+
+  window.addEventListener("keydown", (e) => {
+    const t = e.target.tagName;
+    if (t === "INPUT" || t === "SELECT" || t === "TEXTAREA") return;
+    if (e.key === "Escape") { closeGloss(); return; }
+    if (e.key === "l" || e.key === "L") { toggleGloss(); return; }
+    const i = ORDER.indexOf(current);
+    if (e.key === "ArrowRight" && i < ORDER.length - 1) show(ORDER[i + 1]);
+    else if (e.key === "ArrowLeft" && i > 0) show(ORDER[i - 1]);
+    else if (/^[0-7]$/.test(e.key)) show(ORDER[+e.key]);
+  });
+
+  const STORE_KEY = "r113_lab_virtuel";
+  let store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme: "dark" };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      store = Object.assign(store, s);
+      store.final = Object.assign({ first: {}, best: -1 }, s.final || {});
+    }
+  } catch (_) { /* stockage indisponible */ }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (_) { /* ignore */ }
+  }
+
+  const EXPLORABLE = ["ab", "compose", "prop", "conform", "lot", "budget"];
+  function starCount() { return EXPLORABLE.filter((k) => store.stars[k]).length; }
+  function rankName() {
+    const s = starCount();
+    const f = store.final.best;
+    if (s >= 6 && f >= 5) return "Ingénieur·e métrologue · Pierreclaire d’or";
+    if (s >= 5) return "Chef·fe de labo Pierreclaire";
+    if (s >= 3) return "Chargé·e d’essais";
+    if (s >= 1) return "Technicien·ne d’essai";
+    return "Stagiaire métrologue";
+  }
+  function renderHud() {
+    let n = 0;
+    EXPLORABLE.forEach((k) => {
+      if (store.explored[k]) n += 1;
+      const dot = document.querySelector(`.dot[data-dot="${k}"]`);
+      if (dot) dot.classList.toggle("done", !!store.explored[k]);
+      const st = document.querySelector(`.star-ic[data-star="${k}"]`);
+      if (st) st.classList.toggle("on", !!store.stars[k]);
+    });
+    const stFinal = document.querySelector('.star-ic[data-star="final"]');
+    if (stFinal) stFinal.classList.toggle("on", store.final.best >= 5);
+    $("prog-count").textContent = n + "/6";
+    $("prog-fill").style.width = (n / 6 * 100) + "%";
+    const sc = starCount();
+    $("star-count").textContent = sc + "/6";
+    $("star-fill").style.width = (sc / 6 * 100) + "%";
+    $("rank-name").textContent = rankName();
+  }
+  function markExplored(key) {
+    if (!EXPLORABLE.includes(key) || store.explored[key]) return;
+    store.explored[key] = true;
+    save();
+    renderHud();
+  }
+
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    P = THEMES[t];
+    store.theme = t;
+    save();
+    const dark = t === "dark";
+    $("theme-ic-sun").style.display = dark ? "" : "none";
+    $("theme-ic-moon").style.display = dark ? "none" : "";
+    $("theme-label").textContent = dark ? "Passer en mode clair" : "Passer en mode sombre";
+    $("theme-btn").setAttribute("aria-pressed", String(!dark));
+    repaintAll();
+  }
+  $("theme-btn").addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+
+  function toggleGloss() {
+    const gl = $("gloss");
+    if (gl.hidden) { gl.hidden = false; paintStaticTex(); }
+    else gl.hidden = true;
+  }
+  function closeGloss() { $("gloss").hidden = true; }
+  $("gloss-btn").addEventListener("click", toggleGloss);
+  $("gloss-close").addEventListener("click", closeGloss);
+  $("gloss").addEventListener("click", (e) => { if (e.target === $("gloss")) closeGloss(); });
+
+  let confettiParts = [];
+  let confettiOn = false;
+  function confetti() {
+    if (RM) return;
+    const cv = $("fx-confetti");
+    cv.width = innerWidth;
+    cv.height = innerHeight;
+    cv.style.display = "block";
+    const cols = P.confetti;
+    for (let i = 0; i < 90; i++) {
+      confettiParts.push({
+        x: innerWidth * (0.2 + Math.random() * 0.6),
+        y: -20 - Math.random() * 80,
+        vx: (Math.random() - 0.5) * 3.2,
+        vy: 2 + Math.random() * 3.4,
+        rot: Math.random() * TAU,
+        vr: (Math.random() - 0.5) * 0.3,
+        s: 4 + Math.random() * 5,
+        c: cols[i % cols.length],
+        drop: Math.random() < 0.4,
+      });
+    }
+    if (!confettiOn) { confettiOn = true; requestAnimationFrame(confettiLoop); }
+  }
+  function confettiLoop() {
+    const cv = $("fx-confetti");
+    const ctx = cv.getContext("2d");
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    confettiParts.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05;
+      p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      if (p.drop) {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.s / 2.4, p.s / 1.6, 0, 0, TAU);
+        ctx.fill();
+      } else {
+        ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      }
+      ctx.restore();
+    });
+    confettiParts = confettiParts.filter((p) => p.y < cv.height + 30);
+    if (confettiParts.length > 0) requestAnimationFrame(confettiLoop);
+    else { confettiOn = false; cv.style.display = "none"; }
+  }
+
+  const dust = Array.from({ length: 18 }, (_, i) => ({
+    x: 0.25 + (i % 6) * 0.08, y: 0.55 + Math.random() * 0.2, sp: 0.004 + Math.random() * 0.006,
+  }));
+
+  function paintHero() {
+    const cv = $("cv-hero");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const t = performance.now() / 1000;
+    const travel = RM ? 0.35 : 0.5 + 0.5 * Math.sin(t * 1.15);
+
+    ctx.fillStyle = P.bench;
+    ctx.fillRect(0, 148, w, h - 148);
+    ctx.fillStyle = P.faint;
+    ctx.fillRect(0, 148, w, 3);
+
+    const px = 268, py = 28, pw = 200, ph = 132;
+    ctx.strokeStyle = P.press;
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(px, py + ph);
+    ctx.lineTo(px, py);
+    ctx.lineTo(px + pw, py);
+    ctx.lineTo(px + pw, py + ph);
+    ctx.stroke();
+    const platenY = 46 + travel * 22;
+    ctx.fillStyle = P.steel;
+    rr(ctx, px + 18, platenY, pw - 36, 10, 3);
+    ctx.fill();
+    ctx.fillStyle = P.accent;
+    ctx.fillRect(px + pw / 2 - 6, py + 8, 12, platenY - py - 8);
+
+    function cyl(cx, top, hh, label) {
+      ctx.fillStyle = P.cyl;
+      ctx.beginPath();
+      ctx.ellipse(cx, top + hh, 22, 8, 0, 0, TAU);
+      ctx.fill();
+      ctx.fillRect(cx - 22, top, 44, hh);
+      ctx.beginPath();
+      ctx.ellipse(cx, top, 22, 8, 0, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "600 11px 'DM Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(label, cx, top + hh + 22);
+      ctx.textAlign = "left";
+    }
+    const base = 140;
+    cyl(318, base - 52, 52, "σ1");
+    cyl(368, base - 58, 58, "σ2");
+    cyl(418, base - 46, 46, "σ3");
+
+    ctx.fillStyle = P.panel;
+    rr(ctx, 40, 36, 150, 88, 10);
+    ctx.fill();
+    ctx.strokeStyle = P.stroke;
+    ctx.lineWidth = 1.5;
+    rr(ctx, 40, 36, 150, 88, 10);
+    ctx.stroke();
+    ctx.fillStyle = P.ink;
+    ctx.font = "700 13px 'DM Sans', sans-serif";
+    ctx.fillText("Labo Pierreclaire", 52, 58);
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("Kiosque de Clairval", 52, 78);
+    ctx.fillText("ploton · 3 cylindres", 52, 98);
+
+    ctx.fillStyle = P.panel;
+    rr(ctx, 520, 48, 170, 72, 10);
+    ctx.fill();
+    ctx.strokeStyle = P.stroke;
+    ctx.lineWidth = 1.5;
+    rr(ctx, 520, 48, 170, 72, 10);
+    ctx.stroke();
+    ctx.strokeStyle = P.water;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(538, 62, 48, 14);
+    ctx.beginPath();
+    ctx.moveTo(586, 69);
+    ctx.lineTo(628, 69);
+    ctx.stroke();
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("pied à coulisse", 538, 96);
+    ctx.fillText("D  →  A  →  σ", 538, 112);
+
+    if (!RM) {
+      dust.forEach((d) => {
+        d.y -= d.sp;
+        if (d.y < 0.42) d.y = 0.72;
+        ctx.fillStyle = P.accent;
+        ctx.globalAlpha = 0.35;
+        ctx.beginPath();
+        ctx.arc(d.x * w, d.y * h, 1.4, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+    }
+
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("La presse descend — le ploton attend. Chaque atelier isole un maillon de la chaîne métrologique.", 40, h - 16);
+  }
+
+  let animRunning = false;
+  function animLoop() {
+    animRunning = true;
+    const homeOn = $("atelier-home").classList.contains("active");
+    if (homeOn) paintHero();
+    if (!RM && homeOn) requestAnimationFrame(animLoop);
+    else animRunning = false;
+  }
+  function ensureAnim() {
+    if (RM) { animLoop(); return; }
+    if (!animRunning) requestAnimationFrame(animLoop);
+  }
+
+  function updateAB() {
+    const n = +$("n").value;
+    const s = +$("s").value;
+    const res = +$("res").value;
+    $("v-n").textContent = n;
+    $("v-s").textContent = fmt(s, 2) + " mm";
+    $("v-res").textContent = fmt(res, 2) + " mm";
+    const uA = s / Math.sqrt(n);
+    const uB = (res / 2) / Math.sqrt(3);
+    const uc = Math.sqrt(uA * uA + uB * uB);
+    const cA = (uA * uA) / (uc * uc) * 100;
+    const cB = (uB * uB) / (uc * uc) * 100;
+    const dom = cA >= cB ? "Type A dominant (dispersion / forme / opérateur)" : "Type B dominant (instrument / résolution)";
+    $("out-ab").innerHTML = kpiHTML([
+      { texK: "u_A=s/\\sqrt{n}", v: fmt(uA, 3) + " mm" },
+      { texK: "u_B", kSuffix: "(résolution)", v: fmt(uB, 3) + " mm" },
+      { texK: "u_c", v: fmt(uc, 3) + " mm" },
+      { k: "Contributions", v: `A ${fmt(cA, 0)} % · B ${fmt(cB, 0)} %`, wide: true },
+      { k: "Diagnostic", v: `<span class="badge ${cA >= 70 ? "warn" : cB >= 50 ? "ok" : "warn"}">${dom}</span>`, wide: true },
+    ]);
+    drawAB(uA, uB, uc, cA, cB);
+  }
+  function drawAB(uA, uB, uc, cA, cB) {
+    const cv = $("cv-ab");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const maxU = Math.max(uA, uB, uc, 0.05);
+    const scale = 180 / maxU;
+    const base = h - 70;
+    function bar(x, val, color, label, pct) {
+      const bh = val * scale;
+      ctx.fillStyle = color;
+      ctx.fillRect(x, base - bh, 70, bh);
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText(label, x + 8, base + 18);
+      ctx.font = "600 12px 'IBM Plex Mono', monospace";
+      ctx.fillText(fmt(val, 3), x, base - bh - 8);
+      ctx.fillStyle = P.muted;
+      ctx.font = "11px 'DM Sans', sans-serif";
+      ctx.fillText(fmt(pct, 0) + " %", x + 12, base + 36);
+    }
+    bar(120, uA, P.typeA, "u_A", cA);
+    bar(260, uB, P.typeB, "u_B", cB);
+    bar(420, uc, P.typeC, "u_c", 100);
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Hauteur des barres = valeur de u  ·  % = contribution quadratique à u_c", 40, 28);
+  }
+
+  function updateCompose() {
+    const uA = +$("uA").value;
+    const uB = +$("uB").value;
+    $("v-uA").textContent = fmt(uA, 2) + " mm";
+    $("v-uB").textContent = fmt(uB, 3) + " mm";
+    const uc = Math.sqrt(uA * uA + uB * uB);
+    const sum = uA + uB;
+    const cA = (uA * uA) / (uc * uc) * 100;
+    const cB = 100 - cA;
+    $("out-compose").innerHTML = kpiHTML([
+      { texK: "u_c", v: fmt(uc, 3) + " mm", wide: true },
+      { k: "Somme arithmétique (incorrecte ici)", v: fmt(sum, 3) + " mm" },
+      { k: "Écart somme − u_c", v: fmt(sum - uc, 3) + " mm" },
+      { k: "Contributions A / B", v: `${fmt(cA, 0)} % / ${fmt(cB, 0)} %`, wide: true },
+    ]);
+    drawCompose(uA, uB, uc, cA, cB);
+  }
+  function drawCompose(uA, uB, uc, cA, cB) {
+    const cv = $("cv-compose");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const cx = 200, cy = h / 2 + 10, R = 90;
+    const a0 = -Math.PI / 2;
+    const aA = a0 + (cA / 100) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, a0, aA);
+    ctx.closePath();
+    ctx.fillStyle = P.typeA;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, aA, a0 + Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = P.typeB;
+    ctx.fill();
+    ctx.fillStyle = P.paper;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 14px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("u_c", cx, cy - 4);
+    ctx.font = "12px 'IBM Plex Mono', monospace";
+    ctx.fillText(fmt(uc, 3), cx, cy + 14);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = P.typeA;
+    ctx.fillRect(360, 80, 18, 18);
+    ctx.fillStyle = P.ink;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Type A — " + fmt(cA, 0) + " %", 390, 94);
+    ctx.fillStyle = P.typeB;
+    ctx.fillRect(360, 120, 18, 18);
+    ctx.fillStyle = P.ink;
+    ctx.fillText("Type B — " + fmt(cB, 0) + " %", 390, 134);
+
+    const max = Math.max(uA, uB, uc);
+    const scale = 220 / max;
+    ctx.fillStyle = P.muted;
+    ctx.fillText("Comparaison des longueurs (mm)", 360, 190);
+    [["u_A", uA, P.typeA], ["u_B", uB, P.typeB], ["u_c", uc, P.typeC]].forEach((row, i) => {
+      const y = 210 + i * 36;
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'IBM Plex Mono', monospace";
+      ctx.fillText(row[0], 360, y + 12);
+      ctx.fillStyle = row[2];
+      ctx.fillRect(410, y, row[1] * scale, 16);
+    });
+  }
+
+  function updateProp() {
+    const D = +$("D").value;
+    const uD = +$("uD").value;
+    const F = +$("F").value;
+    const uF = +$("uF").value;
+    $("v-D").textContent = D + " mm";
+    $("v-uD").textContent = fmt(uD, 2) + " mm";
+    $("v-F").textContent = fmt(F, 0) + " kN";
+    $("v-uF").textContent = fmt(uF, 1) + " kN";
+    const A = Math.PI * D * D / 4;
+    const uArel = 2 * (uD / D);
+    const F_N = F * 1000;
+    const uF_N = uF * 1000;
+    const sigma = F_N / A;
+    const uSigRel = Math.sqrt(Math.pow(uF_N / F_N, 2) + Math.pow(uArel, 2));
+    const uSig = sigma * uSigRel;
+    const contribF = Math.pow(uF_N / F_N, 2) / Math.pow(uSigRel, 2) * 100;
+    const contribA = 100 - contribF;
+    $("out-prop").innerHTML = kpiHTML([
+      { texK: "A=\\pi D^{2}/4", v: fmt(A, 0) + " mm²" },
+      { texK: "\\sigma=F/A", v: fmt(sigma, 2) + " MPa" },
+      { texK: "u_c(\\sigma)", v: fmt(uSig, 3) + " MPa", wide: true },
+      { k: "Contribution relative F / A dans u(σ)", v: `${fmt(contribF, 0)} % / ${fmt(contribA, 0)} %`, wide: true },
+    ]);
+    drawProp(D, uD, F, uF, sigma, uSig, contribF, contribA);
+  }
+  function drawProp(D, uD, F, uF, sigma, uSig, cF, cA) {
+    const cv = $("cv-prop");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const boxes = [
+      { x: 40, y: 80, t: "D", s: fmt(D, 0) + " mm", u: "u=" + fmt(uD, 2) },
+      { x: 260, y: 80, t: "A", s: "∝ D²", u: "u/A = 2 u(D)/D" },
+      { x: 260, y: 220, t: "F", s: fmt(F, 0) + " kN", u: "u=" + fmt(uF, 1) },
+      { x: 500, y: 150, t: "σ", s: fmt(sigma, 2) + " MPa", u: "u=" + fmt(uSig, 3) },
+    ];
+    boxes.forEach((b) => {
+      ctx.fillStyle = P.panel;
+      ctx.strokeStyle = P.stroke;
+      ctx.lineWidth = 2;
+      ctx.fillRect(b.x, b.y, 140, 70);
+      ctx.strokeRect(b.x, b.y, 140, 70);
+      ctx.fillStyle = P.ink;
+      ctx.font = "700 16px 'DM Sans', sans-serif";
+      ctx.fillText(b.t, b.x + 12, b.y + 26);
+      ctx.font = "12px 'IBM Plex Mono', monospace";
+      ctx.fillText(b.s, b.x + 12, b.y + 46);
+      ctx.fillStyle = P.muted;
+      ctx.font = "11px 'DM Sans', sans-serif";
+      ctx.fillText(b.u, b.x + 12, b.y + 62);
+    });
+    ctx.strokeStyle = P.accent;
+    ctx.lineWidth = 2;
+    function arrow(x1, y1, x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      const ang = Math.atan2(y2 - y1, x2 - x1);
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - 10 * Math.cos(ang - 0.4), y2 - 10 * Math.sin(ang - 0.4));
+      ctx.lineTo(x2 - 10 * Math.cos(ang + 0.4), y2 - 10 * Math.sin(ang + 0.4));
+      ctx.closePath();
+      ctx.fillStyle = P.accent;
+      ctx.fill();
+    }
+    arrow(180, 115, 260, 115);
+    arrow(400, 115, 500, 170);
+    arrow(400, 255, 500, 200);
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Part de u(σ) due à F : " + fmt(cF, 0) + " %   ·   due à A (donc D) : " + fmt(cA, 0) + " %", 40, 40);
+  }
+
+  function updateConform() {
+    const sig = +$("sig").value;
+    const uc = +$("uc").value;
+    const k = +$("k").value;
+    const L = +$("Lspec").value;
+    $("v-sig").textContent = fmt(sig, 1) + " MPa";
+    $("v-uc").textContent = fmt(uc, 2) + " MPa";
+    $("v-k").textContent = k === 1 ? "1 (~68 %)" : k === 2 ? "2 (~95 %)" : "3 (~99,7 %)";
+    $("v-Lspec").textContent = fmt(L, 1) + " MPa";
+    const U = k * uc;
+    const lo = sig - U;
+    const hi = sig + U;
+    let verdict, cls, detail;
+    if (lo >= L) {
+      verdict = "Conforme";
+      cls = "ok";
+      detail = `Tout l’intervalle [${fmt(lo, 2)} ; ${fmt(hi, 2)}] MPa est au-dessus de L_spec = ${fmt(L, 1)} MPa.`;
+    } else if (hi < L) {
+      verdict = "Non conforme";
+      cls = "bad";
+      detail = `Tout l’intervalle [${fmt(lo, 2)} ; ${fmt(hi, 2)}] MPa est en dessous de L_spec = ${fmt(L, 1)} MPa.`;
+    } else {
+      verdict = "Zone de doute";
+      cls = "warn";
+      detail = `L’intervalle [${fmt(lo, 2)} ; ${fmt(hi, 2)}] MPa chevauche L_spec = ${fmt(L, 1)} MPa : on ne déclare pas la conformité.`;
+    }
+    $("out-conform").innerHTML = kpiHTML([
+      { texK: "U=k\\,u_c", v: fmt(U, 2) + " MPa" },
+      { k: "Intervalle", v: `[${fmt(lo, 2)} ; ${fmt(hi, 2)}] MPa` },
+      { k: "Verdict", v: `<span class="badge ${cls}">${verdict}</span>`, wide: true },
+      { k: "Lecture", v: detail, wide: true },
+    ]);
+    drawConform(sig, lo, hi, L, verdict);
+  }
+  function drawConform(sig, lo, hi, L, verdict) {
+    const cv = $("cv-conform");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const minV = Math.min(lo, L) - 1.5;
+    const maxV = Math.max(hi, L) + 1.5;
+    const x0 = 60, x1 = w - 40;
+    const y = h / 2;
+    const X = (v) => x0 + ((v - minV) / (maxV - minV)) * (x1 - x0);
+    ctx.strokeStyle = P.steel;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x0, y);
+    ctx.lineTo(x1, y);
+    ctx.stroke();
+    const color = verdict === "Conforme" ? P.ok : verdict === "Non conforme" ? P.danger : P.warn;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(X(lo), y);
+    ctx.lineTo(X(hi), y);
+    ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(X(sig), y, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = P.danger;
+    ctx.setLineDash([6, 4]);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(X(L), y - 50);
+    ctx.lineTo(X(L), y + 50);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = P.ink;
+    ctx.font = "600 13px 'DM Sans', sans-serif";
+    ctx.fillText("L_spec = " + fmt(L, 1) + " MPa", X(L) - 40, y - 58);
+    ctx.fillText("σ̄", X(sig) - 6, y + 28);
+    ctx.font = "12px 'IBM Plex Mono', monospace";
+    ctx.fillText(fmt(lo, 2), X(lo) - 16, y + 48);
+    ctx.fillText(fmt(hi, 2), X(hi) - 16, y + 48);
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Trait coloré = intervalle [σ̄ − U ; σ̄ + U]   ·   trait pointillé = limite", 40, 28);
+  }
+
+  function updateLot() {
+    const s1 = +$("s1").value, s2 = +$("s2").value, s3 = +$("s3").value;
+    const fck = +$("fck").value;
+    $("v-s1").textContent = fmt(s1, 1) + " MPa";
+    $("v-s2").textContent = fmt(s2, 1) + " MPa";
+    $("v-s3").textContent = fmt(s3, 1) + " MPa";
+    $("v-fck").textContent = fck + " MPa";
+    const vals = [s1, s2, s3];
+    const mean = (s1 + s2 + s3) / 3;
+    const s = Math.sqrt(((s1 - mean) ** 2 + (s2 - mean) ** 2 + (s3 - mean) ** 2) / 2);
+    const u = s / Math.sqrt(3);
+    const U = 2 * u;
+    const limInd = fck - 4;
+    const okInd = Math.min(s1, s2, s3) >= limInd;
+    const okMean = mean >= fck;
+    const reserve = (mean - U) < fck && (mean + U) > fck;
+    let msg;
+    if (!okInd || !okMean) msg = "Lot non conforme aux critères simplifiés.";
+    else if (reserve) msg = "Critères simplifiés OK, mais avec réserve (intervalle sur la moyenne chevauche f_ck).";
+    else msg = "Critères simplifiés OK, sans chevauchement de l’intervalle à 95 % sur f_ck.";
+    const cls = (!okInd || !okMean) ? "bad" : reserve ? "warn" : "ok";
+    $("out-lot").innerHTML = kpiHTML([
+      { texK: "\\bar\\sigma_{\\mathrm{lot}}", v: fmt(mean, 2) + " MPa" },
+      { texK: "s", v: fmt(s, 2) + " MPa" },
+      { texK: "U_{\\mathrm{lot}}=2u", v: fmt(U, 2) + " MPa", wide: true },
+      { k: "Critère individuel (≥ f_ck − 4)", v: okInd ? "OK" : "ÉCHEC" },
+      { k: "Critère moyenne (≥ f_ck)", v: okMean ? "OK" : "ÉCHEC" },
+      { k: "Verdict", v: `<span class="badge ${cls}">${msg}</span>`, wide: true },
+    ]);
+    drawLot(vals, mean, U, fck, limInd);
+  }
+  function drawLot(vals, mean, U, fck, limInd) {
+    const cv = $("cv-lot");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    const minV = Math.min(...vals, fck, limInd, mean - U) - 2;
+    const maxV = Math.max(...vals, fck, mean + U) + 2;
+    const x0 = 70, x1 = w - 50;
+    const X = (v) => x0 + ((v - minV) / (maxV - minV)) * (x1 - x0);
+    const yAxis = h - 80;
+    ctx.strokeStyle = P.steel;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x0, yAxis);
+    ctx.lineTo(x1, yAxis);
+    ctx.stroke();
+    ctx.fillStyle = P.danger;
+    ctx.globalAlpha = 0.08;
+    ctx.fillRect(x0, 50, X(limInd) - x0, yAxis - 50);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = P.danger;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(X(fck), 40);
+    ctx.lineTo(X(fck), yAxis + 10);
+    ctx.stroke();
+    ctx.strokeStyle = P.warn;
+    ctx.beginPath();
+    ctx.moveTo(X(limInd), 40);
+    ctx.lineTo(X(limInd), yAxis + 10);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    vals.forEach((v, i) => {
+      const y = 90 + i * 50;
+      ctx.fillStyle = P.typeB;
+      ctx.beginPath();
+      ctx.arc(X(v), y, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = P.ink;
+      ctx.font = "600 13px 'DM Sans', sans-serif";
+      ctx.fillText("σ" + (i + 1), 20, y + 4);
+      ctx.font = "12px 'IBM Plex Mono', monospace";
+      ctx.fillText(fmt(v, 1), X(v) + 12, y + 4);
+    });
+    const ym = yAxis - 30;
+    ctx.strokeStyle = P.accent;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(X(mean - U), ym);
+    ctx.lineTo(X(mean + U), ym);
+    ctx.stroke();
+    ctx.fillStyle = P.accent;
+    ctx.beginPath();
+    ctx.arc(X(mean), ym, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = P.muted;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("Moyenne lot ± U (95 %)", X(mean - U), ym - 12);
+    ctx.fillStyle = P.ink;
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("f_ck", X(fck) - 10, 32);
+    ctx.fillText("f_ck−4", X(limInd) - 18, 32);
+    ctx.fillText("Zone individuelle trop basse", x0 + 8, 70);
+  }
+
+  function updateBudget() {
+    const Ucal = +$("Ucal").value;
+    const ader = +$("ader").value;
+    const rF = +$("rF").value;
+    $("v-Ucal").textContent = fmt(Ucal, 1) + " kN";
+    $("v-ader").textContent = fmt(ader, 1) + " kN";
+    $("v-rF").textContent = fmt(rF, 1) + " kN";
+    const ucal = Ucal / 2;
+    const uder = ader / Math.sqrt(3);
+    const ures = (rF / 2) / Math.sqrt(3);
+    const uc = Math.sqrt(ucal ** 2 + uder ** 2 + ures ** 2);
+    const parts = [
+      { name: "Étalonnage", u: ucal, c: P.typeB },
+      { name: "Dérive", u: uder, c: P.typeA },
+      { name: "Résolution", u: ures, c: P.typeC },
+    ];
+    parts.forEach((p) => { p.pct = (p.u * p.u) / (uc * uc) * 100; });
+    parts.sort((a, b) => b.pct - a.pct);
+    const tip = `Priorité d’investissement : ${parts[0].name} (${fmt(parts[0].pct, 0)} % de contribution).`;
+    $("out-budget").innerHTML = kpiHTML([
+      { texK: "u_{\\mathrm{cal}}=U_{\\mathrm{cal}}/2", v: fmt(ucal, 2) + " kN" },
+      { texK: "u_{\\mathrm{dér}}=a/\\sqrt{3}", v: fmt(uder, 2) + " kN" },
+      { texK: "u_{\\mathrm{rés}}", v: fmt(ures, 3) + " kN" },
+      { texK: "u_c(F)", v: fmt(uc, 2) + " kN", wide: true },
+      { k: "Recommandation", v: tip, wide: true },
+    ]);
+    drawBudget(parts, uc);
+  }
+  function drawBudget(parts, uc) {
+    const cv = $("cv-budget");
+    if (!cv) return;
+    const { ctx, w, h } = view(cv);
+    let x = 80;
+    const y = 80, bh = 48, totalW = w - 160;
+    const ordered = [
+      parts.find((p) => p.name === "Étalonnage"),
+      parts.find((p) => p.name === "Dérive"),
+      parts.find((p) => p.name === "Résolution"),
+    ];
+    ordered.forEach((p) => {
+      const ww = (p.pct / 100) * totalW;
+      ctx.fillStyle = p.c;
+      ctx.fillRect(x, y, Math.max(ww, 1), bh);
+      if (ww > 50) {
+        ctx.fillStyle = P.panel === "#ffffff" ? "#fff" : "#0a120e";
+        ctx.font = "600 12px 'DM Sans', sans-serif";
+        ctx.fillText(fmt(p.pct, 0) + "%", x + 8, y + 30);
+      }
+      x += ww;
+    });
+    ctx.strokeStyle = P.ink;
+    ctx.strokeRect(80, y, totalW, bh);
+    ctx.fillStyle = P.muted;
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.fillText("Barre empilée = contributions % à u_c(F)  (largeur ∝ u_i²)", 80, 50);
+
+    const maxU = Math.max(...ordered.map((p) => p.u), uc, 0.1);
+    const scale = 140 / maxU;
+    const base = h - 50;
+    ordered.forEach((p, i) => {
+      const bx = 120 + i * 160;
+      const bh2 = p.u * scale;
+      ctx.fillStyle = p.c;
+      ctx.fillRect(bx, base - bh2, 60, bh2);
+      ctx.fillStyle = P.ink;
+      ctx.font = "12px 'DM Sans', sans-serif";
+      ctx.fillText(p.name, bx - 4, base + 18);
+      ctx.font = "600 12px 'IBM Plex Mono', monospace";
+      ctx.fillText(fmt(p.u, 2), bx + 4, base - bh2 - 8);
+    });
+    const bx = 120 + 3 * 160;
+    ctx.fillStyle = P.ink;
+    ctx.fillRect(bx, base - uc * scale, 60, uc * scale);
+    ctx.font = "12px 'DM Sans', sans-serif";
+    ctx.fillText("u_c(F)", bx + 4, base + 18);
+    ctx.font = "600 12px 'IBM Plex Mono', monospace";
+    ctx.fillText(fmt(uc, 2), bx + 4, base - uc * scale - 8);
+  }
+
+  function syncFill(inp) {
+    if (inp.type !== "range") return;
+    const p = ((+inp.value - +inp.min) / (+inp.max - +inp.min)) * 100;
+    inp.style.setProperty("--p", p + "%");
+  }
+  const GROUPS = {
+    ab: ["n", "s", "res"],
+    compose: ["uA", "uB"],
+    prop: ["D", "uD", "F", "uF"],
+    conform: ["sig", "uc", "k", "Lspec"],
+    lot: ["s1", "s2", "s3", "fck"],
+    budget: ["Ucal", "ader", "rF"],
+  };
+  const UPDATERS = {
+    ab: updateAB,
+    compose: updateCompose,
+    prop: updateProp,
+    conform: updateConform,
+    lot: updateLot,
+    budget: updateBudget,
+  };
+  const DEFAULTS = {};
+  Object.entries(GROUPS).forEach(([key, ids]) => {
+    ids.forEach((id) => {
+      const inp = $(id);
+      DEFAULTS[id] = inp.tagName === "SELECT" ? inp.value : inp.getAttribute("value");
+      inp.addEventListener("input", () => {
+        syncFill(inp);
+        markExplored(key);
+        UPDATERS[key]();
+      });
+    });
+  });
+  function resetGroup(key) {
+    GROUPS[key].forEach((id) => {
+      const inp = $(id);
+      inp.value = DEFAULTS[id];
+      syncFill(inp);
+    });
+    UPDATERS[key]();
+  }
+  document.querySelectorAll(".reset-btn").forEach((btn) => {
+    btn.addEventListener("click", () => resetGroup(btn.dataset.reset));
+  });
+
+  let toastTimer;
+  function showToast(msg) {
+    const el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+  $("wipe-btn").addEventListener("click", () => {
+    const ok = window.confirm(
+      "Remettre à zéro tout le laboratoire ?\n\nÉtoiles, Défis express, Grand contrôle, ateliers explorés et curseurs seront effacés. Le thème clair/sombre est conservé."
+    );
+    if (!ok) return;
+    const theme = store.theme === "light" ? "light" : "dark";
+    store = { explored: {}, stars: {}, quiz: {}, final: { first: {}, best: -1 }, theme };
+    save();
+    Object.keys(GROUPS).forEach(resetGroup);
+    renderAllQuizzes();
+    $("final-panel").hidden = true;
+    renderHud();
+    show("home");
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+    showToast("Progression remise à zéro — vous pouvez tout refaire.");
+  });
+
+  const tex = (s) => `<span class="tex" data-tex="${s}"></span>`;
+  const QUIZ = {
+    ab: [
+      {
+        q: `Une incertitude de <strong>type A</strong> vient surtout…`,
+        opts: [
+          { t: `de la dispersion observée en répétant la mesure (opérateur, ovalisation, placement…)`, ok: true, fb: `Oui : type A = statistique de répétitions. ${tex("u_A=s/\\sqrt{n}")} porte sur la moyenne, pas sur ${tex("s")} tout seul.` },
+          { t: `uniquement de la résolution de l’afficheur`, fb: `La résolution, c’est typiquement du type B (sans statistique de répétitions).` },
+          { t: `du facteur d’élargissement ${tex("k")}`, fb: `${tex("k")} sert plus tard, pour passer de ${tex("u_c")} à ${tex("U")}. Ce n’est pas une source A ou B.` },
+        ],
+      },
+      {
+        q: `Sans changer ${tex("s")}, on multiplie ${tex("n")} par 4. ${tex("u_A=s/\\sqrt{n}")} est…`,
+        opts: [
+          { t: `divisée par 2`, ok: true, fb: `Exact : ${tex("\\sqrt{4}=2")}. Quadrupler les répétitions ne divise ${tex("u_A")} que par 2 — le rendement décroît vite.` },
+          { t: `divisée par 4`, fb: `Ce serait vrai si ${tex("u_A")} allait comme ${tex("1/n")}. Or c’est ${tex("1/\\sqrt{n}")}.` },
+          { t: `inchangée`, fb: `${tex("n")} est au dénominateur : plus de répétitions, ${tex("u_A")} baisse (mais seulement en racine).` },
+        ],
+        apply: { set: { n: 16 }, label: "Voir sur le schéma : n × 2 par rapport à 8" },
+      },
+      {
+        q: `La résolution d’un afficheur entre dans ${tex("u_B")} comment (loi rectangulaire) ?`,
+        opts: [
+          { t: `demi-division divisée par ${tex("\\sqrt{3}")}`, ok: true, fb: `Oui : ${tex("u_B=(\\mathrm{résolution}/2)/\\sqrt{3}")}. C’est l’hypothèse « tout aussi probable dans un intervalle ».` },
+          { t: `on la divise par ${tex("n")}`, fb: `Répéter ne soigne pas la résolution : le cran de l’afficheur reste le même.` },
+          { t: `on la multiplie par ${tex("k=2")}`, fb: `${tex("k")} élargit ${tex("u_c")} en ${tex("U")}, ce n’est pas la formule de la résolution.` },
+        ],
+        apply: { set: { res: 0.8 }, label: "Voir sur le schéma : résolution grossière" },
+      },
+    ],
+    compose: [
+      {
+        q: `Pour composer ${tex("u_A")} et ${tex("u_B")} indépendantes, on…`,
+        opts: [
+          { t: `prend la racine de la somme des carrés`, ok: true, fb: `Oui : ${tex("u_c=\\sqrt{u_A^{2}+u_B^{2}}")}. La somme arithmétique surestime — comparez-la sur les indicateurs.` },
+          { t: `les additionne tout simplement`, fb: `C’est l’erreur classique. Les variances s’additionnent, pas les ${tex("u")} eux-mêmes.` },
+          { t: `garde seulement le plus grand`, fb: `Le plus grand domine, mais le second n’est pas nul : on compose quand même.` },
+        ],
+      },
+      {
+        q: `Si ${tex("u_B \\ll u_A")}, changer d’instrument (donc baisser ${tex("u_B")})…`,
+        opts: [
+          { t: `améliore très peu ${tex("u_c")}`, ok: true, fb: `Oui : une petite composante pèse au carré. Mieux vaut d’abord réduire la source dominante (souvent le type A ici).` },
+          { t: `divise ${tex("u_c")} par deux`, fb: `Seulement si B était comparable à A. Ici B est négligeable dans le carré.` },
+          { t: `annule le type A`, fb: `Les deux familles restent distinctes : un meilleur afficheur ne calme pas la dispersion des répétitions.` },
+        ],
+        apply: { set: { uA: 0.08, uB: 0.01 }, label: "Voir sur le schéma : B très petit" },
+      },
+    ],
+    prop: [
+      {
+        q: `Pourquoi ne peut-on pas coller ${tex("u(D)")} tel quel sur ${tex("\\sigma")} ?`,
+        opts: [
+          { t: `parce que ${tex("A \\propto D^{2}")} puis ${tex("\\sigma=F/A")} : il faut propager`, ok: true, fb: `Exact. Un ${tex("D^{2}")} double l’incertitude relative du diamètre sur la section, puis ${tex("F")} et ${tex("A")} se composent dans ${tex("\\sigma")}.` },
+          { t: `parce que ${tex("D")} et ${tex("\\sigma")} ont la même unité`, fb: `Au contraire : mm et MPa ne se mélangent pas. C’est bien pour ça qu’on propage en relatives.` },
+          { t: `parce que ${tex("k=2")} s’applique déjà au diamètre`, fb: `${tex("k")} élargit à la fin. La propagation, elle, se fait sur les incertitudes-types.` },
+        ],
+      },
+      {
+        q: `Pour ${tex("A=\\pi D^{2}/4")}, l’incertitude relative vaut…`,
+        opts: [
+          { t: `${tex("u(A)/A = 2\\,u(D)/D")}`, ok: true, fb: `Oui : exposant 2 ⇒ facteur 2 sur la relative. C’est le réflexe « puissance ».` },
+          { t: `${tex("u(A)/A = u(D)/D")}`, fb: `Ce serait vrai pour une grandeur linéaire en ${tex("D")}, pas pour une section.` },
+          { t: `${tex("u(A)/A = 4\\,u(D)/D")}`, fb: `Le 4 du ${tex("\\pi D^{2}/4")} est une constante : il ne double pas encore le facteur 2.` },
+        ],
+      },
+      {
+        q: `En compression, ${tex("u(\\sigma)")} est souvent dominée par…`,
+        opts: [
+          { t: `la force ${tex("F")} (presse, étalonnage, dérive)`, ok: true, fb: `Très souvent oui — vérifiez les % sur le schéma : doubler ${tex("u(F)")} bouge ${tex("u(\\sigma)")} plus que doubler ${tex("u(D)")}.` },
+          { t: `uniquement le diamètre, toujours`, fb: `Le ${tex("D^{2}")} amplifie, mais ${tex("u(D)/D")} est souvent minuscule devant ${tex("u(F)/F")}.` },
+          { t: `le facteur ${tex("k")}`, fb: `${tex("k")} n’est pas une source : il élargit après composition.` },
+        ],
+        apply: { set: { uF: 9 }, label: "Voir sur le schéma : je double u(F)" },
+      },
+    ],
+    conform: [
+      {
+        q: `${tex("k=2")} et ${tex("k=3")} : que change le facteur d’élargissement ?`,
+        opts: [
+          { t: `${tex("k=2")} ≈ 95 %, ${tex("k=3")} ≈ 99,7 % : l’intervalle s’élargit, le verdict peut passer en zone de doute`, ok: true, fb: `Oui. Plus on exige de couverture, plus on est « sévère » pour déclarer la conformité. Essayez ${tex("k=3")} sur le défaut actuel.` },
+          { t: `${tex("k")} change la moyenne ${tex("\\bar\\sigma")}`, fb: `La moyenne ne bouge pas : seul ${tex("U=k u_c")} s’étire.` },
+          { t: `${tex("k=3")} est toujours plus « indulgent » pour déclarer conforme`, fb: `C’est l’inverse : intervalle plus large ⇒ plus de risque de chevaucher ${tex("L_{\\mathrm{spec}}")}.` },
+        ],
+        apply: { set: { k: 3 }, label: "Voir sur le schéma : k = 3" },
+      },
+      {
+        q: `Si l’intervalle ${tex("[\\bar\\sigma-U,\\,\\bar\\sigma+U]")} chevauche ${tex("L_{\\mathrm{spec}}")}…`,
+        opts: [
+          { t: `on ne déclare pas la conformité (zone de doute)`, ok: true, fb: `Oui : ce n’est ni un oui franc ni un non franc. Le chantier a besoin de ce message, pas d’un chiffre nu.` },
+          { t: `on déclare conforme dès que la moyenne est au-dessus`, fb: `La moyenne seule ne suffit pas : tout l’intervalle doit passer au-dessus.` },
+          { t: `on ignore ${tex("U")} et on compare seulement ${tex("\\bar\\sigma")}`, fb: `Oublier ${tex("U")}, c’est oublier la métrologie. Le verdict porte sur l’intervalle.` },
+        ],
+      },
+    ],
+    lot: [
+      {
+        q: `Pourquoi un lot de plusieurs éprouvettes plutôt qu’un seul cylindre ?`,
+        opts: [
+          { t: `pour voir la variabilité matière absente du mono-essai`, ok: true, fb: `Oui : un unique spécimen ne raconte pas le gâchage. Le ploton (moyenne + individuels + réserve) est le message chantier.` },
+          { t: `pour faire baisser la résolution de la presse`, fb: `La résolution de l’afficheur ne dépend pas du nombre de cylindres.` },
+          { t: `parce que ${tex("k")} doit valoir le nombre d’éprouvettes`, fb: `${tex("k")} n’est pas ${tex("n")}. Ici ${tex("n=3")} entre dans ${tex("s")} et ${tex("u=s/\\sqrt{n}")}.` },
+        ],
+      },
+      {
+        q: `Les critères simplifiés sont OK, mais l’intervalle à 95 % sur la moyenne chevauche ${tex("f_{ck}")}. On dit…`,
+        opts: [
+          { t: `conforme avec réserve`, ok: true, fb: `Oui : les seuils « chantier » passent, mais la métrologie de la moyenne n’est pas franche. C’est un message légitime.` },
+          { t: `non conforme, point final`, fb: `Les critères individuels et la moyenne peuvent être OK : la réserve n’est pas un rejet automatique.` },
+          { t: `conforme sans rien signaler`, fb: `Le chevauchement mérite d’être dit : c’est précisément le rôle de la réserve.` },
+        ],
+        apply: { set: { s3: 20 }, label: "Voir sur le schéma : un cylindre plus faible" },
+      },
+    ],
+    budget: [
+      {
+        q: `Où dépenser le prochain euro de métrologie ?`,
+        opts: [
+          { t: `sur la source à plus forte contribution ${tex("u_i^{2}/u_c^{2}")}`, ok: true, fb: `Oui. L’outil « le plus visible » (souvent le pied à coulisse) n’est pas forcément le levier.` },
+          { t: `toujours sur un nouveau pied à coulisse`, fb: `Réflexe fréquent, souvent inefficace si le diamètre pèse peu dans ${tex("u(\\sigma)")}.` },
+          { t: `au hasard, toutes les sources se valent`, fb: `Les % le montrent : une source peut écraser les autres.` },
+        ],
+      },
+      {
+        q: `Sur un certificat d’étalonnage donné à ${tex("k=2")}, ${tex("u_{\\mathrm{cal}}")} vaut…`,
+        opts: [
+          { t: `${tex("U_{\\mathrm{cal}}/2")}`, ok: true, fb: `Oui : on « désélargit » pour retravailler en incertitude-type, puis on recompose.` },
+          { t: `${tex("U_{\\mathrm{cal}}\\times 2")}`, fb: `On divise par ${tex("k")}, on ne multiplie pas.` },
+          { t: `la résolution de l’afficheur`, fb: `Étalonnage, dérive et résolution sont trois lignes distinctes du budget.` },
+        ],
+        apply: { set: { Ucal: 2.4 }, label: "Voir sur le schéma : meilleur certificat" },
+      },
+    ],
+    final: [
+      {
+        q: `Type A vs type B : quelle phrase est juste ?`,
+        opts: [
+          { t: `A = répétitions (dispersion) ; B = informations sans statistique (résolution, certificat…)`, ok: true, fb: `Le duo fondateur. Clairval n’y change rien : c’est le même réflexe partout.` },
+          { t: `A = instrument ; B = béton`, fb: `Les types A/B classent la <em>méthode d’évaluation</em>, pas le matériau.` },
+          { t: `A = élargie ; B = composée`, fb: `Composée = ${tex("u_c")} ; élargie = ${tex("U=k u_c")}. Autre étage.` },
+        ],
+      },
+      {
+        q: `Composer ${tex("u_c")}, c’est surtout…`,
+        opts: [
+          { t: `additionner les variances (${tex("\\sqrt{\\sum u_i^{2}}")}), pas les ${tex("u")} eux-mêmes`, ok: true, fb: `Une petite source disparaît presque. D’où le budget : on vise le gros terme.` },
+          { t: `prendre la moyenne des ${tex("u_i")}`, fb: `La moyenne n’a pas de statut GUM ici.` },
+          { t: `multiplier par ${tex("k")} tout de suite`, fb: `${tex("k")} vient après, une fois ${tex("u_c")} obtenu.` },
+        ],
+      },
+      {
+        q: `On propage vers ${tex("\\sigma=F/A")} parce que…`,
+        opts: [
+          { t: `${tex("\\sigma")} n’est pas mesurée directement : ${tex("D")} et ${tex("F")} doivent transmettre leurs incertitudes`, ok: true, fb: `Sans propagation, on collerait un ${tex("u(D)")} en millimètres sur une contrainte en MPa.` },
+          { t: `la presse affiche déjà ${tex("\\sigma")}`, fb: `Même si un logiciel convertit, la métrologie doit retracer ${tex("A")} et ${tex("F")}.` },
+          { t: `${tex("k=2")} remplace la propagation`, fb: `${tex("k")} élargit, il ne transporte pas une grandeur vers une autre.` },
+        ],
+      },
+      {
+        q: `Choisir ${tex("k=3")} plutôt que ${tex("k=2")}, concrètement…`,
+        opts: [
+          { t: `élargit l’intervalle (≈ 99,7 % vs ≈ 95 %) et peut faire basculer un « conforme » en zone de doute`, ok: true, fb: `Plus de couverture = verdict plus prudent. Le dossier noté discute ${tex("k")} ; ici on retient le sens.` },
+          { t: `réduit ${tex("u_c")}`, fb: `${tex("u_c")} ne dépend pas de ${tex("k")}.` },
+          { t: `garantit toujours la conformité`, fb: `C’est l’inverse : plus large, plus de chevauchement possible.` },
+        ],
+      },
+      {
+        q: `Un lot de trois cylindres, par rapport à un seul spécimen…`,
+        opts: [
+          { t: `fait apparaître la variabilité matière et autorise un message « réserve » sur la moyenne`, ok: true, fb: `Le ploton n’est pas une éprouvette. Individuels + moyenne + intervalle = décision chantier.` },
+          { t: `annule le type B`, fb: `L’instrument reste là, que l’on casse un ou trois cylindres.` },
+          { t: `impose ${tex("k=3")}`, fb: `${tex("n=3")} n’est pas ${tex("k=3")}.` },
+        ],
+      },
+      {
+        q: `Le budget d’incertitudes sert à…`,
+        opts: [
+          { t: `décider où investir (plus forte contribution %), pas à racheter l’outil le plus visible`, ok: true, fb: `Étalonnage, dérive, résolution : on compose, on lit les %, on dépense là. Pierreclaire n’a pas un budget infini — le vrai labo non plus.` },
+          { t: `remplacer le sujet noté par ces curseurs`, fb: `Anti-spoil : aucune valeur d’ici ne se recopie dans le dossier.` },
+          { t: `fixer ${tex("f_{ck}")} du projet`, fb: `La classe se discute dans les notes de calcul, pas dans ce laboratoire virtuel.` },
+        ],
+      },
+    ],
+  };
+
+  function shuffleOpts(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+  Object.keys(QUIZ).forEach((k) => {
+    QUIZ[k].forEach((item) => {
+      item.opts = shuffleOpts(item.opts);
+    });
+  });
+
+  function quizSolved(a) { return store.quiz[a] || {}; }
+  function renderQuiz(a) {
+    const host = $("quiz-" + a);
+    if (!host) return;
+    const solved = quizSolved(a);
+    host.innerHTML = `<p class="quiz-banner">Formative seulement : ces questions entraînent un réflexe. Elles ne donnent aucune valeur à recopier dans le dossier noté.</p>` + QUIZ[a].map((item, i) => {
+      const done = !!solved[i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      return `<div class="quiz-q${done ? " solved" : ""}" data-a="${a}" data-i="${i}">
+        <p class="q-txt"><span class="q-num">${i + 1}</span>${item.q}</p>
+        <div class="q-opts">${item.opts.map((o, j) => `
+          <button class="opt${done && j === okIdx ? " correct" : ""}${done && j !== okIdx ? " dim" : ""}" type="button" data-j="${j}" ${done ? "disabled" : ""}>
+            <span class="letter">${"ABCD"[j]}</span><span>${o.t}</span>
+          </button>`).join("")}
+        </div>
+        <div class="q-fb good" ${done ? "" : "hidden"}>${done ? item.opts[okIdx].fb + applyHTML(item) : ""}</div>
+      </div>`;
+    }).join("") + statusHTML(a);
+    wireQuiz(host, a);
+  }
+  function applyHTML(item) {
+    if (!item.apply) return "";
+    return `<div><button class="q-apply" type="button" data-apply='${JSON.stringify(item.apply.set)}'>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>${item.apply.label}</button></div>`;
+  }
+  function statusHTML(a) {
+    if (a === "final") return "";
+    const solved = quizSolved(a);
+    const n = QUIZ[a].filter((_, i) => solved[i]).length;
+    const tot = QUIZ[a].length;
+    const star = store.stars[a]
+      ? `<svg class="star-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.5L12 16.9 6.1 20.1l1.3-6.5L2.5 9l6.6-.8z"/></svg> <strong>Étoile décrochée !</strong> Défi validé ${n}/${tot}.`
+      : `Défi : <strong>${n}/${tot}</strong> question${tot > 1 ? "s" : ""} validée${n > 1 ? "s" : ""} — toutes justes = une étoile.`;
+    return `<div class="quiz-status">${star}</div>`;
+  }
+  function wireQuiz(host, a) {
+    host.querySelectorAll(".quiz-q").forEach((qEl) => {
+      const i = +qEl.dataset.i;
+      const item = QUIZ[a][i];
+      const okIdx = item.opts.findIndex((o) => o.ok);
+      qEl.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const j = +btn.dataset.j;
+          if (a === "final" && store.final.first[i] === undefined) {
+            store.final.first[i] = (j === okIdx);
+            save();
+          }
+          const fb = qEl.querySelector(".q-fb");
+          if (j === okIdx) {
+            btn.classList.add("correct");
+            qEl.classList.add("solved");
+            qEl.querySelectorAll(".opt").forEach((b) => {
+              b.disabled = true;
+              if (+b.dataset.j !== okIdx) b.classList.add("dim");
+            });
+            fb.className = "q-fb good";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[okIdx].fb + applyHTML(item);
+            wireApply(fb, a);
+            if (!store.quiz[a]) store.quiz[a] = {};
+            store.quiz[a][i] = true;
+            save();
+            afterSolve(a);
+          } else {
+            btn.classList.add("wrong");
+            btn.disabled = true;
+            fb.className = "q-fb bad";
+            fb.hidden = false;
+            fb.innerHTML = item.opts[j].fb;
+          }
+          paintStaticTex();
+        });
+      });
+      wireApply(qEl, a);
+    });
+  }
+  function wireApply(scope, a) {
+    scope.querySelectorAll(".q-apply").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", () => {
+        const set = JSON.parse(btn.dataset.apply);
+        Object.entries(set).forEach(([id, val]) => {
+          const inp = $(id);
+          if (!inp) return;
+          inp.value = val;
+          inp.dispatchEvent(new Event("input"));
+        });
+        const section = $("atelier-" + a);
+        const cvs = section && section.querySelector("canvas");
+        if (cvs) cvs.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
+      });
+    });
+  }
+  function afterSolve(a) {
+    if (a === "final") {
+      updateFinalPanel();
+      return;
+    }
+    const solved = quizSolved(a);
+    const all = QUIZ[a].every((_, i) => solved[i]);
+    const statusEl = document.querySelector(`#quiz-${a} .quiz-status`);
+    if (all && !store.stars[a]) {
+      store.stars[a] = true;
+      save();
+      confetti();
+    }
+    if (statusEl) statusEl.outerHTML = statusHTML(a);
+    renderHud();
+  }
+  function updateFinalPanel() {
+    const answered = Object.keys(store.final.first).length;
+    const total = QUIZ.final.length;
+    if (answered < total) {
+      $("final-panel").hidden = true;
+      return;
+    }
+    const score = QUIZ.final.reduce((n, _, i) => n + (store.final.first[i] ? 1 : 0), 0);
+    if (score > store.final.best) {
+      store.final.best = score;
+      save();
+    }
+    $("final-panel").hidden = false;
+    $("final-score").textContent = score + "/" + total;
+    const verdict =
+      score >= 5 ? "Mention « Pierreclaire d’or » — le labo vous embauche !" :
+      score >= 4 ? "Solide ! Encore un ou deux réflexes à ancrer." :
+      "Bon entraînement — relisez les « À retenir » puis rejouez.";
+    $("final-verdict").textContent = verdict;
+    if (score >= 5) confetti();
+    renderHud();
+  }
+  $("final-replay").addEventListener("click", () => {
+    store.quiz.final = {};
+    store.final.first = {};
+    save();
+    renderQuiz("final");
+    $("final-panel").hidden = true;
+    paintStaticTex();
+    window.scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
+  });
+
+  function renderAllQuizzes() {
+    Object.keys(QUIZ).forEach(renderQuiz);
+    updateFinalPanel();
+  }
+
+  function repaintCurrent() {
+    if (current === "ab") updateAB();
+    else if (current === "compose") updateCompose();
+    else if (current === "prop") updateProp();
+    else if (current === "conform") updateConform();
+    else if (current === "lot") updateLot();
+    else if (current === "budget") updateBudget();
+    else if (current === "home") ensureAnim();
+  }
+  function repaintAll() {
+    updateAB();
+    updateCompose();
+    updateProp();
+    updateConform();
+    updateLot();
+    updateBudget();
+    ensureAnim();
+  }
+
+  function boot() {
+    renderAllQuizzes();
+    paintStaticTex();
+    document.querySelectorAll('input[type="range"]').forEach(syncFill);
+    renderHud();
+    applyTheme(store.theme === "light" ? "light" : "dark");
+  }
+
+  function whenReady(cb) {
+    if (window.katex) { cb(); return; }
+    let n = 0;
+    const t = setInterval(() => {
+      n += 1;
+      if (window.katex || n > 40) {
+        clearInterval(t);
+        cb();
+      }
+    }, 50);
+  }
+  whenReady(boot);
+})();
+</script>
+</body>
+</html>
