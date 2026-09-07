@@ -1,15 +1,17 @@
-/* Collez ici l’identifiant YouTube (la partie après v=) une fois la vidéo importée.
-   Exemple : 'id': 'dQw4w9WgXcQ'
-   Le champ mp4 rappelle le fichier source local — ne pas l’envoyer sur GitHub. */
+/* Identifiants YouTube (après v=) et playlists. Le champ mp4 est un aide-mémoire local. */
+window.YOUTUBE_PLAYLISTS = {
+  'r1-10': 'PLOtp-9v_CG9E',
+  'r3-10': 'PLU-mhVpV4vZ0',
+};
 window.YOUTUBE_IDS = {
   'r1-1/1-automatisation-du-suivi-de-chantier.png': { id: '', title: 'Automatisation du suivi de chantier', mp4: '1.Excel___Outils_du_BET.mp4' },
   'r1-1/2-budget-de-chantier-avec-somme-si.png': { id: '', title: 'Budget de chantier avec SOMME.SI', mp4: '2.SOMME.mp4' },
   'r1-1/3-guide-du-pilotage-par-tcd.png': { id: '', title: 'Guide du pilotage par TCD', mp4: '3.TCD_et_Graphiques.mp4' },
   'r1-1/4-concevoir-un-tableau-de-bord.png': { id: '', title: 'Concevoir un tableau de bord', mp4: '4.Gestion_Chantier_Excel.mp4' },
   'r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png': { id: '', title: 'Les fondamentaux d un tableur professionnel', mp4: '5.Le_Simulateur_Pro.mp4' },
-  'r1-10/1-les-fondamentaux-de-l-aep.png': { id: '', title: 'Les fondamentaux de l AEP', mp4: '1.Conception_de_Réseau_AEP.mp4' },
-  'r1-10/2-masse-volumique-versus-viscosite.png': { id: '', title: 'Masse Volumique versus Viscosité', mp4: '2.Fluides_et_Sens_Physique.mp4' },
-  'r1-10/3-comprendre-la-pression-hydrostatique.png': { id: '', title: 'Comprendre la Pression Hydrostatique', mp4: '3.L_eau_pèse,_même_à_l_arrêt.mp4' },
+  'r1-10/1-les-fondamentaux-de-l-aep.png': { id: 'IfY00H-DeXE', title: 'Les fondamentaux de l AEP', mp4: '1.Conception_de_Réseau_AEP.mp4' },
+  'r1-10/2-masse-volumique-versus-viscosite.png': { id: 'eHxa7GX64C0', title: 'Masse Volumique versus Viscosité', mp4: '2.Fluides_et_Sens_Physique.mp4' },
+  'r1-10/3-comprendre-la-pression-hydrostatique.png': { id: 'Ea4we82args', title: 'Comprendre la Pression Hydrostatique', mp4: '3.L_eau_pèse,_même_à_l_arrêt.mp4' },
   'r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png': { id: '', title: 'Comprendre la charge hydraulique Bernoulli', mp4: '4.Bernoulli_sur_chantier.mp4' },
   'r1-10/5-les-pertes-de-charge-lineaires.png': { id: '', title: 'Les pertes de charge linéaires', mp4: '5.Pertes_linéaires_et_rugosité.mp4' },
   'r1-10/6-pertes-de-charge-en-aep.png': { id: '', title: 'Pertes de charge en AEP', mp4: '6.Pertes_Singulières.mp4' },
@@ -26,12 +28,12 @@ window.YOUTUBE_IDS = {
   'r2-9/4-comprendre-la-methode-glaser.png': { id: '', title: 'Comprendre la méthode Glaser', mp4: '4.Hygrothermie___Modèle_Glaser.mp4' },
   'r2-9/5-maitriser-dephasage-et-inertie-thermique.png': { id: '', title: 'Maîtriser déphasage et inertie thermique', mp4: '5.Confort_d_été___la_physique.mp4' },
   'r2-9/6-strategies-de-rehabilitation-thermique.png': { id: '', title: 'Stratégies de réhabilitation thermique', mp4: '6.Stratégies_réhabilitation.mp4' },
-  'r3-10/1-guide-d-analyse-des-deperditions-thermiques.png': { id: '', title: 'Guide d analyse des déperditions thermiques', mp4: '1.Déperditions_thermiques.mp4' },
-  'r3-10/2-comprendre-l-indicateur-thermique-hbat.png': { id: '', title: 'Comprendre l indicateur thermique Hbat', mp4: '2.Ventilation,_ponts_et_Hbat.mp4' },
-  'r3-10/3-comprendre-le-processus-du-dpe.png': { id: '', title: 'Comprendre le processus du DPE', mp4: '3.DPE,_DJU_et_Énergie_Primaire.mp4' },
-  'r3-10/4-renover-l-enveloppe-strategie-coherente.png': { id: '', title: 'Rénover l enveloppe stratégie cohérente', mp4: '4.Scénarios_de_Rénovation.mp4' },
-  'r3-10/5-dimensionnement-vmc-et-pac.png': { id: '', title: 'Dimensionnement VMC et PAC', mp4: '5.Dimensionner_VMC_et_PAC.mp4' },
-  'r3-10/6-reussir-son-bilan-energetique.png': { id: '', title: 'Réussir son bilan énergétique', mp4: '6.Bilan_Éco_Environnemental.mp4' },
+  'r3-10/1-guide-d-analyse-des-deperditions-thermiques.png': { id: 'yrmPQ_9LN8E', title: 'Guide d analyse des déperditions thermiques', mp4: '1.Déperditions_thermiques.mp4' },
+  'r3-10/2-comprendre-l-indicateur-thermique-hbat.png': { id: 'JTATHtqHXiQ', title: 'Comprendre l indicateur thermique Hbat', mp4: '2.Ventilation,_ponts_et_Hbat.mp4' },
+  'r3-10/3-comprendre-le-processus-du-dpe.png': { id: 'TPDGJ40naqo', title: 'Comprendre le processus du DPE', mp4: '3.DPE,_DJU_et_Énergie_Primaire.mp4' },
+  'r3-10/4-renover-l-enveloppe-strategie-coherente.png': { id: '_qlOBY1eH6Q', title: 'Rénover l enveloppe stratégie cohérente', mp4: '4.Scénarios_de_Rénovation.mp4' },
+  'r3-10/5-dimensionnement-vmc-et-pac.png': { id: 'LmwkgN5VbmY', title: 'Dimensionnement VMC et PAC', mp4: '5.Dimensionner_VMC_et_PAC.mp4' },
+  'r3-10/6-reussir-son-bilan-energetique.png': { id: '0ufPGzwFKNw', title: 'Réussir son bilan énergétique', mp4: '6.Bilan_Éco_Environnemental.mp4' },
   'r4-8/1-bilan-thermique-d-ete-passif.png': { id: '', title: 'Bilan thermique d été passif', mp4: '1.Bilan_thermique_d_été.mp4' },
   'r4-8/2-maitriser-le-confort-thermique-estival.png': { id: '', title: 'Maîtriser le confort thermique estival', mp4: '2.Déphasage_et_Inertie.mp4' },
   'r4-8/3-philosophie-bepos-et-systemes-actifs.png': { id: '', title: 'Philosophie BEPOS et systèmes actifs', mp4: '3.BEPOS___Concepts_Terrain.mp4' },

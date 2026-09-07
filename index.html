@@ -86,12 +86,12 @@
   <header class="hero">
     <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
     <h1>Laboratoires virtuels &amp; infographies</h1>
-    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions ; les vidéos YouTube seront reliées ici dès qu’elles seront en ligne. Rien de tout cela ne remplace le sujet PDF ni les notes de calcul.</p>
+    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions. Ces outils d’entraînement ne remplacent pas le sujet PDF ni les notes de calcul.</p>
     <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
   </header>
   <section class="labs" aria-label="Laboratoires virtuels">
     
-        <article class="lab-card" style="--accent:#3ecf8e">
+        <article class="lab-card" data-lab="r1-1" style="--accent:#3ecf8e">
           <p class="code">R 1-1</p>
           <h2>Méthode de travail universitaire</h2>
           <p class="sub">Tableur, références, logique de classeur</p>
@@ -101,7 +101,7 @@
             <a class="btn ghost" href="#g-r1-1">Infographies (5)</a>
           </div>
         </article>
-        <article class="lab-card" style="--accent:#41c7e4">
+        <article class="lab-card" data-lab="r1-10" style="--accent:#41c7e4">
           <p class="code">R 1-10</p>
           <h2>Réseaux secs et humides</h2>
           <p class="sub">Hydraulique AEP, charges, pertes, pompe</p>
@@ -111,7 +111,7 @@
             <a class="btn ghost" href="#g-r1-10">Infographies (7)</a>
           </div>
         </article>
-        <article class="lab-card" style="--accent:#8fd3b0">
+        <article class="lab-card" data-lab="r1-13" style="--accent:#8fd3b0">
           <p class="code">R 1-13</p>
           <h2>Fonctions des composants des bâtiments</h2>
           <p class="sub">Métrologie, incertitudes, conformité</p>
@@ -121,7 +121,7 @@
             <a class="btn ghost" href="#g-r1-13">Infographies (6)</a>
           </div>
         </article>
-        <article class="lab-card" style="--accent:#e08a5a">
+        <article class="lab-card" data-lab="r2-9" style="--accent:#e08a5a">
           <p class="code">R 2-9</p>
           <h2>Transferts thermiques et hydriques</h2>
           <p class="sub">Parois, confort, Glaser, ITI / ITE</p>
@@ -131,7 +131,7 @@
             <a class="btn ghost" href="#g-r2-9">Infographies (6)</a>
           </div>
         </article>
-        <article class="lab-card" style="--accent:#95d5b2">
+        <article class="lab-card" data-lab="r3-10" style="--accent:#95d5b2">
           <p class="code">R 3-10</p>
           <h2>Physique et énergétique du bâtiment 1</h2>
           <p class="sub">Transmission, DJU, DPE, rénovation</p>
@@ -141,7 +141,7 @@
             <a class="btn ghost" href="#g-r3-10">Infographies (6)</a>
           </div>
         </article>
-        <article class="lab-card" style="--accent:#f0c674">
+        <article class="lab-card" data-lab="r4-8" style="--accent:#f0c674">
           <p class="code">R 4-8</p>
           <h2>Physique et énergétique du bâtiment 2</h2>
           <p class="sub">Été, inertie, BEPOS, aéraulique, acoustique</p>
@@ -157,7 +157,7 @@
     
       <section class="gallery" id="g-r1-1">
         <h2><span class="code">R 1-1</span> Méthode de travail universitaire</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r1-1/1-automatisation-du-suivi-de-chantier.png">
               <a href="infographies/r1-1/1-automatisation-du-suivi-de-chantier.png" target="_blank" rel="noopener">
@@ -207,7 +207,7 @@
       </section>
       <section class="gallery" id="g-r1-10">
         <h2><span class="code">R 1-10</span> Réseaux secs et humides</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r1-10/1-les-fondamentaux-de-l-aep.png">
               <a href="infographies/r1-10/1-les-fondamentaux-de-l-aep.png" target="_blank" rel="noopener">
@@ -275,7 +275,7 @@
       </section>
       <section class="gallery" id="g-r1-13">
         <h2><span class="code">R 1-13</span> Fonctions des composants des bâtiments</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r1-13/1-comprendre-les-incertitudes-de-mesure.png">
               <a href="infographies/r1-13/1-comprendre-les-incertitudes-de-mesure.png" target="_blank" rel="noopener">
@@ -334,7 +334,7 @@
       </section>
       <section class="gallery" id="g-r2-9">
         <h2><span class="code">R 2-9</span> Transferts thermiques et hydriques</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r2-9/1-anatomie-d-une-paroi-isolee.png">
               <a href="infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" target="_blank" rel="noopener">
@@ -393,7 +393,7 @@
       </section>
       <section class="gallery" id="g-r3-10">
         <h2><span class="code">R 3-10</span> Physique et énergétique du bâtiment 1</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r3-10/1-guide-d-analyse-des-deperditions-thermiques.png">
               <a href="infographies/r3-10/1-guide-d-analyse-des-deperditions-thermiques.png" target="_blank" rel="noopener">
@@ -452,7 +452,7 @@
       </section>
       <section class="gallery" id="g-r4-8">
         <h2><span class="code">R 4-8</span> Physique et énergétique du bâtiment 2</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">
             <figure class="fig" data-key="r4-8/1-bilan-thermique-d-ete-passif.png">
               <a href="infographies/r4-8/1-bilan-thermique-d-ete-passif.png" target="_blank" rel="noopener">
@@ -519,6 +519,7 @@
 <script>
 (function () {
   const map = window.YOUTUBE_IDS || {};
+  const playlists = window.YOUTUBE_PLAYLISTS || {};
   document.querySelectorAll(".fig").forEach((fig) => {
     const key = fig.getAttribute("data-key");
     const rec = map[key];
@@ -526,8 +527,34 @@
     if (!slot || !rec) return;
     if (rec.id) {
       slot.hidden = false;
-      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo (YouTube)</a>';
+      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo</a>';
     }
+  });
+  document.querySelectorAll("[data-lab]").forEach((card) => {
+    const pl = playlists[card.getAttribute("data-lab")];
+    if (!pl) return;
+    const actions = card.querySelector(".actions");
+    if (!actions) return;
+    const a = document.createElement("a");
+    a.className = "btn ghost";
+    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Vidéos";
+    actions.appendChild(a);
+  });
+  document.querySelectorAll(".gallery").forEach((g) => {
+    const id = (g.id || "").replace(/^g-/, "");
+    const pl = playlists[id];
+    if (!pl) return;
+    const hint = g.querySelector(".hint");
+    if (!hint) return;
+    const a = document.createElement("a");
+    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Playlist YouTube";
+    hint.append(" ", a);
   });
 })();
 </script>

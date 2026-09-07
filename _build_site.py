@@ -74,6 +74,23 @@ PROJECTS = [
     },
 ]
 
+PLAYLISTS = {
+    "r1-10": "PLOtp-9v_CG9E",
+    "r3-10": "PLU-mhVpV4vZ0",
+}
+
+VIDEO_IDS = {
+    "r1-10/1-les-fondamentaux-de-l-aep.png": "IfY00H-DeXE",
+    "r1-10/2-masse-volumique-versus-viscosite.png": "eHxa7GX64C0",
+    "r1-10/3-comprendre-la-pression-hydrostatique.png": "Ea4we82args",
+    "r3-10/1-guide-d-analyse-des-deperditions-thermiques.png": "yrmPQ_9LN8E",
+    "r3-10/2-comprendre-l-indicateur-thermique-hbat.png": "JTATHtqHXiQ",
+    "r3-10/3-comprendre-le-processus-du-dpe.png": "TPDGJ40naqo",
+    "r3-10/4-renover-l-enveloppe-strategie-coherente.png": "_qlOBY1eH6Q",
+    "r3-10/5-dimensionnement-vmc-et-pac.png": "LmwkgN5VbmY",
+    "r3-10/6-reussir-son-bilan-energetique.png": "0ufPGzwFKNw",
+}
+
 
 def slugify(name: str) -> str:
     stem = Path(name).stem
@@ -138,7 +155,11 @@ def main() -> None:
                     if cand.suffix.lower() == ".mp4" and cand.name.startswith(n + "."):
                         mp4_hint = cand.name
                         break
-            yt_map[key] = {"id": "", "mp4": mp4_hint, "title": pretty_title(png.stem)}
+            yt_map[key] = {
+                "id": VIDEO_IDS.get(key, ""),
+                "mp4": mp4_hint,
+                "title": pretty_title(png.stem),
+            }
             items.append(
                 {
                     "file": dest_name,
@@ -159,15 +180,18 @@ def main() -> None:
 
 def render_videos_js(yt_map: dict) -> str:
     lines = [
-        "/* Collez ici l’identifiant YouTube (la partie après v=) une fois la vidéo importée.",
-        "   Exemple : 'id': 'dQw4w9WgXcQ'",
-        "   Le champ mp4 rappelle le fichier source local — ne pas l’envoyer sur GitHub. */",
-        "window.YOUTUBE_IDS = {",
+        "/* Identifiants YouTube (après v=) et playlists. Le champ mp4 est un aide-mémoire local. */",
+        "window.YOUTUBE_PLAYLISTS = {",
     ]
+    for pid, pl in PLAYLISTS.items():
+        lines.append(f"  '{pid}': '{pl}',")
+    lines.append("};")
+    lines.append("window.YOUTUBE_IDS = {")
     for key, meta in yt_map.items():
         comment = meta["mp4"].replace("\\", "/").replace("'", "\\'") if meta["mp4"] else ""
         title = meta["title"].replace("'", "\\'")
-        lines.append(f"  '{key}': {{ id: '', title: '{title}', mp4: '{comment}' }},")
+        vid = (meta.get("id") or "").replace("'", "\\'")
+        lines.append(f"  '{key}': {{ id: '{vid}', title: '{title}', mp4: '{comment}' }},")
     lines.append("};")
     return "\n".join(lines) + "\n"
 
@@ -179,7 +203,7 @@ def render_index(catalog: list) -> str:
         n = len(p["images"])
         cards.append(
             f"""
-        <article class="lab-card" style="--accent:{p['accent']}">
+        <article class="lab-card" data-lab="{p['id']}" style="--accent:{p['accent']}">
           <p class="code">{p['code']}</p>
           <h2>{p['title']}</h2>
           <p class="sub">{p['subtitle']}</p>
@@ -208,7 +232,7 @@ def render_index(catalog: list) -> str:
             f"""
       <section class="gallery" id="g-{p['id']}">
         <h2><span class="code">{p['code']}</span> {p['title']}</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand. Les vidéos associées seront ajoutées ici dès qu’elles seront sur YouTube.</p>
+        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
         <div class="grid-figs">{''.join(figs)}</div>
       </section>"""
         )
@@ -301,7 +325,7 @@ def render_index(catalog: list) -> str:
   <header class="hero">
     <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
     <h1>Laboratoires virtuels &amp; infographies</h1>
-    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions ; les vidéos YouTube seront reliées ici dès qu’elles seront en ligne. Rien de tout cela ne remplace le sujet PDF ni les notes de calcul.</p>
+    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions. Ces outils d’entraînement ne remplacent pas le sujet PDF ni les notes de calcul.</p>
     <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
   </header>
   <section class="labs" aria-label="Laboratoires virtuels">
@@ -329,6 +353,7 @@ def render_index(catalog: list) -> str:
 <script>
 (function () {{
   const map = window.YOUTUBE_IDS || {{}};
+  const playlists = window.YOUTUBE_PLAYLISTS || {{}};
   document.querySelectorAll(".fig").forEach((fig) => {{
     const key = fig.getAttribute("data-key");
     const rec = map[key];
@@ -336,8 +361,34 @@ def render_index(catalog: list) -> str:
     if (!slot || !rec) return;
     if (rec.id) {{
       slot.hidden = false;
-      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo (YouTube)</a>';
+      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo</a>';
     }}
+  }});
+  document.querySelectorAll("[data-lab]").forEach((card) => {{
+    const pl = playlists[card.getAttribute("data-lab")];
+    if (!pl) return;
+    const actions = card.querySelector(".actions");
+    if (!actions) return;
+    const a = document.createElement("a");
+    a.className = "btn ghost";
+    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Vidéos";
+    actions.appendChild(a);
+  }});
+  document.querySelectorAll(".gallery").forEach((g) => {{
+    const id = (g.id || "").replace(/^g-/, "");
+    const pl = playlists[id];
+    if (!pl) return;
+    const hint = g.querySelector(".hint");
+    if (!hint) return;
+    const a = document.createElement("a");
+    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Playlist YouTube";
+    hint.append(" ", a);
   }});
 }})();
 </script>
