@@ -1,562 +1,91 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#07131d" />
 <title>Laboratoires virtuels — IUT Mantes · GC-CD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,650;0,9..40,800;1,9..40,400&family=IBM+Plex+Mono:wght@500;650&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --bg0:#07131d; --bg1:#0b1c2a; --ink:#e9f4f9; --muted:#9cb3c0; --steel:#a9bcc8;
-    --panel:#0f2330; --brd:rgba(127,190,214,.16); --water:#41c7e4; --water-deep:#0b6e8a;
-    --gold:#ffd166; --sans:"DM Sans","Segoe UI",sans-serif; --mono:"IBM Plex Mono",Consolas,monospace;
-    --radius:16px; --shadow:0 18px 40px rgba(2,10,16,.5);
-  }
-  * { box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body {
-    margin:0; font-family:var(--sans); color:var(--ink);
-    background:
-      radial-gradient(1100px 620px at 12% -12%, rgba(11,110,138,.28), transparent 55%),
-      radial-gradient(900px 500px at 100% 0%, rgba(217,122,69,.10), transparent 50%),
-      linear-gradient(180deg, var(--bg0), var(--bg1));
-    min-height:100vh;
-  }
-  a { color:var(--water); }
-  header.hero {
-    max-width:1100px; margin:0 auto; padding:2.2rem 1.25rem 1.2rem;
-  }
-  .eyebrow { font-family:var(--mono); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--water); margin:0 0 .4rem; }
-  h1 { margin:0; font-size:clamp(1.7rem, 3vw, 2.35rem); font-weight:800; letter-spacing:-.02em; }
-  .lede { max-width:46rem; color:var(--muted); line-height:1.55; }
-  .note {
-    margin:1.1rem 0 0; padding:.75rem 1rem; border-radius:12px;
-    background:rgba(224,138,90,.08); border:1px dashed rgba(224,138,90,.35);
-    color:var(--steel); font-size:.9rem; line-height:1.5;
-  }
-  .labs {
-    max-width:1100px; margin:0 auto; padding:0 1.25rem 2rem;
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem;
-  }
-  .lab-card {
-    background:var(--panel); border:1px solid var(--brd); border-radius:var(--radius);
-    padding:1.15rem 1.2rem 1.25rem; box-shadow:var(--shadow);
-    border-top:3px solid var(--accent, var(--water));
-  }
-  .lab-card .code { font-family:var(--mono); font-size:.75rem; color:var(--accent, var(--water)); margin:0 0 .35rem; }
-  .lab-card h2 { margin:0; font-size:1.12rem; }
-  .lab-card .sub { color:var(--muted); font-size:.88rem; line-height:1.4; margin:.35rem 0 .15rem; }
-  .lab-card .mission { font-size:.82rem; color:var(--gold); margin:0 0 .85rem; }
-  .actions { display:flex; flex-wrap:wrap; gap:.5rem; }
-  .btn {
-    display:inline-flex; align-items:center; justify-content:center;
-    text-decoration:none; font-weight:650; font-size:.86rem;
-    padding:.48rem .85rem; border-radius:999px;
-  }
-  .btn.primary { background:var(--water-deep); color:#eaf6fb; border:1px solid transparent; }
-  .btn.ghost { border:1px solid var(--brd); color:var(--ink); background:transparent; }
-  .galleries { max-width:1100px; margin:0 auto; padding:0 1.25rem 5rem; }
-  .gallery { margin-top:2.2rem; }
-  .gallery h2 { font-size:1.2rem; display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap; }
-  .gallery h2 .code { font-family:var(--mono); font-size:.8rem; color:var(--water); }
-  .hint { color:var(--muted); font-size:.88rem; }
-  .grid-figs { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:.9rem; }
-  .fig { margin:0; background:var(--panel); border:1px solid var(--brd); border-radius:14px; overflow:hidden; }
-  .fig img { display:block; width:100%; height:160px; object-fit:cover; background:#0a1a27; }
-  .fig figcaption { padding:.65rem .8rem .8rem; font-size:.84rem; line-height:1.4; color:var(--steel); }
-  .fig figcaption strong { display:block; color:var(--ink); font-size:.9rem; margin-bottom:.25rem; }
-  .yt a { font-size:.82rem; }
-  footer.credit {
-    position:sticky; bottom:0; display:grid; grid-template-columns:1fr 1.2fr 1fr;
-    background:rgba(8,22,31,.92); color:#d7e8ef; font-size:.8rem;
-  }
-  footer.credit div { padding:.55rem .9rem; }
-  footer.credit .mid { text-align:center; background:linear-gradient(135deg,#0b5871,#0b6e8a); }
-  footer.credit .who { font-weight:700; }
-  footer.credit .role { color:rgba(215,232,239,.68); font-size:.72rem; }
-  @media (max-width:700px) {
-    footer.credit { grid-template-columns:1fr; }
-    .fig img { height:200px; }
-  }
-</style>
+<link rel="stylesheet" href="assets/site.css" />
+<script>(function(){try{var t=localStorage.getItem("iut_mantes_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}catch(e){}})();</script>
 </head>
 <body>
-  <header class="hero">
-    <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
-    <h1>Laboratoires virtuels &amp; infographies</h1>
-    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions. Ces outils d’entraînement ne remplacent pas le sujet PDF ni les notes de calcul.</p>
-    <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
-  </header>
-  <section class="labs" aria-label="Laboratoires virtuels">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <div>
+    <a class="home" href="index.html">IUT Mantes · GC-CD</a>
     
-        <article class="lab-card" data-lab="r1-1" style="--accent:#3ecf8e">
-          <p class="code">R 1-1</p>
-          <h2>Méthode de travail universitaire</h2>
-          <p class="sub">Tableur, références, logique de classeur</p>
-          <p class="mission">Entraînement : Gymnase de Clairmont</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r1-1/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r1-1">Infographies (5)</a>
-          </div>
-        </article>
-        <article class="lab-card" data-lab="r1-10" style="--accent:#41c7e4">
-          <p class="code">R 1-10</p>
-          <h2>Réseaux secs et humides</h2>
-          <p class="sub">Hydraulique AEP, charges, pertes, pompe</p>
-          <p class="mission">Entraînement : Valdeau</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r1-10/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r1-10">Infographies (7)</a>
-          </div>
-        </article>
-        <article class="lab-card" data-lab="r1-13" style="--accent:#8fd3b0">
-          <p class="code">R 1-13</p>
-          <h2>Fonctions des composants des bâtiments</h2>
-          <p class="sub">Métrologie, incertitudes, conformité</p>
-          <p class="mission">Entraînement : Pierreclaire</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r1-13/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r1-13">Infographies (6)</a>
-          </div>
-        </article>
-        <article class="lab-card" data-lab="r2-9" style="--accent:#e08a5a">
-          <p class="code">R 2-9</p>
-          <h2>Transferts thermiques et hydriques</h2>
-          <p class="sub">Parois, confort, Glaser, ITI / ITE</p>
-          <p class="mission">Entraînement : Halle de Valvert</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r2-9/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r2-9">Infographies (6)</a>
-          </div>
-        </article>
-        <article class="lab-card" data-lab="r3-10" style="--accent:#95d5b2">
-          <p class="code">R 3-10</p>
-          <h2>Physique et énergétique du bâtiment 1</h2>
-          <p class="sub">Transmission, DJU, DPE, rénovation</p>
-          <p class="mission">Entraînement : Pavillon des Aulnes</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r3-10/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r3-10">Infographies (6)</a>
-          </div>
-        </article>
-        <article class="lab-card" data-lab="r4-8" style="--accent:#f0c674">
-          <p class="code">R 4-8</p>
-          <h2>Physique et énergétique du bâtiment 2</h2>
-          <p class="sub">Été, inertie, BEPOS, aéraulique, acoustique</p>
-          <p class="mission">Entraînement : Maison de santé de Lironde</p>
-          <div class="actions">
-            <a class="btn primary" href="labs/r4-8/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-r4-8">Infographies (5)</a>
-          </div>
-        </article>
-  </section>
-  <div class="galleries">
-    <h1>Infographies</h1>
-    
-      <section class="gallery" id="g-r1-1">
-        <h2><span class="code">R 1-1</span> Méthode de travail universitaire</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r1-1/1-automatisation-du-suivi-de-chantier.png">
-              <a href="infographies/r1-1/1-automatisation-du-suivi-de-chantier.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-1/1-automatisation-du-suivi-de-chantier.png" alt="Automatisation du suivi de chantier" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Automatisation du suivi de chantier</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-1/2-budget-de-chantier-avec-somme-si.png">
-              <a href="infographies/r1-1/2-budget-de-chantier-avec-somme-si.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-1/2-budget-de-chantier-avec-somme-si.png" alt="Budget de chantier avec SOMME.SI" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Budget de chantier avec SOMME.SI</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-1/3-guide-du-pilotage-par-tcd.png">
-              <a href="infographies/r1-1/3-guide-du-pilotage-par-tcd.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-1/3-guide-du-pilotage-par-tcd.png" alt="Guide du pilotage par TCD" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Guide du pilotage par TCD</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-1/4-concevoir-un-tableau-de-bord.png">
-              <a href="infographies/r1-1/4-concevoir-un-tableau-de-bord.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-1/4-concevoir-un-tableau-de-bord.png" alt="Concevoir un tableau de bord" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Concevoir un tableau de bord</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png">
-              <a href="infographies/r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png" alt="Les fondamentaux d un tableur professionnel" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Les fondamentaux d un tableur professionnel</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
-      <section class="gallery" id="g-r1-10">
-        <h2><span class="code">R 1-10</span> Réseaux secs et humides</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r1-10/1-les-fondamentaux-de-l-aep.png">
-              <a href="infographies/r1-10/1-les-fondamentaux-de-l-aep.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/1-les-fondamentaux-de-l-aep.png" alt="Les fondamentaux de l AEP" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Les fondamentaux de l AEP</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/2-masse-volumique-versus-viscosite.png">
-              <a href="infographies/r1-10/2-masse-volumique-versus-viscosite.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/2-masse-volumique-versus-viscosite.png" alt="Masse Volumique versus Viscosité" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Masse Volumique versus Viscosité</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/3-comprendre-la-pression-hydrostatique.png">
-              <a href="infographies/r1-10/3-comprendre-la-pression-hydrostatique.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/3-comprendre-la-pression-hydrostatique.png" alt="Comprendre la Pression Hydrostatique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre la Pression Hydrostatique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png">
-              <a href="infographies/r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png" alt="Comprendre la charge hydraulique Bernoulli" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre la charge hydraulique Bernoulli</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/5-les-pertes-de-charge-lineaires.png">
-              <a href="infographies/r1-10/5-les-pertes-de-charge-lineaires.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/5-les-pertes-de-charge-lineaires.png" alt="Les pertes de charge linéaires" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Les pertes de charge linéaires</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/6-pertes-de-charge-en-aep.png">
-              <a href="infographies/r1-10/6-pertes-de-charge-en-aep.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/6-pertes-de-charge-en-aep.png" alt="Pertes de charge en AEP" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Pertes de charge en AEP</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-10/7-guide-de-selection-de-pompe.png">
-              <a href="infographies/r1-10/7-guide-de-selection-de-pompe.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-10/7-guide-de-selection-de-pompe.png" alt="Guide de sélection de pompe" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Guide de sélection de pompe</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
-      <section class="gallery" id="g-r1-13">
-        <h2><span class="code">R 1-13</span> Fonctions des composants des bâtiments</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r1-13/1-comprendre-les-incertitudes-de-mesure.png">
-              <a href="infographies/r1-13/1-comprendre-les-incertitudes-de-mesure.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/1-comprendre-les-incertitudes-de-mesure.png" alt="Comprendre les incertitudes de mesure" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre les incertitudes de mesure</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-13/2-la-propagation-des-incertitudes.png">
-              <a href="infographies/r1-13/2-la-propagation-des-incertitudes.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/2-la-propagation-des-incertitudes.png" alt="La propagation des incertitudes" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>La propagation des incertitudes</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-13/3-incertitude-et-conformite-decisionnelle.png">
-              <a href="infographies/r1-13/3-incertitude-et-conformite-decisionnelle.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/3-incertitude-et-conformite-decisionnelle.png" alt="Incertitude et conformité décisionnelle" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Incertitude et conformité décisionnelle</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-13/4-guide-de-conformite-des-lots.png">
-              <a href="infographies/r1-13/4-guide-de-conformite-des-lots.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/4-guide-de-conformite-des-lots.png" alt="Guide de conformité des lots" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Guide de conformité des lots</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-13/5-le-budget-d-incertitudes-en-btp.png">
-              <a href="infographies/r1-13/5-le-budget-d-incertitudes-en-btp.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/5-le-budget-d-incertitudes-en-btp.png" alt="Le Budget d Incertitudes en BTP" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Le Budget d Incertitudes en BTP</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r1-13/6-l-art-de-la-restitution.png">
-              <a href="infographies/r1-13/6-l-art-de-la-restitution.png" target="_blank" rel="noopener">
-                <img src="infographies/r1-13/6-l-art-de-la-restitution.png" alt="L Art de la Restitution" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>L Art de la Restitution</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
-      <section class="gallery" id="g-r2-9">
-        <h2><span class="code">R 2-9</span> Transferts thermiques et hydriques</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r2-9/1-anatomie-d-une-paroi-isolee.png">
-              <a href="infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" alt="Anatomie d une paroi isolée" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Anatomie d une paroi isolée</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r2-9/2-la-physique-du-confort-thermique.png">
-              <a href="infographies/r2-9/2-la-physique-du-confort-thermique.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/2-la-physique-du-confort-thermique.png" alt="La physique du confort thermique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>La physique du confort thermique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r2-9/3-comprendre-les-ponts-thermiques.png">
-              <a href="infographies/r2-9/3-comprendre-les-ponts-thermiques.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/3-comprendre-les-ponts-thermiques.png" alt="Comprendre les ponts thermiques" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre les ponts thermiques</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r2-9/4-comprendre-la-methode-glaser.png">
-              <a href="infographies/r2-9/4-comprendre-la-methode-glaser.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/4-comprendre-la-methode-glaser.png" alt="Comprendre la méthode Glaser" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre la méthode Glaser</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r2-9/5-maitriser-dephasage-et-inertie-thermique.png">
-              <a href="infographies/r2-9/5-maitriser-dephasage-et-inertie-thermique.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/5-maitriser-dephasage-et-inertie-thermique.png" alt="Maîtriser déphasage et inertie thermique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Maîtriser déphasage et inertie thermique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r2-9/6-strategies-de-rehabilitation-thermique.png">
-              <a href="infographies/r2-9/6-strategies-de-rehabilitation-thermique.png" target="_blank" rel="noopener">
-                <img src="infographies/r2-9/6-strategies-de-rehabilitation-thermique.png" alt="Stratégies de réhabilitation thermique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Stratégies de réhabilitation thermique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
-      <section class="gallery" id="g-r3-10">
-        <h2><span class="code">R 3-10</span> Physique et énergétique du bâtiment 1</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r3-10/1-guide-d-analyse-des-deperditions-thermiques.png">
-              <a href="infographies/r3-10/1-guide-d-analyse-des-deperditions-thermiques.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/1-guide-d-analyse-des-deperditions-thermiques.png" alt="Guide d analyse des déperditions thermiques" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Guide d analyse des déperditions thermiques</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r3-10/2-comprendre-l-indicateur-thermique-hbat.png">
-              <a href="infographies/r3-10/2-comprendre-l-indicateur-thermique-hbat.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/2-comprendre-l-indicateur-thermique-hbat.png" alt="Comprendre l indicateur thermique Hbat" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre l indicateur thermique Hbat</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r3-10/3-comprendre-le-processus-du-dpe.png">
-              <a href="infographies/r3-10/3-comprendre-le-processus-du-dpe.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/3-comprendre-le-processus-du-dpe.png" alt="Comprendre le processus du DPE" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Comprendre le processus du DPE</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r3-10/4-renover-l-enveloppe-strategie-coherente.png">
-              <a href="infographies/r3-10/4-renover-l-enveloppe-strategie-coherente.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/4-renover-l-enveloppe-strategie-coherente.png" alt="Rénover l enveloppe stratégie cohérente" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Rénover l enveloppe stratégie cohérente</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r3-10/5-dimensionnement-vmc-et-pac.png">
-              <a href="infographies/r3-10/5-dimensionnement-vmc-et-pac.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/5-dimensionnement-vmc-et-pac.png" alt="Dimensionnement VMC et PAC" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Dimensionnement VMC et PAC</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r3-10/6-reussir-son-bilan-energetique.png">
-              <a href="infographies/r3-10/6-reussir-son-bilan-energetique.png" target="_blank" rel="noopener">
-                <img src="infographies/r3-10/6-reussir-son-bilan-energetique.png" alt="Réussir son bilan énergétique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Réussir son bilan énergétique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
-      <section class="gallery" id="g-r4-8">
-        <h2><span class="code">R 4-8</span> Physique et énergétique du bâtiment 2</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">
-            <figure class="fig" data-key="r4-8/1-bilan-thermique-d-ete-passif.png">
-              <a href="infographies/r4-8/1-bilan-thermique-d-ete-passif.png" target="_blank" rel="noopener">
-                <img src="infographies/r4-8/1-bilan-thermique-d-ete-passif.png" alt="Bilan thermique d été passif" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Bilan thermique d été passif</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r4-8/2-maitriser-le-confort-thermique-estival.png">
-              <a href="infographies/r4-8/2-maitriser-le-confort-thermique-estival.png" target="_blank" rel="noopener">
-                <img src="infographies/r4-8/2-maitriser-le-confort-thermique-estival.png" alt="Maîtriser le confort thermique estival" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Maîtriser le confort thermique estival</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r4-8/3-philosophie-bepos-et-systemes-actifs.png">
-              <a href="infographies/r4-8/3-philosophie-bepos-et-systemes-actifs.png" target="_blank" rel="noopener">
-                <img src="infographies/r4-8/3-philosophie-bepos-et-systemes-actifs.png" alt="Philosophie BEPOS et systèmes actifs" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Philosophie BEPOS et systèmes actifs</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r4-8/4-l-aeraulique-poumon-du-batiment.png">
-              <a href="infographies/r4-8/4-l-aeraulique-poumon-du-batiment.png" target="_blank" rel="noopener">
-                <img src="infographies/r4-8/4-l-aeraulique-poumon-du-batiment.png" alt="L aéraulique, poumon du bâtiment" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>L aéraulique, poumon du bâtiment</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure>
-            <figure class="fig" data-key="r4-8/5-identifier-le-bon-levier-acoustique.png">
-              <a href="infographies/r4-8/5-identifier-le-bon-levier-acoustique.png" target="_blank" rel="noopener">
-                <img src="infographies/r4-8/5-identifier-le-bon-levier-acoustique.png" alt="Identifier le bon levier acoustique" loading="lazy" />
-              </a>
-              <figcaption>
-                <strong>Identifier le bon levier acoustique</strong>
-                <span class="yt" hidden></span>
-              </figcaption>
-            </figure></div>
-      </section>
   </div>
-  <footer class="credit" aria-label="Crédit">
-    <div>
-      <div class="who">Nicolas di Scala</div>
-      <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Activer le mode clair">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+    <span data-theme-label>Mode clair</span>
+  </button>
+</header>
+
+<main class="wrap" id="contenu">
+  <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
+  <h1>Laboratoires virtuels &amp; infographies</h1>
+  <p class="lede">Choisissez d’abord votre semestre. Vous y trouverez le laboratoire interactif, les infographies et, lorsqu’elles existent, les vidéos de cours.</p>
+  <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
+  <section class="semesters" aria-label="Semestres">
+      <a class="sem-card" href="s1/index.html" style="--accent:#41c7e4">
+        <p class="code">S1 · 1re année</p>
+        <h2>Semestre 1</h2>
+        <p class="sub">Méthode de travail, réseaux, métrologie</p>
+        <p class="mods">3 ressources : R 1-1, R 1-10, R 1-13</p>
+        <span class="go">Entrer dans le semestre →</span>
+      </a>
+      <a class="sem-card" href="s2/index.html" style="--accent:#e08a5a">
+        <p class="code">S2 · 1re année</p>
+        <h2>Semestre 2</h2>
+        <p class="sub">Transferts thermiques et hydriques</p>
+        <p class="mods">1 ressource : R 2-9</p>
+        <span class="go">Entrer dans le semestre →</span>
+      </a>
+      <a class="sem-card" href="s3/index.html" style="--accent:#95d5b2">
+        <p class="code">S3 · 2e année</p>
+        <h2>Semestre 3</h2>
+        <p class="sub">Physique et énergétique du bâtiment 1</p>
+        <p class="mods">1 ressource : R 3-10</p>
+        <span class="go">Entrer dans le semestre →</span>
+      </a>
+      <a class="sem-card" href="s4/index.html" style="--accent:#f0c674">
+        <p class="code">S4 · 2e année</p>
+        <h2>Semestre 4</h2>
+        <p class="sub">Physique et énergétique du bâtiment 2</p>
+        <p class="mods">1 ressource : R 4-8</p>
+        <span class="go">Entrer dans le semestre →</span>
+      </a></section>
+  <section class="charte" aria-labelledby="charte-titre">
+    <div class="txt">
+      <h2 id="charte-titre">Charte du projet — déroulé des séances</h2>
+      <p>Rôles, rituel de séance, note, interlocuteur mystère et usage de l’IA. À lire avant de commencer un projet.</p>
+      <a class="btn primary" href="charte.html">Lire la charte</a>
     </div>
-    <div class="mid">
-      <div class="who">BUT Génie Civil — Construction Durable</div>
-      <div class="role">Laboratoires virtuels pédagogiques</div>
-    </div>
-    <div>
-      <div class="who">IUT Mantes-en-Yvelines</div>
-      <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
-    </div>
-  </footer>
-<script src="videos.js"></script>
-<script>
-(function () {
-  const map = window.YOUTUBE_IDS || {};
-  const playlists = window.YOUTUBE_PLAYLISTS || {};
-  document.querySelectorAll(".fig").forEach((fig) => {
-    const key = fig.getAttribute("data-key");
-    const rec = map[key];
-    const slot = fig.querySelector(".yt");
-    if (!slot || !rec) return;
-    if (rec.id) {
-      slot.hidden = false;
-      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo</a>';
-    }
-  });
-  document.querySelectorAll("[data-lab]").forEach((card) => {
-    const pl = playlists[card.getAttribute("data-lab")];
-    if (!pl) return;
-    const actions = card.querySelector(".actions");
-    if (!actions) return;
-    const a = document.createElement("a");
-    a.className = "btn ghost";
-    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Vidéos";
-    actions.appendChild(a);
-  });
-  document.querySelectorAll(".gallery").forEach((g) => {
-    const id = (g.id || "").replace(/^g-/, "");
-    const pl = playlists[id];
-    if (!pl) return;
-    const hint = g.querySelector(".hint");
-    if (!hint) return;
-    const a = document.createElement("a");
-    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Playlist YouTube";
-    hint.append(" ", a);
-  });
-})();
-</script>
+    <a class="preview" href="charte.html">
+      <img src="infographies/consignes-etudiants.png" alt="Aperçu de la charte du projet, mode BET" />
+    </a>
+  </section>
+</main>
+
+<footer class="credit" aria-label="Crédit">
+  <div>
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="mid">
+    <div class="who">BUT Génie Civil — Construction Durable</div>
+    <div class="role">Laboratoires virtuels pédagogiques</div>
+  </div>
+  <div>
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+<script src="assets/theme.js"></script>
+
 </body>
 </html>

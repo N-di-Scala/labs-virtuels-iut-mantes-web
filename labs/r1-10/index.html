@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
+<script>(function(){try{var t=localStorage.getItem('iut_mantes_theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -531,6 +532,8 @@
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-thumb { background: var(--track); border-radius: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
+  .site-back { display:inline-flex; margin: 0 0 0.75rem; font-size: 0.78rem; font-weight: 650; color: var(--water, #41c7e4); text-decoration: none; }
+  .site-back:hover { text-decoration: underline; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -554,6 +557,7 @@
         <h1>Hydraulique AEP</h1>
       </div>
     </div>
+    <a class="site-back" href="../../s1/index.html">← S1 · Semestre 1</a>
     <p class="brand-sub">Ateliers interactifs pour sentir la physique avant les notes de calcul. Aucune donnée du sujet « Les Hauts Vallons » n’est fournie ici.</p>
 
     <nav class="ateliers" aria-label="Ateliers du laboratoire virtuel">
@@ -1402,6 +1406,7 @@
     document.documentElement.dataset.theme = t;
     P = THEMES[t];
     store.theme = t;
+    try { localStorage.setItem("iut_mantes_theme", t); } catch (_) {}
     save();
     const dark = t === "dark";
     $("theme-ic-sun").style.display = dark ? "" : "none";
@@ -2836,7 +2841,9 @@
     paintStaticTex();
     document.querySelectorAll('input[type="range"]').forEach(syncFill);
     renderHud();
-    applyTheme(store.theme === "light" ? "light" : "dark");
+    let siteTheme = "";
+    try { siteTheme = localStorage.getItem("iut_mantes_theme") || ""; } catch (_) {}
+    applyTheme(siteTheme === "light" || siteTheme === "dark" ? siteTheme : (store.theme === "light" ? "light" : "dark"));
   }
 
   function whenReady(cb) {

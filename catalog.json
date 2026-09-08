@@ -1,6 +1,7 @@
 [
   {
     "id": "r1-1",
+    "semester": "s1",
     "code": "R 1-1",
     "title": "Méthode de travail universitaire",
     "subtitle": "Tableur, références, logique de classeur",
@@ -41,6 +42,7 @@
   },
   {
     "id": "r1-10",
+    "semester": "s1",
     "code": "R 1-10",
     "title": "Réseaux secs et humides",
     "subtitle": "Hydraulique AEP, charges, pertes, pompe",
@@ -93,6 +95,7 @@
   },
   {
     "id": "r1-13",
+    "semester": "s1",
     "code": "R 1-13",
     "title": "Fonctions des composants des bâtiments",
     "subtitle": "Métrologie, incertitudes, conformité",
@@ -139,6 +142,7 @@
   },
   {
     "id": "r2-9",
+    "semester": "s2",
     "code": "R 2-9",
     "title": "Transferts thermiques et hydriques",
     "subtitle": "Parois, confort, Glaser, ITI / ITE",
@@ -185,6 +189,7 @@
   },
   {
     "id": "r3-10",
+    "semester": "s3",
     "code": "R 3-10",
     "title": "Physique et énergétique du bâtiment 1",
     "subtitle": "Transmission, DJU, DPE, rénovation",
@@ -231,6 +236,7 @@
   },
   {
     "id": "r4-8",
+    "semester": "s4",
     "code": "R 4-8",
     "title": "Physique et énergétique du bâtiment 2",
     "subtitle": "Été, inertie, BEPOS, aéraulique, acoustique",

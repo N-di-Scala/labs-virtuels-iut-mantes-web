@@ -10,10 +10,47 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 SRC = Path(r"c:\Users\nicodisc-admin\Desktop\Agent\Enseignement\IUT_Mantes")
+CONSIGNES = SRC / "Infographie_consignes_etudiants.png"
+
+SEMESTERS = [
+    {
+        "id": "s1",
+        "code": "S1",
+        "year": "1re année",
+        "title": "Semestre 1",
+        "subtitle": "Méthode de travail, réseaux, métrologie",
+        "accent": "#41c7e4",
+    },
+    {
+        "id": "s2",
+        "code": "S2",
+        "year": "1re année",
+        "title": "Semestre 2",
+        "subtitle": "Transferts thermiques et hydriques",
+        "accent": "#e08a5a",
+    },
+    {
+        "id": "s3",
+        "code": "S3",
+        "year": "2e année",
+        "title": "Semestre 3",
+        "subtitle": "Physique et énergétique du bâtiment 1",
+        "accent": "#95d5b2",
+    },
+    {
+        "id": "s4",
+        "code": "S4",
+        "year": "2e année",
+        "title": "Semestre 4",
+        "subtitle": "Physique et énergétique du bâtiment 2",
+        "accent": "#f0c674",
+    },
+]
 
 PROJECTS = [
     {
         "id": "r1-1",
+        "semester": "s1",
         "code": "R 1-1",
         "title": "Méthode de travail universitaire",
         "subtitle": "Tableur, références, logique de classeur",
@@ -24,6 +61,7 @@ PROJECTS = [
     },
     {
         "id": "r1-10",
+        "semester": "s1",
         "code": "R 1-10",
         "title": "Réseaux secs et humides",
         "subtitle": "Hydraulique AEP, charges, pertes, pompe",
@@ -34,6 +72,7 @@ PROJECTS = [
     },
     {
         "id": "r1-13",
+        "semester": "s1",
         "code": "R 1-13",
         "title": "Fonctions des composants des bâtiments",
         "subtitle": "Métrologie, incertitudes, conformité",
@@ -44,6 +83,7 @@ PROJECTS = [
     },
     {
         "id": "r2-9",
+        "semester": "s2",
         "code": "R 2-9",
         "title": "Transferts thermiques et hydriques",
         "subtitle": "Parois, confort, Glaser, ITI / ITE",
@@ -54,6 +94,7 @@ PROJECTS = [
     },
     {
         "id": "r3-10",
+        "semester": "s3",
         "code": "R 3-10",
         "title": "Physique et énergétique du bâtiment 1",
         "subtitle": "Transmission, DJU, DPE, rénovation",
@@ -64,6 +105,7 @@ PROJECTS = [
     },
     {
         "id": "r4-8",
+        "semester": "s4",
         "code": "R 4-8",
         "title": "Physique et énergétique du bâtiment 2",
         "subtitle": "Été, inertie, BEPOS, aéraulique, acoustique",
@@ -90,6 +132,8 @@ VIDEO_IDS = {
     "r3-10/5-dimensionnement-vmc-et-pac.png": "LmwkgN5VbmY",
     "r3-10/6-reussir-son-bilan-energetique.png": "0ufPGzwFKNw",
 }
+
+SEM_BY_ID = {s["id"]: s for s in SEMESTERS}
 
 
 def slugify(name: str) -> str:
@@ -120,33 +164,74 @@ def collect_pngs(folder: Path) -> list[Path]:
     return sorted(files, key=key)
 
 
+def patch_lab_html(html: str, semester_id: str) -> str:
+    sem = SEM_BY_ID[semester_id]
+    if "iut_mantes_theme" not in html:
+        html = html.replace(
+            '<html lang="fr" data-theme="dark">',
+            '<html lang="fr" data-theme="dark">\n'
+            "<script>(function(){try{var t=localStorage.getItem('iut_mantes_theme');"
+            "if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>",
+            1,
+        )
+        html = html.replace(
+            "    store.theme = t;\n    save();",
+            '    store.theme = t;\n    try { localStorage.setItem("iut_mantes_theme", t); } catch (_) {}\n    save();',
+            1,
+        )
+        html = html.replace(
+            '    applyTheme(store.theme === "light" ? "light" : "dark");',
+            "    let siteTheme = \"\";\n"
+            '    try { siteTheme = localStorage.getItem("iut_mantes_theme") || ""; } catch (_) {}\n'
+            '    applyTheme(siteTheme === "light" || siteTheme === "dark" ? siteTheme : (store.theme === "light" ? "light" : "dark"));',
+            1,
+        )
+    if ".site-back" not in html:
+        html = html.replace(
+            "</style>",
+            "  .site-back { display:inline-flex; margin: 0 0 0.75rem; font-size: 0.78rem; font-weight: 650;"
+            " color: var(--water, #41c7e4); text-decoration: none; }\n"
+            "  .site-back:hover { text-decoration: underline; }\n</style>",
+            1,
+        )
+        html = html.replace(
+            "    </div>\n    <p class=\"brand-sub\">",
+            "    </div>\n"
+            f'    <a class="site-back" href="../../{sem["id"]}/index.html">← {sem["code"]} · {sem["title"]}</a>\n'
+            '    <p class="brand-sub">',
+            1,
+        )
+    return html
+
+
 def main() -> None:
     labs_dir = ROOT / "labs"
     img_root = ROOT / "infographies"
-    if labs_dir.exists():
-        shutil.rmtree(labs_dir)
-    if img_root.exists():
-        shutil.rmtree(img_root)
-    labs_dir.mkdir()
-    img_root.mkdir()
+    labs_dir.mkdir(exist_ok=True)
+    img_root.mkdir(exist_ok=True)
+
+    if CONSIGNES.is_file():
+        shutil.copy2(CONSIGNES, img_root / "consignes-etudiants.png")
 
     catalog = []
     yt_map = {}
     for proj in PROJECTS:
         lab_dst_dir = labs_dir / proj["id"]
-        lab_dst_dir.mkdir()
+        lab_dst_dir.mkdir(exist_ok=True)
         if not proj["lab_src"].is_file():
             raise SystemExit(f"Lab manquant : {proj['lab_src']}")
-        shutil.copy2(proj["lab_src"], lab_dst_dir / "index.html")
+        html = proj["lab_src"].read_text(encoding="utf-8")
+        (lab_dst_dir / "index.html").write_text(patch_lab_html(html, proj["semester"]), encoding="utf-8")
 
         img_dst = img_root / proj["id"]
-        img_dst.mkdir()
+        img_dst.mkdir(exist_ok=True)
         items = []
         for png in collect_pngs(proj["media_src"]):
             dest_name = slugify(png.name) + ".png"
-            shutil.copy2(png, img_dst / dest_name)
+            dest = img_dst / dest_name
+            if not dest.exists() or png.stat().st_mtime > dest.stat().st_mtime:
+                shutil.copy2(png, dest)
             key = f"{proj['id']}/{dest_name}"
-            # Matching mp4 by leading number
             num = re.match(r"^(\d+)", png.name)
             mp4_hint = ""
             if num:
@@ -168,14 +253,22 @@ def main() -> None:
                     "mp4": mp4_hint,
                 }
             )
-        catalog.append({**{k: proj[k] for k in ("id", "code", "title", "subtitle", "mission", "accent")}, "images": items})
+        keys = ("id", "semester", "code", "title", "subtitle", "mission", "accent")
+        catalog.append({**{k: proj[k] for k in keys}, "images": items})
 
     (ROOT / "catalog.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=2), encoding="utf-8")
     (ROOT / "videos.js").write_text(render_videos_js(yt_map), encoding="utf-8")
-    (ROOT / "index.html").write_text(render_index(catalog), encoding="utf-8")
+    (ROOT / "index.html").write_text(render_home(catalog), encoding="utf-8")
+    (ROOT / "charte.html").write_text(render_charte(), encoding="utf-8")
+    (ROOT / "404.html").write_text(render_404(), encoding="utf-8")
+    for sem in SEMESTERS:
+        sem_dir = ROOT / sem["id"]
+        sem_dir.mkdir(exist_ok=True)
+        items = [p for p in catalog if p["semester"] == sem["id"]]
+        (sem_dir / "index.html").write_text(render_semester(sem, items), encoding="utf-8")
     (ROOT / "README.md").write_text(render_readme(), encoding="utf-8")
     n_png = sum(len(p["images"]) for p in catalog)
-    print(f"OK : {len(catalog)} labs, {n_png} infographies PNG")
+    print(f"OK : accueil + 4 semestres, {len(catalog)} labs, {n_png} infographies PNG")
 
 
 def render_videos_js(yt_map: dict) -> str:
@@ -196,11 +289,66 @@ def render_videos_js(yt_map: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_index(catalog: list) -> str:
+def chrome(base: str, crumb: str, title: str) -> tuple[str, str]:
+    home = f"{base}index.html" if base else "index.html"
+    head = f"""<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#07131d" />
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,650;0,9..40,800;1,9..40,400&family=IBM+Plex+Mono:wght@500;650&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{base}assets/site.css" />
+<script>(function(){{try{{var t=localStorage.getItem("iut_mantes_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}}catch(e){{}}}})();</script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <div>
+    <a class="home" href="{home}">IUT Mantes · GC-CD</a>
+    {crumb}
+  </div>
+  <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Activer le mode clair">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+    <span data-theme-label>Mode clair</span>
+  </button>
+</header>
+"""
+    foot = f"""
+<footer class="credit" aria-label="Crédit">
+  <div>
+    <div class="who">Nicolas di Scala</div>
+    <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
+  </div>
+  <div class="mid">
+    <div class="who">BUT Génie Civil — Construction Durable</div>
+    <div class="role">Laboratoires virtuels pédagogiques</div>
+  </div>
+  <div>
+    <div class="who">IUT Mantes-en-Yvelines</div>
+    <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
+  </div>
+</footer>
+<script src="{base}assets/theme.js"></script>
+"""
+    return head, foot
+
+
+def lab_cards(items: list, base: str) -> str:
     cards = []
-    galleries = []
-    for p in catalog:
+    for p in items:
         n = len(p["images"])
+        pl = PLAYLISTS.get(p["id"], "")
+        yt_btn = ""
+        if pl:
+            yt_btn = (
+                f'<a class="btn ghost" href="https://www.youtube.com/playlist?list={pl}" '
+                f'target="_blank" rel="noopener">Vidéos</a>'
+            )
         cards.append(
             f"""
         <article class="lab-card" data-lab="{p['id']}" style="--accent:{p['accent']}">
@@ -209,189 +357,128 @@ def render_index(catalog: list) -> str:
           <p class="sub">{p['subtitle']}</p>
           <p class="mission">Entraînement : {p['mission']}</p>
           <div class="actions">
-            <a class="btn primary" href="labs/{p['id']}/">Ouvrir le laboratoire virtuel</a>
-            <a class="btn ghost" href="#g-{p['id']}">Infographies ({n})</a>
+            <a class="btn primary" href="{base}labs/{p['id']}/index.html">Ouvrir le laboratoire virtuel</a>
+            <button type="button" class="btn ghost" data-toggle-gallery="{p['id']}" aria-expanded="false" aria-controls="g-{p['id']}">Infographies et vidéos ({n})</button>
+            {yt_btn}
           </div>
+          {one_gallery(p, base)}
         </article>"""
         )
-        figs = []
-        for im in p["images"]:
-            figs.append(
-                f"""
+    return "".join(cards)
+
+
+def one_gallery(p: dict, base: str) -> str:
+    figs = []
+    for im in p["images"]:
+        figs.append(
+            f"""
             <figure class="fig" data-key="{im['key']}">
-              <a href="infographies/{p['id']}/{im['file']}" target="_blank" rel="noopener">
-                <img src="infographies/{p['id']}/{im['file']}" alt="{im['title']}" loading="lazy" />
+              <a href="{base}infographies/{p['id']}/{im['file']}" target="_blank" rel="noopener">
+                <img src="{base}infographies/{p['id']}/{im['file']}" alt="{im['title']}" loading="lazy" />
               </a>
               <figcaption>
                 <strong>{im['title']}</strong>
                 <span class="yt" hidden></span>
               </figcaption>
             </figure>"""
-            )
-        galleries.append(
-            f"""
-      <section class="gallery" id="g-{p['id']}">
-        <h2><span class="code">{p['code']}</span> {p['title']}</h2>
-        <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
-        <div class="grid-figs">{''.join(figs)}</div>
-      </section>"""
         )
+    return f"""
+          <section class="gallery" id="g-{p['id']}" hidden>
+            <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
+            <div class="grid-figs">{''.join(figs)}</div>
+          </section>"""
 
-    return f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Laboratoires virtuels — IUT Mantes · GC-CD</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,650;0,9..40,800;1,9..40,400&family=IBM+Plex+Mono:wght@500;650&display=swap" rel="stylesheet" />
-<style>
-  :root {{
-    --bg0:#07131d; --bg1:#0b1c2a; --ink:#e9f4f9; --muted:#9cb3c0; --steel:#a9bcc8;
-    --panel:#0f2330; --brd:rgba(127,190,214,.16); --water:#41c7e4; --water-deep:#0b6e8a;
-    --gold:#ffd166; --sans:"DM Sans","Segoe UI",sans-serif; --mono:"IBM Plex Mono",Consolas,monospace;
-    --radius:16px; --shadow:0 18px 40px rgba(2,10,16,.5);
-  }}
-  * {{ box-sizing:border-box; }}
-  html {{ scroll-behavior:smooth; }}
-  body {{
-    margin:0; font-family:var(--sans); color:var(--ink);
-    background:
-      radial-gradient(1100px 620px at 12% -12%, rgba(11,110,138,.28), transparent 55%),
-      radial-gradient(900px 500px at 100% 0%, rgba(217,122,69,.10), transparent 50%),
-      linear-gradient(180deg, var(--bg0), var(--bg1));
-    min-height:100vh;
-  }}
-  a {{ color:var(--water); }}
-  header.hero {{
-    max-width:1100px; margin:0 auto; padding:2.2rem 1.25rem 1.2rem;
-  }}
-  .eyebrow {{ font-family:var(--mono); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--water); margin:0 0 .4rem; }}
-  h1 {{ margin:0; font-size:clamp(1.7rem, 3vw, 2.35rem); font-weight:800; letter-spacing:-.02em; }}
-  .lede {{ max-width:46rem; color:var(--muted); line-height:1.55; }}
-  .note {{
-    margin:1.1rem 0 0; padding:.75rem 1rem; border-radius:12px;
-    background:rgba(224,138,90,.08); border:1px dashed rgba(224,138,90,.35);
-    color:var(--steel); font-size:.9rem; line-height:1.5;
-  }}
-  .labs {{
-    max-width:1100px; margin:0 auto; padding:0 1.25rem 2rem;
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem;
-  }}
-  .lab-card {{
-    background:var(--panel); border:1px solid var(--brd); border-radius:var(--radius);
-    padding:1.15rem 1.2rem 1.25rem; box-shadow:var(--shadow);
-    border-top:3px solid var(--accent, var(--water));
-  }}
-  .lab-card .code {{ font-family:var(--mono); font-size:.75rem; color:var(--accent, var(--water)); margin:0 0 .35rem; }}
-  .lab-card h2 {{ margin:0; font-size:1.12rem; }}
-  .lab-card .sub {{ color:var(--muted); font-size:.88rem; line-height:1.4; margin:.35rem 0 .15rem; }}
-  .lab-card .mission {{ font-size:.82rem; color:var(--gold); margin:0 0 .85rem; }}
-  .actions {{ display:flex; flex-wrap:wrap; gap:.5rem; }}
-  .btn {{
-    display:inline-flex; align-items:center; justify-content:center;
-    text-decoration:none; font-weight:650; font-size:.86rem;
-    padding:.48rem .85rem; border-radius:999px;
-  }}
-  .btn.primary {{ background:var(--water-deep); color:#eaf6fb; border:1px solid transparent; }}
-  .btn.ghost {{ border:1px solid var(--brd); color:var(--ink); background:transparent; }}
-  .galleries {{ max-width:1100px; margin:0 auto; padding:0 1.25rem 5rem; }}
-  .gallery {{ margin-top:2.2rem; }}
-  .gallery h2 {{ font-size:1.2rem; display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap; }}
-  .gallery h2 .code {{ font-family:var(--mono); font-size:.8rem; color:var(--water); }}
-  .hint {{ color:var(--muted); font-size:.88rem; }}
-  .grid-figs {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:.9rem; }}
-  .fig {{ margin:0; background:var(--panel); border:1px solid var(--brd); border-radius:14px; overflow:hidden; }}
-  .fig img {{ display:block; width:100%; height:160px; object-fit:cover; background:#0a1a27; }}
-  .fig figcaption {{ padding:.65rem .8rem .8rem; font-size:.84rem; line-height:1.4; color:var(--steel); }}
-  .fig figcaption strong {{ display:block; color:var(--ink); font-size:.9rem; margin-bottom:.25rem; }}
-  .yt a {{ font-size:.82rem; }}
-  footer.credit {{
-    position:sticky; bottom:0; display:grid; grid-template-columns:1fr 1.2fr 1fr;
-    background:rgba(8,22,31,.92); color:#d7e8ef; font-size:.8rem;
-  }}
-  footer.credit div {{ padding:.55rem .9rem; }}
-  footer.credit .mid {{ text-align:center; background:linear-gradient(135deg,#0b5871,#0b6e8a); }}
-  footer.credit .who {{ font-weight:700; }}
-  footer.credit .role {{ color:rgba(215,232,239,.68); font-size:.72rem; }}
-  @media (max-width:700px) {{
-    footer.credit {{ grid-template-columns:1fr; }}
-    .fig img {{ height:200px; }}
-  }}
-</style>
-</head>
-<body>
-  <header class="hero">
-    <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
-    <h1>Laboratoires virtuels &amp; infographies</h1>
-    <p class="lede">Ouvrez un laboratoire dans le navigateur (ordinateur, tablette ou téléphone). Les infographies rappellent les notions. Ces outils d’entraînement ne remplacent pas le sujet PDF ni les notes de calcul.</p>
-    <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
-  </header>
-  <section class="labs" aria-label="Laboratoires virtuels">
-    {''.join(cards)}
+
+def render_home(catalog: list) -> str:
+    by_sem = {s["id"]: [p for p in catalog if p["semester"] == s["id"]] for s in SEMESTERS}
+    cards = []
+    for s in SEMESTERS:
+        mods = ", ".join(p["code"] for p in by_sem[s["id"]])
+        n = len(by_sem[s["id"]])
+        cards.append(
+            f"""
+      <a class="sem-card" href="{s['id']}/index.html" style="--accent:{s['accent']}">
+        <p class="code">{s['code']} · {s['year']}</p>
+        <h2>{s['title']}</h2>
+        <p class="sub">{s['subtitle']}</p>
+        <p class="mods">{n} ressource{"s" if n > 1 else ""} : {mods}</p>
+        <span class="go">Entrer dans le semestre →</span>
+      </a>"""
+        )
+    head, foot = chrome("", "", "Laboratoires virtuels — IUT Mantes · GC-CD")
+    return f"""{head}
+<main class="wrap" id="contenu">
+  <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
+  <h1>Laboratoires virtuels &amp; infographies</h1>
+  <p class="lede">Choisissez d’abord votre semestre. Vous y trouverez le laboratoire interactif, les infographies et, lorsqu’elles existent, les vidéos de cours.</p>
+  <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
+  <section class="semesters" aria-label="Semestres">{''.join(cards)}</section>
+  <section class="charte" aria-labelledby="charte-titre">
+    <div class="txt">
+      <h2 id="charte-titre">Charte du projet — déroulé des séances</h2>
+      <p>Rôles, rituel de séance, note, interlocuteur mystère et usage de l’IA. À lire avant de commencer un projet.</p>
+      <a class="btn primary" href="charte.html">Lire la charte</a>
+    </div>
+    <a class="preview" href="charte.html">
+      <img src="infographies/consignes-etudiants.png" alt="Aperçu de la charte du projet, mode BET" />
+    </a>
   </section>
-  <div class="galleries">
-    <h1>Infographies</h1>
-    {''.join(galleries)}
-  </div>
-  <footer class="credit" aria-label="Crédit">
-    <div>
-      <div class="who">Nicolas di Scala</div>
-      <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
-    </div>
-    <div class="mid">
-      <div class="who">BUT Génie Civil — Construction Durable</div>
-      <div class="role">Laboratoires virtuels pédagogiques</div>
-    </div>
-    <div>
-      <div class="who">IUT Mantes-en-Yvelines</div>
-      <div class="role">Génie Civil - Construction Durable (GC-CD)</div>
-    </div>
-  </footer>
-<script src="videos.js"></script>
-<script>
-(function () {{
-  const map = window.YOUTUBE_IDS || {{}};
-  const playlists = window.YOUTUBE_PLAYLISTS || {{}};
-  document.querySelectorAll(".fig").forEach((fig) => {{
-    const key = fig.getAttribute("data-key");
-    const rec = map[key];
-    const slot = fig.querySelector(".yt");
-    if (!slot || !rec) return;
-    if (rec.id) {{
-      slot.hidden = false;
-      slot.innerHTML = '<a href="https://www.youtube.com/watch?v=' + encodeURIComponent(rec.id) + '" target="_blank" rel="noopener">Voir la vidéo</a>';
-    }}
-  }});
-  document.querySelectorAll("[data-lab]").forEach((card) => {{
-    const pl = playlists[card.getAttribute("data-lab")];
-    if (!pl) return;
-    const actions = card.querySelector(".actions");
-    if (!actions) return;
-    const a = document.createElement("a");
-    a.className = "btn ghost";
-    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Vidéos";
-    actions.appendChild(a);
-  }});
-  document.querySelectorAll(".gallery").forEach((g) => {{
-    const id = (g.id || "").replace(/^g-/, "");
-    const pl = playlists[id];
-    if (!pl) return;
-    const hint = g.querySelector(".hint");
-    if (!hint) return;
-    const a = document.createElement("a");
-    a.href = "https://www.youtube.com/playlist?list=" + encodeURIComponent(pl);
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Playlist YouTube";
-    hint.append(" ", a);
-  }});
-}})();
-</script>
+</main>
+{foot}
+</body>
+</html>
+"""
+
+
+def render_semester(sem: dict, items: list) -> str:
+    crumb = f'<span class="crumb"> · {sem["code"]} {sem["title"]}</span>'
+    head, foot = chrome(
+        "../",
+        crumb,
+        f"{sem['code']} {sem['title']} — Laboratoires virtuels · IUT Mantes",
+    )
+    return f"""{head}
+<main class="wrap" id="contenu">
+  <p class="eyebrow">{sem["year"]} · BUT GC-CD</p>
+  <h1>{sem["code"]} — {sem["title"]}</h1>
+  <p class="lede">{sem["subtitle"]}. Ouvrez un laboratoire, consultez les infographies, ou lancez les vidéos lorsqu’un lien est proposé.</p>
+  <p><a class="btn ghost" href="../charte.html">Charte du projet</a></p>
+  <section class="labs stack" aria-label="Ressources du semestre">{lab_cards(items, "../")}</section>
+</main>
+{foot}
+<script src="../videos.js"></script>
+<script src="../assets/hub.js"></script>
+</body>
+</html>
+"""
+
+
+def render_charte() -> str:
+    head, foot = chrome("", '<span class="crumb"> · Charte du projet</span>', "Charte du projet — IUT Mantes · GC-CD")
+    return f"""{head}
+<main class="wrap charte-page" id="contenu">
+  <p class="eyebrow">Tous semestres</p>
+  <h1>Charte du projet — mode BET</h1>
+  <p class="lede">Déroulé des séances à l’IUT : rôles, chaîne du projet, rituel, notation, interlocuteur mystère et outils.</p>
+  <p><a class="btn ghost" href="index.html">Retour à l’accueil</a></p>
+  <p><img src="infographies/consignes-etudiants.png" alt="Charte du projet – mode BET : vous êtes des techniciens-conseils en équipe" /></p>
+</main>
+{foot}
+</body>
+</html>
+"""
+
+
+def render_404() -> str:
+    head, foot = chrome("", "", "Page introuvable — IUT Mantes · GC-CD")
+    return f"""{head}
+<main class="wrap" id="contenu">
+  <p class="eyebrow">Erreur 404</p>
+  <h1>Cette page n’existe pas</h1>
+  <p class="lede">Revenez à l’accueil pour choisir un semestre.</p>
+  <p><a class="btn primary" href="index.html">Retour à l’accueil</a></p>
+</main>
+{foot}
 </body>
 </html>
 """
@@ -402,32 +489,24 @@ def render_readme() -> str:
 
 Site **public** pour les étudiants : laboratoires HTML + infographies PNG.
 
-Adresse Pages (après activation) :
+Adresse Pages : `https://N-di-Scala.github.io/labs-virtuels-iut-mantes-web/`
 
-`https://N-di-Scala.github.io/labs-virtuels-iut-mantes-web/`
+## Navigation
 
-## Contenu
-
-- `labs/r1-1/` … `labs/r4-8/` : chaque `index.html` est le laboratoire virtuel.
+- `index.html` : choix du semestre (S1 à S4).
+- `s1/` … `s4/` : laboratoire, infographies et liens vidéos du semestre.
+- `charte.html` : infographie des consignes étudiants.
+- `labs/` : applications HTML autonomes.
 - `infographies/` : PNG pédagogiques (pas les vidéos).
-- `videos.js` : coller ici les identifiants YouTube une fois les imports faits.
+- `videos.js` : identifiants YouTube.
 
-## Ce qui n’est pas dans ce dépôt
-
-- sujets et corrigés des projets notés ;
-- classeurs Excel, PDF de notes de calcul ;
-- fichiers `.mp4` (trop lourds pour GitHub — à mettre sur YouTube en non répertorié).
+Le thème clair / sombre est mémorisé (`iut_mantes_theme`) et suivi dans les laboratoires.
 
 ## Relier une vidéo YouTube
 
-1. Importer le MP4 sur YouTube (compte @uvsq), visibilité **Non répertoriée**.
-2. Copier l’identifiant (après `v=` dans l’URL).
-3. Dans `videos.js`, remplir le champ `id` de la ligne correspondante (`mp4` rappelle le fichier source).
-4. `git add videos.js && git commit && git push` : le site se met à jour.
-
-## Mise à jour d’un lab
-
-Remplacer le HTML dans `Enseignement/IUT_Mantes/.../App_interactive/`, relancer `_build_site.py`, puis commit / push.
+1. Importer le MP4 sur YouTube, visibilité **Non répertoriée**.
+2. Copier l’identifiant (après `v=`).
+3. Remplir le champ `id` dans `videos.js` (ou `VIDEO_IDS` dans `_build_site.py`).
 """
 
 
