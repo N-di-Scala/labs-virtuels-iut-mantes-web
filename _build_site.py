@@ -117,14 +117,30 @@ PROJECTS = [
 ]
 
 PLAYLISTS = {
+    "r1-1": "PLdvfbV6gHmIs",
     "r1-10": "PLOtp-9v_CG9E",
+    "r1-13": "PLOUGV3afMlSA",
     "r3-10": "PLU-mhVpV4vZ0",
 }
 
 VIDEO_IDS = {
+    "r1-1/1-automatisation-du-suivi-de-chantier.png": "QO5S8-SY8Gk",
+    "r1-1/2-budget-de-chantier-avec-somme-si.png": "RfgMrGv0h7U",
+    "r1-1/3-guide-du-pilotage-par-tcd.png": "tHIdovQdoV8",
+    "r1-1/4-concevoir-un-tableau-de-bord.png": "sI89pUaTGo8",
+    "r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png": "oykX68_NGug",
     "r1-10/1-les-fondamentaux-de-l-aep.png": "IfY00H-DeXE",
     "r1-10/2-masse-volumique-versus-viscosite.png": "eHxa7GX64C0",
     "r1-10/3-comprendre-la-pression-hydrostatique.png": "Ea4we82args",
+    "r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png": "RI4u-O8MEBw",
+    "r1-10/5-les-pertes-de-charge-lineaires.png": "AxpnPHgEtYY",
+    "r1-10/6-pertes-de-charge-en-aep.png": "b_AqoX5MTxo",
+    "r1-10/7-guide-de-selection-de-pompe.png": "p0_S3oV2bTQ",
+    "r1-13/1-comprendre-les-incertitudes-de-mesure.png": "s7_QM8P2aCE",
+    "r1-13/2-la-propagation-des-incertitudes.png": "92IBJeWBkwk",
+    "r1-13/3-incertitude-et-conformite-decisionnelle.png": "VHfqS-rlQzw",
+    "r1-13/4-guide-de-conformite-des-lots.png": "YPMf3Mss2ig",
+    "r1-13/5-le-budget-d-incertitudes-en-btp.png": "8q9lbUvqEzY",
     "r3-10/1-guide-d-analyse-des-deperditions-thermiques.png": "yrmPQ_9LN8E",
     "r3-10/2-comprendre-l-indicateur-thermique-hbat.png": "JTATHtqHXiQ",
     "r3-10/3-comprendre-le-processus-du-dpe.png": "TPDGJ40naqo",
