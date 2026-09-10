@@ -120,7 +120,9 @@ PLAYLISTS = {
     "r1-1": "PLdvfbV6gHmIs",
     "r1-10": "PLOtp-9v_CG9E",
     "r1-13": "PLOUGV3afMlSA",
+    "r2-9": "PLJQ4kWqmCdVI",
     "r3-10": "PLU-mhVpV4vZ0",
+    "r4-8": "PLI2gBdKJjUhA",
 }
 
 VIDEO_IDS = {
@@ -141,12 +143,24 @@ VIDEO_IDS = {
     "r1-13/3-incertitude-et-conformite-decisionnelle.png": "VHfqS-rlQzw",
     "r1-13/4-guide-de-conformite-des-lots.png": "YPMf3Mss2ig",
     "r1-13/5-le-budget-d-incertitudes-en-btp.png": "8q9lbUvqEzY",
+    "r1-13/6-l-art-de-la-restitution.png": "MmKYLUyEqyw",
+    "r2-9/1-anatomie-d-une-paroi-isolee.png": "pKv1AhqyRZQ",
+    "r2-9/2-la-physique-du-confort-thermique.png": "eGctIwvyGho",
+    "r2-9/3-comprendre-les-ponts-thermiques.png": "wYyCvxTThbc",
+    "r2-9/4-comprendre-la-methode-glaser.png": "I1FCCekPJpg",
+    "r2-9/5-maitriser-dephasage-et-inertie-thermique.png": "_1hXRLOt9PM",
+    "r2-9/6-strategies-de-rehabilitation-thermique.png": "vboYFY8i9tY",
     "r3-10/1-guide-d-analyse-des-deperditions-thermiques.png": "yrmPQ_9LN8E",
     "r3-10/2-comprendre-l-indicateur-thermique-hbat.png": "JTATHtqHXiQ",
     "r3-10/3-comprendre-le-processus-du-dpe.png": "TPDGJ40naqo",
     "r3-10/4-renover-l-enveloppe-strategie-coherente.png": "_qlOBY1eH6Q",
     "r3-10/5-dimensionnement-vmc-et-pac.png": "LmwkgN5VbmY",
     "r3-10/6-reussir-son-bilan-energetique.png": "0ufPGzwFKNw",
+    "r4-8/1-bilan-thermique-d-ete-passif.png": "OzAZHJf-c2A",
+    "r4-8/2-maitriser-le-confort-thermique-estival.png": "cpyKxevCrsQ",
+    "r4-8/3-philosophie-bepos-et-systemes-actifs.png": "WCc3p50XQGc",
+    "r4-8/4-l-aeraulique-poumon-du-batiment.png": "0pcszIEADaI",
+    "r4-8/5-identifier-le-bon-levier-acoustique.png": "st5KHJ6GAYw",
 }
 
 SEM_BY_ID = {s["id"]: s for s in SEMESTERS}
