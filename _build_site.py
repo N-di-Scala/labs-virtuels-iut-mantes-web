@@ -177,7 +177,7 @@ def slugify(name: str) -> str:
 
 
 def pretty_title(stem: str) -> str:
-    t = re.sub(r"^\d+\.", "", stem).replace("_", " ").replace("___", " — ").replace("  ", " ")
+    t = re.sub(r"^\d+\.", "", stem).replace("_", " ").replace("___", " - ").replace("  ", " ")
     t = re.sub(r"\s+", " ", t).strip(" .")
     return t
 
@@ -331,7 +331,7 @@ def chrome(base: str, crumb: str, title: str) -> tuple[str, str]:
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,650;0,9..40,800;1,9..40,400&family=IBM+Plex+Mono:wght@500;650&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="stylesheet" href="{base}assets/site.css" />
 <script>(function(){{try{{var t=localStorage.getItem("iut_mantes_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}}catch(e){{}}}})();</script>
 </head>
@@ -355,7 +355,7 @@ def chrome(base: str, crumb: str, title: str) -> tuple[str, str]:
     <div class="role">Maître de conférences en Physique (28<sup>e</sup> section)</div>
   </div>
   <div class="mid">
-    <div class="who">BUT Génie Civil — Construction Durable</div>
+    <div class="who">BUT Génie Civil - Construction Durable</div>
     <div class="role">Laboratoires virtuels pédagogiques</div>
   </div>
   <div>
@@ -435,17 +435,17 @@ def render_home(catalog: list) -> str:
         <span class="go">Entrer dans le semestre →</span>
       </a>"""
         )
-    head, foot = chrome("", "", "Laboratoires virtuels — IUT Mantes · GC-CD")
+    head, foot = chrome("", "", "Laboratoires virtuels - IUT Mantes · GC-CD")
     return f"""{head}
 <main class="wrap" id="contenu">
   <p class="eyebrow">IUT Mantes-en-Yvelines · GC-CD</p>
-  <h1>Laboratoires virtuels &amp; infographies</h1>
+  <h1>Laboratoires virtuels &amp; <em>infographies</em></h1>
   <p class="lede">Choisissez d’abord votre semestre. Vous y trouverez le laboratoire interactif, les infographies et, lorsqu’elles existent, les vidéos de cours.</p>
   <p class="note">Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les QCM des labs sont formatifs (mission fictive).</p>
   <section class="semesters" aria-label="Semestres">{''.join(cards)}</section>
   <section class="charte" aria-labelledby="charte-titre">
     <div class="txt">
-      <h2 id="charte-titre">Charte du projet — déroulé des séances</h2>
+      <h2 id="charte-titre">Charte du projet - déroulé des séances</h2>
       <p>Rôles, rituel de séance, note, interlocuteur mystère et usage de l’IA. À lire avant de commencer un projet.</p>
       <a class="btn primary" href="charte.html">Lire la charte</a>
     </div>
@@ -465,12 +465,12 @@ def render_semester(sem: dict, items: list) -> str:
     head, foot = chrome(
         "../",
         crumb,
-        f"{sem['code']} {sem['title']} — Laboratoires virtuels · IUT Mantes",
+        f"{sem['code']} {sem['title']} - Laboratoires virtuels · IUT Mantes",
     )
     return f"""{head}
 <main class="wrap" id="contenu">
   <p class="eyebrow">{sem["year"]} · BUT GC-CD</p>
-  <h1>{sem["code"]} — {sem["title"]}</h1>
+  <h1>{sem["code"]} - {sem["title"]}</h1>
   <p class="lede">{sem["subtitle"]}. Ouvrez un laboratoire, consultez les infographies, ou lancez les vidéos lorsqu’un lien est proposé.</p>
   <p><a class="btn ghost" href="../charte.html">Charte du projet</a></p>
   <section class="labs stack" aria-label="Ressources du semestre">{lab_cards(items, "../")}</section>
@@ -484,11 +484,11 @@ def render_semester(sem: dict, items: list) -> str:
 
 
 def render_charte() -> str:
-    head, foot = chrome("", '<span class="crumb"> · Charte du projet</span>', "Charte du projet — IUT Mantes · GC-CD")
+    head, foot = chrome("", '<span class="crumb"> · Charte du projet</span>', "Charte du projet - IUT Mantes · GC-CD")
     return f"""{head}
 <main class="wrap charte-page" id="contenu">
   <p class="eyebrow">Tous semestres</p>
-  <h1>Charte du projet — mode BET</h1>
+  <h1>Charte du projet - mode BET</h1>
   <p class="lede">Déroulé des séances à l’IUT : rôles, chaîne du projet, rituel, notation, interlocuteur mystère et outils.</p>
   <p><a class="btn ghost" href="index.html">Retour à l’accueil</a></p>
   <p><img src="infographies/consignes-etudiants.png" alt="Charte du projet – mode BET : vous êtes des techniciens-conseils en équipe" /></p>
@@ -500,7 +500,7 @@ def render_charte() -> str:
 
 
 def render_404() -> str:
-    head, foot = chrome("", "", "Page introuvable — IUT Mantes · GC-CD")
+    head, foot = chrome("", "", "Page introuvable - IUT Mantes · GC-CD")
     return f"""{head}
 <main class="wrap" id="contenu">
   <p class="eyebrow">Erreur 404</p>
@@ -515,7 +515,7 @@ def render_404() -> str:
 
 
 def render_readme() -> str:
-    return """# Laboratoires virtuels — IUT Mantes (GC-CD)
+    return """# Laboratoires virtuels - IUT Mantes (GC-CD)
 
 Site **public** pour les étudiants : laboratoires HTML + infographies PNG.
 

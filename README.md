@@ -1,4 +1,4 @@
-# Laboratoires virtuels — IUT Mantes (GC-CD)
+# Laboratoires virtuels - IUT Mantes (GC-CD)
 
 Site **public** pour les étudiants : laboratoires HTML + infographies PNG.
 
