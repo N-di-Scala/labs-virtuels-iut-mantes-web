@@ -1,0 +1,242 @@
+/* =====================================================================
+   Couche v4 « prise en main » (au-dessus de lab-v2.css et lab-v3.css)
+   ===================================================================== */
+
+/* --- légende d'usage de la scène 3D : compacte, en haut à gauche --- */
+html.v4 .v4-legend {
+  position: absolute; z-index: 5; left: 12px; top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
+  max-width: calc(100% - 24px); padding: 5px 10px; border-radius: 12px;
+  font: 500 11.5px var(--v2-font); color: var(--v2-ink2);
+  background: var(--v2-chip); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px var(--v2-line);
+}
+html.v4 .v4-legend > span { white-space: nowrap; }
+html.v4 .v4-legend kbd { font: 600 10.5px var(--v2-mono); padding: 1px 5px; border-radius: 5px; background: var(--v2-chip-hi); color: var(--v2-ink); margin-right: 3px; }
+html.v4 .v2-scale { display: none; }
+html.v4 .v2-home .v4-legend { left: auto; right: 18px; top: auto; bottom: 64px; }
+html.v4 .v4-grab {
+  display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border: 0; border-radius: 9px; cursor: pointer;
+  background: color-mix(in srgb, var(--v2-acc) 22%, transparent); color: var(--v2-ink); font: 600 11.5px var(--v2-font);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 60%, transparent);
+}
+html.v4 .v4-grab svg { width: 15px; height: 15px; color: var(--v2-acc); }
+html.v4 .v4-grab.v4-new { animation: v4pulse 1.6s ease-in-out infinite; }
+@keyframes v4pulse { 0%, 100% { box-shadow: inset 0 0 0 1px var(--v2-acc), 0 0 0 0 color-mix(in srgb, var(--v2-acc) 55%, transparent); } 50% { box-shadow: inset 0 0 0 1px var(--v2-acc), 0 0 0 7px transparent; } }
+html.v4 .v4-grabpop {
+  display: none; position: absolute; left: 0; top: calc(100% + 6px); width: 300px; padding: 10px 12px; border-radius: 12px;
+  background: var(--v2-bg2); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px var(--v2-line), 0 10px 30px rgba(0,0,0,.35);
+  color: var(--v2-ink); font: 500 12.5px/1.45 var(--v2-font); white-space: normal;
+}
+html.v4 .v4-legend.v4-open .v4-grabpop { display: block; }
+html.v4 .v4-grabpop p { margin: 0 0 6px; }
+html.v4 .v4-grabpop ul { margin: 0; padding-left: 16px; }
+html.v4 .v4-grabpop li { margin: 3px 0; }
+
+/* --- menu « Plus » de la barre d'outils 3D --- */
+html.v4 .v4-more { position: relative; display: inline-flex; }
+html.v4 .v4-more.v4-busy > .v2-chipbtn { background: var(--v2-on); color: var(--v2-on-ink); }
+html.v4 .v4-menu {
+  display: none; position: absolute; z-index: 30; right: 0; bottom: calc(100% + 8px); min-width: 250px; padding: 6px; border-radius: 14px;
+  flex-direction: column; gap: 2px;
+  background: var(--v2-bg2); backdrop-filter: blur(16px); box-shadow: inset 0 0 0 1px var(--v2-line), 0 12px 32px rgba(0,0,0,.4);
+}
+html.v4 .v4-more.open .v4-menu { display: flex; }
+html.v4 .v4-menu .v4-item { width: 100%; justify-content: flex-start; gap: 10px; background: transparent; box-shadow: none; }
+html.v4 .v4-menu .v4-item.v2-icon { width: 100%; padding: 0 11px; }
+html.v4 .v4-menu .v4-item > span { display: inline !important; }
+html.v4 .v4-menu .v4-item kbd { margin-left: auto; }
+html.v4 .v4-menu .v4-item:hover { background: var(--v2-chip-hi); }
+html.v4 .v4-menu .v4-item[aria-pressed="true"] { background: var(--v2-on); color: var(--v2-on-ink); }
+
+/* --- 3D seule : schémas 2D redondants masqués, graphes gardés --- */
+html.v4 .v4-hide2d { display: none !important; }
+
+/* --- valeurs saisissables : visibles sans survol --- */
+html.v3.v4 strong.v3-editable {
+  display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px; border-radius: 7px; border-bottom: 0;
+  background: color-mix(in srgb, var(--v2-acc) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 55%, transparent);
+}
+html.v3.v4 strong.v3-editable:hover, html.v3.v4 strong.v3-editable:focus-visible { background: color-mix(in srgb, var(--v2-acc) 22%, transparent); }
+html.v4 .v4-pen { display: inline-flex; font-style: normal; opacity: 0.75; }
+html.v4 .v4-pen svg { width: 11px; height: 11px; }
+html.v3.v4 .v3-locked strong.v3-editable, html.v3.v4 .v3-dim strong.v3-editable { box-shadow: none; background: transparent; }
+html.v3.v4 .v3-locked .v4-pen { display: none; }
+html.v4 .v4-tipline { display: flex; gap: 8px; align-items: flex-start; margin: 0 0 12px; padding: 7px 10px; border-radius: 10px; font: 500 12px/1.4 var(--v2-font); color: var(--v2-ink2); background: var(--v2-chip); }
+html.v4 .v4-tipline svg { flex: none; width: 13px; height: 13px; margin-top: 2px; color: var(--v2-acc); }
+
+/* --- menu latéral : indication de défilement + réinitialisation --- */
+html.v4 .v4-navwrap { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+html.v4 .v4-navwrap > nav.ateliers { flex: 1 1 auto; min-height: 0; }
+html.v4 .v4-navcue {
+  position: absolute; left: 0; right: 0; z-index: 3; display: none; align-items: center; justify-content: center; gap: 6px;
+  height: 26px; border: 0; pointer-events: none; color: var(--v2-acc); font: 600 11px var(--v2-font); white-space: nowrap; overflow: hidden;
+}
+html.v4 .v4-cuebtn { pointer-events: auto; cursor: pointer; flex: none; display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; color: var(--v2-acc); background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 60%, transparent); }
+html.v4 .v4-cuebtn:hover { background: var(--v2-acc); color: var(--v2-on-ink, #0a0e18); }
+html.v4 .v4-navcue svg { width: 15px; height: 15px; flex: none; animation: v4bob 1.4s ease-in-out infinite; }
+html.v4 .v4-navcue.up svg { animation-direction: reverse; }
+@keyframes v4bob { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(2px); } }
+html.v4 .v4-navcue.dn { bottom: 0; background: linear-gradient(to top, var(--v2-bg) 45%, transparent); }
+html.v4 .v4-navcue.up { top: 0; background: linear-gradient(to bottom, var(--v2-bg) 45%, transparent); }
+html.v4 .v4-navwrap.v4-can-dn .v4-navcue.dn, html.v4 .v4-navwrap.v4-can-up .v4-navcue.up { display: flex; }
+html.v4 .sidebar:not(:hover):not(:has(:focus-visible)) .v4-navcue span { display: none; }
+html.v4 .v4-sidereset svg { color: var(--v2-acc); }
+html.v4 .v4-sidereset:disabled { opacity: 0.4; cursor: default; }
+html.v4 .v4-toast {
+  position: fixed; z-index: 90; transform: translateY(-50%); padding: 7px 12px; border-radius: 10px; pointer-events: none;
+  font: 600 12.5px var(--v2-font); color: var(--v2-on-ink, #0a0e18); background: var(--v2-acc); transition: opacity 0.4s ease;
+}
+html.v4 .v4-toast.out { opacity: 0; }
+
+/* --- parcours : étapes facultatives --- */
+html.v4 .v3-steps li.v4-opt button { opacity: 0.8; }
+html.v4 .v3-steps li.v4-opt button b { background: transparent; box-shadow: inset 0 0 0 1px currentColor; }
+html.v4 .v4-optnote { margin: 8px 16px 2px; font: 500 11px var(--v2-font); color: var(--v2-mute); }
+
+/* --- premier atelier : bulle d'accueil d'une ligne --- */
+html.v4 .v4-bubble { margin: 0 0 10px; padding: 9px 12px; border-radius: 12px; font: 500 12.5px/1.45 var(--v2-font); color: var(--v2-ink);
+  background: color-mix(in srgb, var(--v2-acc) 16%, var(--v2-bg2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 55%, transparent); }
+html.v4 .v4-bubble svg { width: 12px; height: 12px; vertical-align: -1px; color: var(--v2-acc); }
+
+/* --- graphes 2D conservés (05, 08) : seule la partie absente de la 3D est visible --- */
+html.v4 .v4-crop { overflow: hidden; width: 100%; border-radius: 12px; }
+html.v4 .v4-crop > canvas { display: block; width: 100%; height: auto; }
+@media (min-width: 900px) {
+  html.v4 .v2-center:has(.v4-graph) .v2-world { height: clamp(380px, calc(100vh - 430px), 620px); }
+}
+
+/* --- « Voir dans la 3D » : la scène s'illumine brièvement --- */
+html.v4 .v2-world.v4-ping, html.v4 .v2-stats.v4-ping { border-radius: 14px; animation: v4ping 1.3s ease-out; }
+@keyframes v4ping { 0% { box-shadow: 0 0 0 3px var(--v2-acc), 0 0 40px color-mix(in srgb, var(--v2-acc) 50%, transparent); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* --- message avec action (réinitialisation) --- */
+html.v4 .v4-toast.v4-act { pointer-events: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; max-width: 280px; color: var(--v2-ink); background: var(--v2-bg2); box-shadow: inset 0 0 0 1px var(--v2-acc), 0 10px 30px rgba(0,0,0,.4); }
+html.v4 .v4-toast.v4-act button { border: 0; cursor: pointer; padding: 5px 10px; border-radius: 8px; font: 600 12px var(--v2-font); background: var(--v2-acc); color: var(--v2-on-ink, #0a0e18); text-align: left; }
+
+@media print { html.v4 .v4-legend, html.v4 .v4-bubble, html.v4 .v4-navcue { display: none !important; } }
+
+/* --- scène 3D agrandie quand elle est seule au centre --- */
+@media (min-width: 900px) {
+  html.v4 .v2-center:has(> .v2-figs.v4-hide2d) .v2-world { height: clamp(460px, calc(100vh - 150px), 820px); }
+}
+
+/* --- menu latéral un peu plus compact : les dix entrées tiennent sur un écran de 900 px --- */
+@media (min-width: 901px) {
+  html.v4 nav.ateliers { gap: 0; }
+  html.v4 .nav-btn { padding: 3px 8px 3px 7px; }
+  html.v4 .nav-btn .ic { width: 30px; height: 30px; }
+  html.v4 .nav-btn .ic svg { width: 16px; height: 16px; }
+  html.v4 .nav-btn .sub { font-size: 11px; }
+}
+
+/* --- traits de rappel des étiquettes 3D décalées --- */
+html.v4 .v4-leads { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+html.v4 .v4-leads line { stroke-width: 1.2; stroke-opacity: 0.75; }
+html.v4 .v4-leads circle { fill: var(--v2-ink); fill-opacity: 0.85; }
+html.v4 .v2-world.v2-notags .v4-leads { display: none; }
+
+/* --- trois zones : parcours (gauche), scène 3D (centre), commandes et mesures (droite) --- */
+html.v4 .v4-split .v2-left .v3-panel { margin: 0; }
+html.v4 .v4-split .v2-right .v2-stats { margin-top: 12px; }
+html.v4 .v4-split .v2-right .controls-card .hd { font-weight: 700; }
+html.v4 .v4-ctx { margin-top: 10px; font: 500 13px/1.5 var(--v2-font); color: var(--v2-ink2); }
+html.v4 .v4-ctx > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 12px;
+  color: var(--v2-ink); background: color-mix(in srgb, var(--v2-acc) 12%, var(--v2-bg2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 50%, transparent); }
+html.v4 .v4-ctx > summary::-webkit-details-marker { display: none; }
+html.v4 .v4-ctx > summary b { font: 600 13px var(--v2-font); }
+html.v4 .v4-ctx > summary em { font: 500 11.5px var(--v2-font); font-style: normal; color: var(--v2-mute); margin-left: auto; }
+html.v4 .v4-ctx > summary svg { width: 15px; height: 15px; color: var(--v2-acc); transition: transform 0.2s ease; flex: none; }
+html.v4 .v4-ctx[open] > summary svg { transform: rotate(180deg); }
+html.v4 .v4-ctx[open] > summary em { display: none; }
+html.v4 .v4-ctx > summary:hover { box-shadow: inset 0 0 0 1.5px var(--v2-acc); }
+html.v4 .v4-ctx-ic { display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%; font: 700 12px var(--v2-serif, serif); font-style: italic; color: var(--v2-on-ink, #0a0e18); background: var(--v2-acc); }
+html.v4 .v4-ctx.v4-ctx-new:not([open]) > summary { animation: v4ctx 2.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { html.v4 .v4-ctx.v4-ctx-new:not([open]) > summary { animation: none; box-shadow: inset 0 0 0 2px var(--v2-acc); } }
+@keyframes v4ctx { 50% { box-shadow: inset 0 0 0 1px var(--v2-acc), 0 0 14px color-mix(in srgb, var(--v2-acc) 45%, transparent); } }
+html.v4 .v4-ctx[open] > summary { margin-bottom: 8px; }
+html.v4 .v4-ctx > :not(summary) { padding: 0 4px; }
+@media (min-width: 1241px) {
+  html.v4 .v4-split.v2-stage { grid-template-columns: minmax(300px, 350px) minmax(0, 1fr) minmax(290px, 340px); }
+}
+
+/* --- accueil plus court, flèche vers la suite --- */
+html.v4 .v2-home { min-height: min(82vh, 760px); }
+html.v4 .v4-homedown { position: absolute; left: 50%; bottom: 14px; z-index: 6; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0; border-radius: 999px; cursor: pointer;
+  font: 600 12px var(--v2-font); color: var(--v2-ink); background: var(--v2-glass); box-shadow: inset 0 0 0 1px var(--v2-line2); animation: v4bobh 2.4s ease-in-out infinite; }
+html.v4 .v4-homedown svg { width: 15px; height: 15px; }
+html.v4 .v4-homedown:hover { box-shadow: inset 0 0 0 1px var(--v2-acc); color: var(--v2-acc); }
+@keyframes v4bobh { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 4px); } }
+@media (prefers-reduced-motion: reduce) { html.v4 .v4-homedown { animation: none; } }
+html.v4 .v4-howto { grid-column: 1 / -1; padding: 0; }
+html.v4 .v4-howto > summary { cursor: pointer; padding: 14px 18px; font: 600 14px var(--v2-font); color: var(--v2-ink); }
+html.v4 .v4-howto > summary:hover { color: var(--v2-acc); }
+html.v4 .v4-howto > .welcome { padding: 0 18px 16px; }
+@media (max-width: 900px) { html.v4 .v4-homedown { display: none; } }
+
+/* --- menu de gauche : outils compacts et défilants, plus de place pour les ateliers --- */
+@media (min-width: 901px) {
+  html.v4 .v4-atwrap { flex: 1 1 auto; min-height: 120px; }
+  html.v4 .v4-toolwrap { flex: 0 1 auto; min-height: 64px; max-height: 34vh; }
+  html.v4 .v4-toolwrap > .side-tools { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; gap: 1px; }
+  html.v4 .v4-toolwrap > .side-tools::-webkit-scrollbar { display: none; }
+  html.v4 .v4-toolwrap .theme-btn { min-height: 0; height: 32px; padding-top: 0; padding-bottom: 0; }
+  html.v4 .v4-toolwrap .v2-railstar { padding: 2px 0; }
+}
+
+/* --- colonne du parcours : elle suit le défilement de la page (plus de zone défilante cachée) --- */
+@media (min-width: 1241px) {
+  html.v4 .v4-split .v2-left { position: static; max-height: none; overflow: visible; }
+  /* P7 : la scène 3D reste sous les yeux pendant que l'on lit ou répond dans le parcours à gauche */
+  html.v4 .v4-split .v2-center:has(> .v2-figs.v4-hide2d) { position: sticky; top: 18px; align-self: start; }
+}
+/* P7 : confort sur portables 13"-14" (hauteur réduite) sans toucher aux grands écrans */
+@media (min-width: 1241px) and (max-height: 840px) {
+  html.v4 .v4-split.v2-stage { padding: 14px 18px 20px; gap: 14px; }
+  html.v4 .v4-split .v2-right { top: 14px; max-height: calc(100vh - 28px); }
+  html.v4 .v4-split .v2-center:has(> .v2-figs.v4-hide2d) { top: 14px; }
+  html.v4 .v4-split .v2-center:has(> .v2-figs.v4-hide2d) .v2-world { height: clamp(390px, calc(100vh - 116px), 680px); }
+}
+/* P7 : confort en écran partagé avec Excel / tableur (901 px - 1240 px) */
+@media (min-width: 901px) and (max-width: 1240px) {
+  html.v4 .v4-split.v2-stage {
+    grid-template-columns: minmax(0, 1fr) minmax(276px, 324px);
+    grid-template-areas: "left right" "center right";
+    gap: 14px;
+    padding: 14px 16px 22px;
+  }
+  html.v4 .v4-split .v2-right { top: 14px; max-height: calc(100vh - 28px); }
+  html.v4 .v4-split .v2-center .v2-world,
+  html.v4 .v4-split .v2-center:has(> .v2-figs.v4-hide2d) .v2-world { height: clamp(340px, 52vh, 500px); }
+}
+/* P7 : bandeau compact des mesures en tête des commandes (masqué aux étapes 1-2) */
+html.v4 .v4-pin-kpi {
+  display: none; flex-wrap: wrap; gap: 5px 8px; padding: 7px 12px;
+  border-top: 1px solid var(--v2-line); border-bottom: 1px solid var(--v2-line);
+  background: color-mix(in srgb, var(--v2-acc) 7%, var(--v2-bg2));
+}
+html.v4 .v4-pin-kpi.v4-pin-on:not(.v4-pin-masked):not(:empty) { display: flex; }
+html.v4 .controls-card.v3-locked .v4-pin-kpi,
+html.v4 .v2-right:has(.v2-stats.v3-masked) .v4-pin-kpi { display: none !important; }
+html.v4 .v4-pk-it { display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 7px; border-radius: 7px; background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px var(--v2-line); font: 500 11px/1.3 var(--v2-font); }
+html.v4 .v4-pk-it i { font-style: normal; color: var(--v2-mute); max-width: 105px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.v4 .v4-pk-it b { font: 600 11.5px var(--v2-mono); color: var(--v2-ink); white-space: nowrap; }
+html.v4 .v4-pk-it em { font-style: normal; margin-left: 3px; font-weight: 700; }
+html.v4 .v4-pk-it em.v4-pk-up { color: var(--v2-acc); }
+html.v4 .v4-pk-it em.v4-pk-dn { color: var(--ok, #2f9e6a); }
+
+/* --- mémo de calcul : bouton nommé et fenêtre expliquée --- */
+html.v4 .v4-memobtn span { display: inline; }
+html.v2 .v2-memo-why { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; font: 500 13px/1.5 var(--v2-font); color: var(--v2-ink2);
+  background: color-mix(in srgb, var(--v2-acc) 10%, var(--v2-bg2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--v2-acc) 40%, transparent); }
+html.v2 .v2-memo-why b { color: var(--v2-ink); }
+html.v2 .v2-memo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 640px) { html.v2 .v2-memo-grid { grid-template-columns: 1fr; } }
+html.v2 .v2-memo-box { padding: 12px 14px; border-radius: 12px; background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px var(--v2-line); }
+html.v2 .v2-memo-box h3 { margin: 0 0 8px; font: 600 11px var(--v2-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--v2-acc); }
+html.v2 .v2-memo-box dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; font: 500 13px/1.4 var(--v2-font); }
+html.v2 .v2-memo-box dt { color: var(--v2-ink2); }
+html.v2 .v2-memo-box dd { margin: 0; font: 600 13px var(--v2-mono); color: var(--v2-ink); text-align: right; }
+html.v2 .v2-memo-note { display: block; width: 100%; box-sizing: border-box; min-height: 64px; margin: 4px 0 12px; padding: 10px 12px; border: 0; border-radius: 12px; resize: vertical;
+  font: 500 13px/1.5 var(--v2-font); color: var(--v2-ink); background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px var(--v2-line); }
+html.v2 .v2-memo-note:focus { outline: 2px solid var(--v2-acc); }
+html.v2 .v2-memo-lbl { font: 600 13px var(--v2-font); color: var(--v2-ink); }

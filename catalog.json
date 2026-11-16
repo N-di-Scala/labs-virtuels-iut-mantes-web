@@ -7,36 +7,118 @@
     "subtitle": "Tableur, références, logique de classeur",
     "mission": "Gymnase de Clairmont",
     "accent": "#3ecf8e",
+    "store_key": "r11_parcours",
+    "v1_key": "r11_lab_virtuel",
+    "workshops": [
+      {
+        "id": "refs",
+        "label": "01 · Références $"
+      },
+      {
+        "id": "unites",
+        "label": "02 · Unités & formats"
+      },
+      {
+        "id": "logique",
+        "label": "03 · Logique SI"
+      },
+      {
+        "id": "tva",
+        "label": "04 · HT / TVA / TTC"
+      },
+      {
+        "id": "synthese",
+        "label": "05 · SOMME.SI & TCD"
+      },
+      {
+        "id": "graphiques",
+        "label": "06 · Graphiques"
+      },
+      {
+        "id": "qualite",
+        "label": "07 · Qualité & SIERREUR"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-automatisation-du-suivi-de-chantier.png",
         "title": "Automatisation du suivi de chantier",
         "key": "r1-1/1-automatisation-du-suivi-de-chantier.png",
-        "mp4": "1.Excel___Outils_du_BET.mp4"
+        "mp4": "1.Excel___Outils_du_BET.mp4",
+        "video": "QO5S8-SY8Gk",
+        "atelier": "refs",
+        "atelierLabel": "01 · Références $"
       },
       {
+        "num": 2,
         "file": "2-budget-de-chantier-avec-somme-si.png",
         "title": "Budget de chantier avec SOMME.SI",
         "key": "r1-1/2-budget-de-chantier-avec-somme-si.png",
-        "mp4": "2.SOMME.mp4"
+        "mp4": "2.SOMME.mp4",
+        "video": "RfgMrGv0h7U",
+        "atelier": "synthese",
+        "atelierLabel": "05 · SOMME.SI & TCD"
       },
       {
+        "num": 3,
         "file": "3-guide-du-pilotage-par-tcd.png",
         "title": "Guide du pilotage par TCD",
         "key": "r1-1/3-guide-du-pilotage-par-tcd.png",
-        "mp4": "3.TCD_et_Graphiques.mp4"
+        "mp4": "3.TCD_et_Graphiques.mp4",
+        "video": "tHIdovQdoV8",
+        "atelier": "synthese",
+        "atelierLabel": "05 · SOMME.SI & TCD"
       },
       {
+        "num": 4,
         "file": "4-concevoir-un-tableau-de-bord.png",
         "title": "Concevoir un tableau de bord",
         "key": "r1-1/4-concevoir-un-tableau-de-bord.png",
-        "mp4": "4.Gestion_Chantier_Excel.mp4"
+        "mp4": "4.Gestion_Chantier_Excel.mp4",
+        "video": "sI89pUaTGo8",
+        "atelier": "graphiques",
+        "atelierLabel": "06 · Graphiques"
       },
       {
+        "num": 5,
         "file": "5-les-fondamentaux-d-un-tableur-professionnel.png",
         "title": "Les fondamentaux d un tableur professionnel",
         "key": "r1-1/5-les-fondamentaux-d-un-tableur-professionnel.png",
-        "mp4": "5.Le_Simulateur_Pro.mp4"
+        "mp4": "5.Le_Simulateur_Pro.mp4",
+        "video": "oykX68_NGug",
+        "atelier": "unites",
+        "atelierLabel": "02 · Unités & formats"
+      },
+      {
+        "num": 6,
+        "file": "6-maitriser-le-dollar-references-relatives-et-absolues.png",
+        "title": "Maîtriser le dollar références relatives et absolues",
+        "key": "r1-1/6-maitriser-le-dollar-references-relatives-et-absolues.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "refs",
+        "atelierLabel": "01 · Références $"
+      },
+      {
+        "num": 7,
+        "file": "7-logique-si-et-cascade-ht-tva-ttc-en-btp.png",
+        "title": "Logique SI et cascade HT TVA TTC en BTP",
+        "key": "r1-1/7-logique-si-et-cascade-ht-tva-ttc-en-btp.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "logique",
+        "atelierLabel": "03 · Logique SI"
+      },
+      {
+        "num": 8,
+        "file": "8-fiabiliser-un-classeur-sierreur-et-controles-croises.png",
+        "title": "Fiabiliser un classeur SIERREUR et contrôles croisés",
+        "key": "r1-1/8-fiabiliser-un-classeur-sierreur-et-controles-croises.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "qualite",
+        "atelierLabel": "07 · Qualité & SIERREUR"
       }
     ]
   },
@@ -48,48 +130,122 @@
     "subtitle": "Hydraulique AEP, charges, pertes, pompe",
     "mission": "Valdeau",
     "accent": "#41c7e4",
+    "store_key": "r110_parcours",
+    "v1_key": "r110_lab_v4",
+    "workshops": [
+      {
+        "id": "debit",
+        "label": "01 · Débit & continuité"
+      },
+      {
+        "id": "fluide",
+        "label": "02 · Viscosité & Reynolds"
+      },
+      {
+        "id": "hydro",
+        "label": "03 · Hydrostatique"
+      },
+      {
+        "id": "bernoulli",
+        "label": "04 · Bernoulli & Venturi"
+      },
+      {
+        "id": "lineaire",
+        "label": "05 · Pertes linéaires"
+      },
+      {
+        "id": "singulier",
+        "label": "06 · Pertes singulières"
+      },
+      {
+        "id": "pompe",
+        "label": "07 · Sélection pompe"
+      },
+      {
+        "id": "reseau",
+        "label": "08 · Réseau du Plateau"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-les-fondamentaux-de-l-aep.png",
         "title": "Les fondamentaux de l AEP",
         "key": "r1-10/1-les-fondamentaux-de-l-aep.png",
-        "mp4": "1.Conception_de_Réseau_AEP.mp4"
+        "mp4": "1.Conception_de_Réseau_AEP.mp4",
+        "video": "IfY00H-DeXE",
+        "atelier": "debit",
+        "atelierLabel": "01 · Débit & continuité"
       },
       {
+        "num": 2,
         "file": "2-masse-volumique-versus-viscosite.png",
         "title": "Masse Volumique versus Viscosité",
         "key": "r1-10/2-masse-volumique-versus-viscosite.png",
-        "mp4": "2.Fluides_et_Sens_Physique.mp4"
+        "mp4": "2.Fluides_et_Sens_Physique.mp4",
+        "video": "eHxa7GX64C0",
+        "atelier": "fluide",
+        "atelierLabel": "02 · Viscosité & Reynolds"
       },
       {
+        "num": 3,
         "file": "3-comprendre-la-pression-hydrostatique.png",
         "title": "Comprendre la Pression Hydrostatique",
         "key": "r1-10/3-comprendre-la-pression-hydrostatique.png",
-        "mp4": "3.L_eau_pèse,_même_à_l_arrêt.mp4"
+        "mp4": "3.L_eau_pèse,_même_à_l_arrêt.mp4",
+        "video": "Ea4we82args",
+        "atelier": "hydro",
+        "atelierLabel": "03 · Hydrostatique"
       },
       {
+        "num": 4,
         "file": "4-comprendre-la-charge-hydraulique-bernoulli.png",
         "title": "Comprendre la charge hydraulique Bernoulli",
         "key": "r1-10/4-comprendre-la-charge-hydraulique-bernoulli.png",
-        "mp4": "4.Bernoulli_sur_chantier.mp4"
+        "mp4": "4.Bernoulli_sur_chantier.mp4",
+        "video": "RI4u-O8MEBw",
+        "atelier": "bernoulli",
+        "atelierLabel": "04 · Bernoulli & Venturi"
       },
       {
+        "num": 5,
         "file": "5-les-pertes-de-charge-lineaires.png",
         "title": "Les pertes de charge linéaires",
         "key": "r1-10/5-les-pertes-de-charge-lineaires.png",
-        "mp4": "5.Pertes_linéaires_et_rugosité.mp4"
+        "mp4": "5.Pertes_linéaires_et_rugosité.mp4",
+        "video": "AxpnPHgEtYY",
+        "atelier": "lineaire",
+        "atelierLabel": "05 · Pertes linéaires"
       },
       {
+        "num": 6,
         "file": "6-pertes-de-charge-en-aep.png",
         "title": "Pertes de charge en AEP",
         "key": "r1-10/6-pertes-de-charge-en-aep.png",
-        "mp4": "6.Pertes_Singulières.mp4"
+        "mp4": "6.Pertes_Singulières.mp4",
+        "video": "b_AqoX5MTxo",
+        "atelier": "singulier",
+        "atelierLabel": "06 · Pertes singulières"
       },
       {
+        "num": 7,
         "file": "7-guide-de-selection-de-pompe.png",
         "title": "Guide de sélection de pompe",
         "key": "r1-10/7-guide-de-selection-de-pompe.png",
-        "mp4": "7.Pompes,_HMT_et_Choix.mp4"
+        "mp4": "7.Pompes,_HMT_et_Choix.mp4",
+        "video": "p0_S3oV2bTQ",
+        "atelier": "pompe",
+        "atelierLabel": "07 · Sélection pompe"
+      },
+      {
+        "num": 8,
+        "file": "8-arbitrage-reseau-gravitaire-ou-surpresseur.png",
+        "title": "Arbitrage réseau gravitaire ou surpresseur",
+        "key": "r1-10/8-arbitrage-reseau-gravitaire-ou-surpresseur.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "reseau",
+        "atelierLabel": "08 · Réseau du Plateau"
       }
     ]
   },
@@ -100,43 +256,105 @@
     "title": "Fonctions des composants des bâtiments",
     "subtitle": "Métrologie, incertitudes, conformité",
     "mission": "Pierreclaire",
-    "accent": "#8fd3b0",
+    "accent": "#b38cff",
+    "store_key": "r113_parcours",
+    "v1_key": "r113_lab_virtuel",
+    "workshops": [
+      {
+        "id": "ab",
+        "label": "01 · Type A & Type B"
+      },
+      {
+        "id": "compose",
+        "label": "02 · Composition quadratique"
+      },
+      {
+        "id": "prop",
+        "label": "03 · Propagation"
+      },
+      {
+        "id": "conform",
+        "label": "04 · Conformité"
+      },
+      {
+        "id": "lot",
+        "label": "05 · Contrôle de lot"
+      },
+      {
+        "id": "budget",
+        "label": "06 · Budget d'incertitude"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-comprendre-les-incertitudes-de-mesure.png",
         "title": "Comprendre les incertitudes de mesure",
         "key": "r1-13/1-comprendre-les-incertitudes-de-mesure.png",
-        "mp4": "1.Incertitudes_Types_A_et_B.mp4"
+        "mp4": "1.Incertitudes_Types_A_et_B.mp4",
+        "video": "s7_QM8P2aCE",
+        "atelier": "ab",
+        "atelierLabel": "01 · Type A & Type B"
       },
       {
+        "num": 2,
         "file": "2-la-propagation-des-incertitudes.png",
         "title": "La propagation des incertitudes",
         "key": "r1-13/2-la-propagation-des-incertitudes.png",
-        "mp4": "2.Propagation_d_incertitudes.mp4"
+        "mp4": "2.Propagation_d_incertitudes.mp4",
+        "video": "92IBJeWBkwk",
+        "atelier": "prop",
+        "atelierLabel": "03 · Propagation"
       },
       {
+        "num": 3,
         "file": "3-incertitude-et-conformite-decisionnelle.png",
         "title": "Incertitude et conformité décisionnelle",
         "key": "r1-13/3-incertitude-et-conformite-decisionnelle.png",
-        "mp4": "3.Incertitude_élargie.mp4"
+        "mp4": "3.Incertitude_élargie.mp4",
+        "video": "VHfqS-rlQzw",
+        "atelier": "conform",
+        "atelierLabel": "04 · Conformité"
       },
       {
+        "num": 4,
         "file": "4-guide-de-conformite-des-lots.png",
         "title": "Guide de conformité des lots",
         "key": "r1-13/4-guide-de-conformite-des-lots.png",
-        "mp4": "4.Conformité_de_Lot.mp4"
+        "mp4": "4.Conformité_de_Lot.mp4",
+        "video": "YPMf3Mss2ig",
+        "atelier": "lot",
+        "atelierLabel": "05 · Contrôle de lot"
       },
       {
+        "num": 5,
         "file": "5-le-budget-d-incertitudes-en-btp.png",
         "title": "Le Budget d Incertitudes en BTP",
         "key": "r1-13/5-le-budget-d-incertitudes-en-btp.png",
-        "mp4": "5.Budgets_d_incertitudes.mp4"
+        "mp4": "5.Budgets_d_incertitudes.mp4",
+        "video": "8q9lbUvqEzY",
+        "atelier": "budget",
+        "atelierLabel": "06 · Budget d'incertitude"
       },
       {
+        "num": 6,
         "file": "6-l-art-de-la-restitution.png",
         "title": "L Art de la Restitution",
         "key": "r1-13/6-l-art-de-la-restitution.png",
-        "mp4": "6.Traçabilité_et_restitution.mp4"
+        "mp4": "6.Traçabilité_et_restitution.mp4",
+        "video": "MmKYLUyEqyw",
+        "atelier": "budget",
+        "atelierLabel": "06 · Restitution & bilan"
+      },
+      {
+        "num": 7,
+        "file": "7-composition-quadratique-le-pythagore-des-incertitudes.png",
+        "title": "Composition quadratique le Pythagore des incertitudes",
+        "key": "r1-13/7-composition-quadratique-le-pythagore-des-incertitudes.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "compose",
+        "atelierLabel": "02 · Composition quadratique"
       }
     ]
   },
@@ -147,43 +365,95 @@
     "title": "Transferts thermiques et hydriques",
     "subtitle": "Parois, confort, Glaser, ITI / ITE",
     "mission": "Halle de Valvert",
-    "accent": "#e08a5a",
+    "accent": "#ff8a4c",
+    "store_key": "r29_parcours",
+    "v1_key": "r29_lab_virtuel",
+    "workshops": [
+      {
+        "id": "cond",
+        "label": "01 · Paroi & résistance R"
+      },
+      {
+        "id": "surf",
+        "label": "02 · Confort & T_si"
+      },
+      {
+        "id": "bilan",
+        "label": "03 · Ponts thermiques"
+      },
+      {
+        "id": "glaser",
+        "label": "04 · Vapeur & Glaser"
+      },
+      {
+        "id": "dyn",
+        "label": "05 · Déphasage & inertie"
+      },
+      {
+        "id": "rehab",
+        "label": "06 · ITI vs ITE"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-anatomie-d-une-paroi-isolee.png",
         "title": "Anatomie d une paroi isolée",
         "key": "r2-9/1-anatomie-d-une-paroi-isolee.png",
-        "mp4": "1.Anatomie_d_une_paroi.mp4"
+        "mp4": "1.Anatomie_d_une_paroi.mp4",
+        "video": "pKv1AhqyRZQ",
+        "atelier": "cond",
+        "atelierLabel": "01 · Paroi & résistance R"
       },
       {
+        "num": 2,
         "file": "2-la-physique-du-confort-thermique.png",
         "title": "La physique du confort thermique",
         "key": "r2-9/2-la-physique-du-confort-thermique.png",
-        "mp4": "2.Échanges_surface_et_confort.mp4"
+        "mp4": "2.Échanges_surface_et_confort.mp4",
+        "video": "eGctIwvyGho",
+        "atelier": "surf",
+        "atelierLabel": "02 · Confort & T_si"
       },
       {
+        "num": 3,
         "file": "3-comprendre-les-ponts-thermiques.png",
         "title": "Comprendre les ponts thermiques",
         "key": "r2-9/3-comprendre-les-ponts-thermiques.png",
-        "mp4": "3.Les_ponts_thermiques.mp4"
+        "mp4": "3.Les_ponts_thermiques.mp4",
+        "video": "wYyCvxTThbc",
+        "atelier": "bilan",
+        "atelierLabel": "03 · Ponts thermiques"
       },
       {
+        "num": 4,
         "file": "4-comprendre-la-methode-glaser.png",
         "title": "Comprendre la méthode Glaser",
         "key": "r2-9/4-comprendre-la-methode-glaser.png",
-        "mp4": "4.Hygrothermie___Modèle_Glaser.mp4"
+        "mp4": "4.Hygrothermie___Modèle_Glaser.mp4",
+        "video": "I1FCCekPJpg",
+        "atelier": "glaser",
+        "atelierLabel": "04 · Vapeur & Glaser"
       },
       {
+        "num": 5,
         "file": "5-maitriser-dephasage-et-inertie-thermique.png",
         "title": "Maîtriser déphasage et inertie thermique",
         "key": "r2-9/5-maitriser-dephasage-et-inertie-thermique.png",
-        "mp4": "5.Confort_d_été___la_physique.mp4"
+        "mp4": "5.Confort_d_été___la_physique.mp4",
+        "video": "_1hXRLOt9PM",
+        "atelier": "dyn",
+        "atelierLabel": "05 · Déphasage & inertie"
       },
       {
+        "num": 6,
         "file": "6-strategies-de-rehabilitation-thermique.png",
         "title": "Stratégies de réhabilitation thermique",
         "key": "r2-9/6-strategies-de-rehabilitation-thermique.png",
-        "mp4": "6.Stratégies_réhabilitation.mp4"
+        "mp4": "6.Stratégies_réhabilitation.mp4",
+        "video": "vboYFY8i9tY",
+        "atelier": "rehab",
+        "atelierLabel": "06 · ITI vs ITE"
       }
     ]
   },
@@ -194,43 +464,109 @@
     "title": "Physique et énergétique du bâtiment 1",
     "subtitle": "Transmission, DJU, DPE, rénovation",
     "mission": "Pavillon des Aulnes",
-    "accent": "#95d5b2",
+    "accent": "#ff5d8f",
+    "store_key": "r310_parcours",
+    "v1_key": "r310_lab_virtuel",
+    "workshops": [
+      {
+        "id": "trans",
+        "label": "01 · Déperditions U·A"
+      },
+      {
+        "id": "vent",
+        "label": "02 · Ventilation & H_bât"
+      },
+      {
+        "id": "dju",
+        "label": "03 · DJU & besoin annuel"
+      },
+      {
+        "id": "dpe",
+        "label": "04 · Double seuil DPE"
+      },
+      {
+        "id": "reno",
+        "label": "05 · Scénario rénovation"
+      },
+      {
+        "id": "sys",
+        "label": "06 · VMC & PAC"
+      },
+      {
+        "id": "tri",
+        "label": "07 · Bilan carbone & TRI"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-guide-d-analyse-des-deperditions-thermiques.png",
         "title": "Guide d analyse des déperditions thermiques",
         "key": "r3-10/1-guide-d-analyse-des-deperditions-thermiques.png",
-        "mp4": "1.Déperditions_thermiques.mp4"
+        "mp4": "1.Déperditions_thermiques.mp4",
+        "video": "yrmPQ_9LN8E",
+        "atelier": "trans",
+        "atelierLabel": "01 · Déperditions U·A"
       },
       {
+        "num": 2,
         "file": "2-comprendre-l-indicateur-thermique-hbat.png",
         "title": "Comprendre l indicateur thermique Hbat",
         "key": "r3-10/2-comprendre-l-indicateur-thermique-hbat.png",
-        "mp4": "2.Ventilation,_ponts_et_Hbat.mp4"
+        "mp4": "2.Ventilation,_ponts_et_Hbat.mp4",
+        "video": "JTATHtqHXiQ",
+        "atelier": "vent",
+        "atelierLabel": "02 · Ventilation & H_bât"
       },
       {
+        "num": 3,
         "file": "3-comprendre-le-processus-du-dpe.png",
         "title": "Comprendre le processus du DPE",
         "key": "r3-10/3-comprendre-le-processus-du-dpe.png",
-        "mp4": "3.DPE,_DJU_et_Énergie_Primaire.mp4"
+        "mp4": "3.DPE,_DJU_et_Énergie_Primaire.mp4",
+        "video": "TPDGJ40naqo",
+        "atelier": "dpe",
+        "atelierLabel": "04 · Double seuil DPE"
       },
       {
+        "num": 4,
         "file": "4-renover-l-enveloppe-strategie-coherente.png",
         "title": "Rénover l enveloppe stratégie cohérente",
         "key": "r3-10/4-renover-l-enveloppe-strategie-coherente.png",
-        "mp4": "4.Scénarios_de_Rénovation.mp4"
+        "mp4": "4.Scénarios_de_Rénovation.mp4",
+        "video": "_qlOBY1eH6Q",
+        "atelier": "reno",
+        "atelierLabel": "05 · Scénario rénovation"
       },
       {
+        "num": 5,
         "file": "5-dimensionnement-vmc-et-pac.png",
         "title": "Dimensionnement VMC et PAC",
         "key": "r3-10/5-dimensionnement-vmc-et-pac.png",
-        "mp4": "5.Dimensionner_VMC_et_PAC.mp4"
+        "mp4": "5.Dimensionner_VMC_et_PAC.mp4",
+        "video": "LmwkgN5VbmY",
+        "atelier": "sys",
+        "atelierLabel": "06 · VMC & PAC"
       },
       {
+        "num": 6,
         "file": "6-reussir-son-bilan-energetique.png",
         "title": "Réussir son bilan énergétique",
         "key": "r3-10/6-reussir-son-bilan-energetique.png",
-        "mp4": "6.Bilan_Éco_Environnemental.mp4"
+        "mp4": "6.Bilan_Éco_Environnemental.mp4",
+        "video": "0ufPGzwFKNw",
+        "atelier": "tri",
+        "atelierLabel": "07 · Bilan carbone & TRI"
+      },
+      {
+        "num": 7,
+        "file": "7-des-dju-au-besoin-annuel-de-chauffage.png",
+        "title": "Des DJU au besoin annuel de chauffage",
+        "key": "r3-10/7-des-dju-au-besoin-annuel-de-chauffage.png",
+        "mp4": "",
+        "video": "",
+        "atelier": "dju",
+        "atelierLabel": "03 · DJU & besoin annuel"
       }
     ]
   },
@@ -242,36 +578,80 @@
     "subtitle": "Été, inertie, BEPOS, aéraulique, acoustique",
     "mission": "Maison de santé de Lironde",
     "accent": "#f0c674",
+    "store_key": "r48_parcours",
+    "v1_key": "r48_lab_virtuel",
+    "workshops": [
+      {
+        "id": "ete",
+        "label": "01 · Apports d'été & Fs"
+      },
+      {
+        "id": "inertie",
+        "label": "02 · Inertie estivale"
+      },
+      {
+        "id": "bepos",
+        "label": "03 · Solaire & BEPOS"
+      },
+      {
+        "id": "aera",
+        "label": "04 · Réseau aéraulique"
+      },
+      {
+        "id": "acou",
+        "label": "05 · Acoustique & T_r"
+      }
+    ],
     "images": [
       {
+        "num": 1,
         "file": "1-bilan-thermique-d-ete-passif.png",
         "title": "Bilan thermique d été passif",
         "key": "r4-8/1-bilan-thermique-d-ete-passif.png",
-        "mp4": "1.Bilan_thermique_d_été.mp4"
+        "mp4": "1.Bilan_thermique_d_été.mp4",
+        "video": "OzAZHJf-c2A",
+        "atelier": "ete",
+        "atelierLabel": "01 · Apports d'été & Fs"
       },
       {
+        "num": 2,
         "file": "2-maitriser-le-confort-thermique-estival.png",
         "title": "Maîtriser le confort thermique estival",
         "key": "r4-8/2-maitriser-le-confort-thermique-estival.png",
-        "mp4": "2.Déphasage_et_Inertie.mp4"
+        "mp4": "2.Déphasage_et_Inertie.mp4",
+        "video": "cpyKxevCrsQ",
+        "atelier": "inertie",
+        "atelierLabel": "02 · Inertie estivale"
       },
       {
+        "num": 3,
         "file": "3-philosophie-bepos-et-systemes-actifs.png",
         "title": "Philosophie BEPOS et systèmes actifs",
         "key": "r4-8/3-philosophie-bepos-et-systemes-actifs.png",
-        "mp4": "3.BEPOS___Concepts_Terrain.mp4"
+        "mp4": "3.BEPOS___Concepts_Terrain.mp4",
+        "video": "WCc3p50XQGc",
+        "atelier": "bepos",
+        "atelierLabel": "03 · Solaire & BEPOS"
       },
       {
+        "num": 4,
         "file": "4-l-aeraulique-poumon-du-batiment.png",
         "title": "L aéraulique, poumon du bâtiment",
         "key": "r4-8/4-l-aeraulique-poumon-du-batiment.png",
-        "mp4": "4.Aéraulique_et_QAI.mp4"
+        "mp4": "4.Aéraulique_et_QAI.mp4",
+        "video": "0pcszIEADaI",
+        "atelier": "aera",
+        "atelierLabel": "04 · Réseau aéraulique"
       },
       {
+        "num": 5,
         "file": "5-identifier-le-bon-levier-acoustique.png",
         "title": "Identifier le bon levier acoustique",
         "key": "r4-8/5-identifier-le-bon-levier-acoustique.png",
-        "mp4": "5.Acoustique_du_bâtiment.mp4"
+        "mp4": "5.Acoustique_du_bâtiment.mp4",
+        "video": "st5KHJ6GAYw",
+        "atelier": "acou",
+        "atelierLabel": "05 · Acoustique & T_r"
       }
     ]
   }

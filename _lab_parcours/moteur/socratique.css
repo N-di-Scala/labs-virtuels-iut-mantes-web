@@ -1,0 +1,46 @@
+/* =====================================================================
+   Variante « tuteur socratique scripté » : raisonnement, échange, indices, reformulation
+   ===================================================================== */
+html.v3 .v3s-why { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+html.v3 .v3s-why:empty { display: none; }
+html.v3 .v3s-why-q { flex-basis: 100%; margin: 0 0 2px; font: 600 12.5px/1.4 var(--v2-font); color: var(--v2-ink2); }
+html.v3 .v3s-reason { height: auto; min-height: 26px; padding: 5px 11px; line-height: 1.3; text-align: left; }
+html.v3 .v3s-dlg { display: grid; gap: 8px; margin-top: 10px; padding: 10px 12px 8px; border-radius: 12px; background: var(--v2-chip-hi); box-shadow: inset 3px 0 0 var(--v2-acc), inset 0 0 0 1px var(--v2-line); }
+html.v3 .v3s-dlg .v3-q { margin: 0; font-size: 13.5px; }
+html.v3 .v3s-dlg .v3-btn { justify-self: start; }
+html.v3 .v3s-dlg-hd { margin: 0; font: 500 10px var(--v2-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--v2-acc); }
+html.v3 .v3s-dlg-hd em { font-style: normal; color: var(--v2-mute); margin-left: 6px; letter-spacing: 0.06em; text-transform: none; }
+html.v3 .v3s-hints { margin-top: 8px; }
+html.v3 .v3s-hint { margin: 6px 0 0; padding: 7px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.45; color: var(--v2-ink2); background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px var(--v2-line); }
+html.v3 .v3s-hint b { margin-right: 6px; font: 600 10.5px var(--v2-mono); color: var(--v2-acc); }
+html.v3 .v3s-ref { display: grid; gap: 6px; margin: 10px 0 4px; }
+html.v3 .v3s-ref .v3-btn { justify-self: start; }
+html.v3 .v3s-ta { width: 100%; box-sizing: border-box; resize: vertical; padding: 8px 10px; border: 0; border-radius: 10px; background: var(--v2-chip-hi); color: var(--v2-ink); font: 13px/1.45 var(--v2-font); box-shadow: inset 0 0 0 1px var(--v2-line2); }
+html.v3 .v3s-ta:focus { outline: none; box-shadow: inset 0 0 0 1.5px var(--v2-acc); }
+
+/* ---------------- fin d'atelier ---------------- */
+html.v3 .v3s-end { display: grid; gap: 4px; margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; color: var(--v2-ink2); background: var(--ok-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ok) 45%, transparent); }
+html.v3 .v3s-end b { color: var(--v2-ink); }
+html.v3 .v3s-end-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+html.v3 .v3s-fin { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: color-mix(in srgb, var(--v2-bg) 70%, transparent); backdrop-filter: blur(6px); animation: v3sfade 0.25s ease; }
+html.v3 .v3s-fin-card { width: min(520px, 100%); box-sizing: border-box; padding: 22px 24px 16px; border-radius: var(--v2-r); background: var(--v2-paper, var(--v2-bg2)); box-shadow: var(--v2-shadow), inset 0 0 0 1px color-mix(in srgb, var(--ok) 45%, transparent); }
+html.v3 .v3s-fin-card h3 { margin: 0 0 10px; font: 400 28px/1.15 var(--v2-serif); font-style: italic; color: var(--v2-ink); }
+html.v3 .v3s-fin-card ul { margin: 0 0 12px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--v2-ink2); }
+html.v3 .v3s-fin-card .v3s-fin-x { margin-top: 10px; }
+@keyframes v3sfade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------------- carnet verrouillé / en pleine page ---------------- */
+html.v3 .v2-notebook > .v3s-nb-ph { grid-column: 1 / -1; display: grid; gap: 6px; justify-items: start; padding: 14px 16px; border-radius: var(--v2-r); font-size: 13px; line-height: 1.5; color: var(--v2-ink2); background: var(--v2-chip-hi); box-shadow: inset 0 0 0 1px var(--v2-line); }
+html.v3 .v3s-nb-ph b { color: var(--v2-ink); font-size: 14px; }
+html.v3 .v2-notebook.v3s-nb-locked > :not(.v2-nbhead):not(.v3s-nb-ph) { display: none !important; }
+html.v3 .v3s-carnet .v3s-nb-ph { display: none; }
+html.v3.v3s-noscroll, html.v3.v3s-noscroll body { overflow: hidden; }
+html.v3 .v3s-carnet { position: fixed; inset: 0; z-index: 95; display: grid; grid-template-rows: auto 1fr; background: var(--v2-bg); animation: v3sfade 0.2s ease; }
+html.v3 .v3s-carnet-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 10px 16px; border-bottom: 1px solid var(--v2-line); background: var(--v2-bg2); font: 500 11px var(--v2-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--v2-acc); }
+html.v3 .v3s-carnet-bar .v3s-end-row { margin: 0; }
+html.v3 .v3s-carnet-page { overflow: auto; overscroll-behavior: contain; }
+@media (max-width: 640px) { html.v3 .v3s-carnet-bar .v3-btn { flex: 1 1 auto; } }
+
+/* carnet : jamais affiché sous l'animation, seulement en pleine page (bouton « Ouvrir le carnet ») */
+html.v3 .atelier .v2-notebook.v3s-nb { display: none !important; }
+html.v3 .v3s-free-nb { margin: 0 0 10px; }

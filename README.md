@@ -1,22 +1,16 @@
 # Laboratoires virtuels - IUT Mantes (GC-CD)
 
-Site **public** pour les étudiants : laboratoires HTML + infographies PNG.
+Site **public** pour les étudiants : laboratoires HTML 3D, infographies PNG, visionneuse intégrée et suivi local de progression.
 
 Adresse Pages : `https://N-di-Scala.github.io/labs-virtuels-iut-mantes-web/`
 
 ## Navigation
 
-- `index.html` : choix du semestre (S1 à S4).
-- `s1/` … `s4/` : laboratoire, infographies et liens vidéos du semestre.
-- `charte.html` : infographie des consignes étudiants.
-- `labs/` : applications HTML autonomes.
-- `infographies/` : PNG pédagogiques (pas les vidéos).
-- `videos.js` : identifiants YouTube.
+- `index.html` : quartier 3D des 6 laboratoires, suivi personnel de progression et choix du semestre (S1 à S4).
+- `s1/` … `s4/` : laboratoires, accès direct aux ateliers, visionneuse d’infographies et vidéos du semestre.
+- `charte.html` : charte éditoriale complète du fonctionnement en mode bureau d’études (BET).
+- `labs/` : applications HTML autonomes (39 ateliers guidés).
+- `infographies/` : fiches visuelles PNG haute définition.
+- `videos.js` : identifiants YouTube et métadonnées de maillage par atelier.
 
-Le thème clair / sombre est mémorisé (`iut_mantes_theme`) et suivi dans les laboratoires.
-
-## Relier une vidéo YouTube
-
-1. Importer le MP4 sur YouTube, visibilité **Non répertoriée**.
-2. Copier l’identifiant (après `v=`).
-3. Remplir le champ `id` dans `videos.js` (ou `VIDEO_IDS` dans `_build_site.py`).
+Le thème clair / sombre (`iut_mantes_theme`), la langue (`labs-lang`) et la progression sont mémorisés localement dans le navigateur de chaque étudiant.

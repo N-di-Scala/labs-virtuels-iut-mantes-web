@@ -1,0 +1,64 @@
+# English translations for R1-1 upgrades (3D handles, interactive formula bar, replay variants)
+Toutes les lignes utiliseraient alors la quantité de la ligne {0}. La bonne réponse : « =A{1}*$F${2} ». A{3} doit suivre chaque ligne, F{4} doit rester fixe.	Every row would then use row {0}'s quantity. Correct answer: "=A{1}*$F${2}". A{3} must follow each row, while F{4} stays locked.
+Absolue - toutes visent $B${0}	Absolute - all rows point to $B${0}
+Maîtriser le dollar références relatives et absolues	Mastering $: relative vs absolute references
+{0} · Références $ · Atelier	{0} · $ References · Workshop
+<b>Le cadenas de B{0}</b> : cliquer pour basculer entre référence relative (B{1}) et absolue ($B${2})	<b>Cell B{0} padlock</b>: click to toggle between relative (B{1}) and absolute ($B${2}) reference
+<b>La poignée de recopie (carré vert)</b> : glisser vers le bas pour étirer la formule sur davantage de lignes	<b>Fill handle (green square)</b>: drag down to copy the formula across more rows
+<b>La bande A (bleue)</b> : glisser vers la droite ou la gauche pour changer la longueur en mètres	<b>Strip A (blue)</b>: drag left or right to change length in meters
+<b>La barre de somme</b> : cliquer pour basculer entre addition convertie (m) et mélange m + mm	<b>Sum bar</b>: click to toggle between converted sum (m) and mixed m + mm
+<b>La pile de pièces</b> : glisser vers le haut ou le bas pour modifier le montant en €	<b>Coin stack</b>: drag up or down to change the € amount
+<b>Le losange du test SI</b> : glisser vers le haut ou le bas pour modifier les heures travaillées	<b>IF decision diamond</b>: drag up or down to change hours worked
+<b>La pile d’heures rémunérées</b> : glisser vers le haut ou le bas pour ajuster le taux horaire	<b>Paid-hours stack</b>: drag up or down to adjust hourly rate
+<b>La colonne dorée du taux $B${0}</b> : glisser vers le haut ou le bas pour modifier le taux de TVA	<b>Golden rate column $B${0}</b>: drag up or down to change VAT rate
+<b>La colonne HT de la ligne {0}</b> : glisser vers le haut ou le bas pour changer le montant HT	<b>Excl.-VAT column (row {0})</b>: drag up or down to change net amount
+<b>L’entonnoir de critère SOMME.SI</b> : cliquer pour faire défiler le poste filtré (Tous, Peinture, Quincaillerie, Signalétique)	<b>SUMIF filter funnel</b>: click to cycle filtered trade (All, Painting, Hardware, Signage)
+<b>Le bac de la somme sélective</b> : glisser vers le haut ou le bas pour tester la sensibilité à l’inflation	<b>Selective sum tray</b>: drag up or down to test inflation sensitivity
+<b>La barre de la semaine {0}</b> : glisser vers le haut ou le bas pour modifier l’amplitude réelle	<b>Week {0} bar</b>: drag up or down to change actual amplitude
+<b>Le socle de l’axe vertical</b> : cliquer pour basculer entre origine à {0} et axe tronqué	<b>Vertical axis base</b>: click to toggle between zero baseline ({0}) and truncated axis
+<b>La table des articles (BAN, TAP, PEI)</b> : glisser vers le bas ou le haut pour changer le code recherché	<b>Item lookup table (BAN, TAP, PEI)</b>: drag up or down to change looked-up code
+<b>La cellule résultat</b> : cliquer pour activer ou retirer l’encadrement SIERREUR	<b>Result cell</b>: click to enable or remove IFERROR wrapper
+<b>Le cadenas de protection</b> : cliquer pour protéger ou déverrouiller les cellules de formule	<b>Protection padlock</b>: click to lock or unlock formula cells
+Formule tableur de la cellule C{0}	Spreadsheet formula for cell C{0}
+Formule tableur de la cellule D{0}	Spreadsheet formula for cell D{0}
+Formule tableur de la cellule F{0}	Spreadsheet formula for cell F{0}
+Barre de formule · C{0}	Formula bar · C{0}
+Barre de formule · D{0}	Formula bar · D{0}
+Barre de formule · F{0}	Formula bar · F{0}
+Testez votre écriture tableur	Test your spreadsheet syntax
+Écrivez la formule de montant en C{0} reliant la quantité `A{1}` et le tarif unique `B{2}` (ex. `=A{3}*$B${4}`).	Write the amount formula in C{0} linking quantity `A{1}` and unit rate `B{2}` (e.g. `=A{3}*$B${4}`).
+Écrivez la formule de montant en C{0} reliant la quantité A{1} et le tarif unique B{2} (ex. =A{3}*$B${4}).	Write the amount formula in C{0} linking quantity A{1} and unit rate B{2} (e.g. =A{3}*$B${4}).
+Référence verrouillée sur la ligne {0} ($B${1}) : recopiable sur tout le devis sans décalage !	Reference locked on row {0} ($B${1}): safe to copy down the entire estimate without shifting!
+Attention : $A${0} bloque aussi la quantité de la ligne {1} ! Seul le tarif B{2} doit porter $.	Watch out: $A${0} also locks row {1}'s quantity! Only rate cell B{2} should carry $.
+Sans $ devant le {0}, B{1} glissera en B{2}, B{3}… lors de la recopie vers le bas.	Without $ before {0}, B{1} will shift to B{2}, B{3}… when copied down.
+Testez une formule conditionnelle avec `=SI(A{0}>{1} ; ... ; A{2}*B{3})`.	Try a conditional formula with `=SI(A{0}>{1} ; ... ; A{2}*B{3})`.
+Testez une formule conditionnelle avec =SI(A{0}>{1} ; ... ; A{2}*B{3}).	Try a conditional formula with =SI(A{0}>{1} ; ... ; A{2}*B{3}).
+SI attend {0} parties séparées par ; : test_logique ; valeur_si_vrai ; valeur_si_faux.	IF expects {0} arguments separated by ; : logical_test ; value_if_true ; value_if_false.
+Le test logique doit comparer les heures au seuil légal ou contractuel (A{0}>{1}).	The logical test must compare hours against the threshold (A{0}>{1}).
+Formule SI impeccable : les {0} premières heures restent au taux normal et seul le dépassement (A{1}-{2}) est majoré.	Spot-on IF formula: the first {0} hours stay at base rate and only overtime (A{1}-{2}) gets the premium.
+Dans la branche « si vrai », veillez à ne majorer que (A{0}-{1}) et non la totalité de A{2} !	In the "if true" branch, make sure only (A{0}-{1}) gets the overtime premium, not all of A{2}!
+Exprimez le TTC à partir du HT (`A{0}`) et du taux de TVA en `B{1}` : `=A{2}*({3}+$B${4})`.	Express Incl.-VAT from Excl.-VAT (`A{0}`) and VAT rate in `B{1}`: `=A{2}*({3}+$B${4})`.
+Exprimez le TTC à partir du HT (A{0}) et du taux de TVA en B{1} : =A{2}*({3}+$B${4}).	Express Incl.-VAT from Excl.-VAT (A{0}) and VAT rate in B{1}: =A{2}*({3}+$B${4}).
+Formule TTC directe =A{0}*({1}+$B${2}) avec taux de TVA verrouillé : nette et recopiable !	Direct Incl.-VAT formula =A{0}*({1}+$B${2}) with locked VAT rate: clean and copy-safe!
+Le facteur ({0}+taux) est juste, mais pensez à figer $B${1} si le taux de TVA est en en-tête !	Factor ({0}+rate) is right, but remember to lock $B${1} when the VAT rate sits in the header!
+Essayez `=SOMME.SI(B{0}:B{1} ; "Peinture" ; D{2}:D{3})` pour filtrer un poste sans trier le devis.	Try `=SOMME.SI(B{0}:B{1} ; "Peinture" ; D{2}:D{3})` to sum a trade without sorting the estimate.
+Essayez =SOMME.SI(B{0}:B{1} ; "Peinture" ; D{2}:D{3}) pour filtrer un poste sans trier le devis.	Try =SOMME.SI(B{0}:B{1} ; "Peinture" ; D{2}:D{3}) to sum a trade without sorting the estimate.
+SOMME.SI requiert ici {0} arguments séparés par ; : plage_postes ; "Poste" ; plage_montants.	SUMIF here requires {0} arguments separated by ; : trade_range ; "Trade" ; amount_range.
+Syntaxe SOMME.SI(plage_critère ; critère ; plage_somme) conforme : le sous-total se met à jour automatiquement.	Valid SUMIF(criteria_range ; criteria ; sum_range) syntax: the subtotal updates automatically.
+=SIERREUR(RECHERCHEV(A{0};Tarifs;{1};FAUX);"Code à vérifier")	=SIERREUR(RECHERCHEV(A{0};Tarifs;{1};FAUX);"Check code")
+;"Code à vérifier")	;"Code à vérifier")
+Encadrez la recherche par `=SIERREUR(RECHERCHEV(...) ; "Code à vérifier")`.	Wrap the lookup with `=SIERREUR(RECHERCHEV(...) ; "Code à vérifier")`.
+Encadrez la recherche par =SIERREUR(RECHERCHEV(...) ; "Code à vérifier").	Wrap the lookup with =SIERREUR(RECHERCHEV(...) ; "Code à vérifier").
+Danger métier : renvoyer {0} cache un code introuvable dans la somme du devis ! Renvoyez un texte explicite.	Costing hazard: returning {0} hides a missing item code inside the estimate total! Return an explicit alert text.
+Parfait : SIERREUR(... ; "Code à vérifier") intercepte #N/A tout en gardant l’alerte bien visible.	Spot-on: SIERREUR(... ; "Code à vérifier") catches #N/A while keeping the warning clearly visible.
+Complétez le second argument de SIERREUR(formule ; "Message d’alerte").	Complete the second argument of SIERREUR(formula ; "Alert message").
+Camille : commencez par le signe = (sans lui, le tableur stocke un simple texte).	Camille: start with = (without it, the spreadsheet stores plain text).
+Camille : parenthèses non équilibrées ({0} ouverte(s) pour {1} fermée(s)).	Camille: unbalanced parentheses ({0} open vs {1} closed).
+Camille : en version française, séparez les arguments par un point-virgule « ; » (la virgule sert aux décimales).	Camille: in French spreadsheet syntax, separate arguments with a semicolon ";" (commas are decimal separators).
+Variante de chantier : l’ancre `$B${0}` est bien posée, mais la poignée de recopie s’est arrêtée à la ligne {1} au lieu de couvrir les {2} postes du bordereau.	Site variant: anchor `$B${0}` is properly set, but the fill handle stopped at row {1} instead of covering all {2} schedule items.
+Variante de chantier : toutes les longueurs sont bien en mètres, mais le premier tronçon a été saisi à {0} m au lieu des {1} m cotés sur le plan (le second vaut {2} m, total attendu : {3} m).	Site variant: all lengths are in meters, but the first section was typed as {0} m instead of the {1} m shown on the drawing (the second is {2} m, expected total: {3} m).
+Variante de chantier : le pointage hebdomadaire est bien à {0} h, mais le taux horaire de base a été saisi à {1} €/h au lieu de {2} €/h prévus par la grille (total attendu : {3} €).	Site variant: weekly hours are right ({0} h), but base hourly pay was entered as {1} €/h instead of {2} €/h on the schedule (expected total: {3} €).
+Variante de chantier : le taux normal de TVA à {0} % est bien sélectionné, mais le montant HT unitaire a été saisi en double ({1} € HT au lieu de {2} € HT, soit {3} € TTC attendus).	Site variant: standard {0}% VAT is selected, but unit Excl.-VAT price was entered twice ({1} € Excl. VAT instead of {2} € Excl. VAT, expected {3} € Incl. VAT).
+Variante de chantier : la synthèse filtre bien le lot n° {0}, mais l’indice d’actualisation des prix est resté bloqué à +{1} % d’un ancien scénario au lieu de {2} % (base marché).	Site variant: summary properly filters trade #{0}, but the price-indexation slider stayed stuck at +{1}% from an old scenario instead of {2}% (base contract).
+Variante de chantier : l’axe vertical part bien de {0} €, mais la valeur de la semaine {1} a été saisie à +{2} € d’écart au lieu de +{3} € ({4} € attendus).	Site variant: vertical axis starts honestly at {0} €, but week {1}'s variance was typed as +{2} € instead of +{3} € ({4} € expected).
+Variante de chantier : `SIERREUR` encadre déjà les codes absents, mais le classeur s’apprête à partir sur chantier sans verrouillage des cellules de formules.	Site variant: `IFERROR` already catches missing codes, but the workbook is about to go on site without locking formula cells.

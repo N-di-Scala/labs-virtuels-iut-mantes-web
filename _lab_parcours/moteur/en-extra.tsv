@@ -1,0 +1,142 @@
+# English translations for shared lab engine upgrades (P1 media modal, P8 micro-gauges, P9 replay variants, P10 targeted review)
+Parcours : terminé (anneau vert) · étoile pas encore obtenue	Course: completed (green ring) · star not earned yet
+Étape {0} · Diagnostic · cas {1}/{2}	Step {0} · Diagnosis · case {1}/{2}
+Défi chronométré : retrouvez la commande responsable ({0} essai), puis corrigez-la en moins de {1} s.	Timed challenge: find the faulty control ({0} try), then fix it in under {1} s.
+Défi chronométré : retrouvez la commande responsable ({0} essais), puis corrigez-la en moins de {1} s.	Timed challenge: find the faulty control ({0} tries), then fix it in under {1} s.
+Rejouer en défi chronométré (nouvelle panne)	Replay as timed challenge (new fault)
+Réviser mes points fragiles ({0} min)	Review my weak spots ({0} min)
+{0} ateliers commencés	{0} workshops started
+Une progression est enregistrée sur ce navigateur :	Progress is already saved in this browser:
+. C’est la vôtre ?	. Is it yours?
+Une progression est enregistrée sur ce navigateur : <b>{0} ateliers commencés</b>. C’est la vôtre ?	Progress is already saved in this browser: <b>{0} workshops started</b>. Is it yours?
+Oui, reprendre	Yes, resume
+Non : nouvelle session	No: start fresh
+Fiche visuelle & vidéo du cours	Course visual sheet & video
+Fiche visuelle du cours	Course visual sheet
+Regarder la capsule ({0} min)	Watch video clip ({0} min)
+Revoir l’infographie / vidéo	Review infographic / video
+Revoir l’infographie	Review infographic
+Consulter la fiche visuelle / vidéo de cet atelier	Open this workshop’s visual / video sheet
+Camille · révision ciblée ({0} min)	Camille · targeted review ({0} min)
+<span></span>Camille · révision ciblée ({0} min)	<span></span>Camille · targeted review ({0} min)
+Consolidation de vos points fragiles	Consolidating your weak spots
+J’ai sélectionné {0} questions centrées en priorité sur les {1} notion(s) où vous aviez hésité ou changé d’idée en chemin.	I picked {0} questions focused first on the {1} concept(s) where you hesitated or changed your mind along the way.
+Vos parcours précédents étaient très sûrs : voici {0} questions de synthèse pour consolider vos acquis sur la durée.	Your previous runs were rock-solid: here are {0} synthesis questions to lock in long-term retention.
+Terminer la révision	Finish review
+Question suivante →	Next question →
+Voir mon score →	See my score →
+Score de révision : {0} / {1}	Review score: {0} / {1}
+{0}/{1} · Atelier « Exemple » · Transfert · point à consolider	{0}/{1} · Workshop "Example" · Transfer · point to consolidate
+{0}/{1} · Atelier « Exemple » · Mécanisme clé · point à consolider	{0}/{1} · Workshop "Example" · Key mechanism · point to consolidate
+{0}/{1} · Atelier « Exemple » · Transfert	{0}/{1} · Workshop "Example" · Transfer
+{0}/{1} · Atelier « Exemple » · Mécanisme clé	{0}/{1} · Workshop "Example" · Key mechanism
+Cliquer pour zoomer / dézoomer	Click to zoom in / out
+Fiche infographique	Infographic sheet
+Capsule vidéo commentée	Narrated video clip
+Fiche {0}/{1}	Sheet {0}/{1}
+Astuce : cliquez sur l’infographie pour zoomer à {0} % et lire les schémas de détail.	Tip: click the infographic to zoom to {0}% and inspect detailed diagrams.
+Ouvrir l’image en plein onglet ↗	Open image in new tab ↗
+Parcours de l’atelier	Workshop course
+Repère métier	Engineering benchmark
+<b>!</b> < {0} m/s	<b>!</b> < {0} m/s
+<b>✓</b> {0}-{1} m/s	<b>✓</b> {0}-{1} m/s
+<b>!</b> {0}-{1} m/s	<b>!</b> {0}-{1} m/s
+<b>✗</b> > {0} m/s (bruit)	<b>✗</b> > {0} m/s (noise)
+> {0} m/s (bruit)	> {0} m/s (noise)
+<b>✓</b> ≤ {0} m/s	<b>✓</b> ≤ {0} m/s
+<b>!</b> limite acoust.	<b>!</b> acoustic limit
+limite acoust.	acoustic limit
+<b>✗</b> > {0} m/s	<b>✗</b> > {0} m/s
+<b>✗</b> < {0} bar	<b>✗</b> < {0} bar
+<b>!</b> limite	<b>!</b> borderline
+limite	borderline
+<b>✓</b> confort {0}-{1} bar	<b>✓</b> comfort {0}-{1} bar
+confort {0}-{1} bar	comfort {0}-{1} bar
+<b>!</b> > {0} bar (réducteur)	<b>!</b> > {0} bar (PRV needed)
+> {0} bar (réducteur)	> {0} bar (PRV needed)
+<b>✓</b> sain ≥ {0}	<b>✓</b> healthy ≥ {0}
+sain ≥ {0}	healthy ≥ {0}
+<b>!</b> seuil {0}	<b>!</b> threshold {0}
+seuil {0}	threshold {0}
+<b>✗</b> < {0} moisissures	<b>✗</b> < {0} mold risk
+< {0} moisissures	< {0} mold risk
+<b>✓</b> isolé RE{0}	<b>✓</b> RE{0} insulated
+isolé RE{0}	RE{0} insulated
+<b>!</b> correct réno	<b>!</b> decent retrofit
+correct réno	decent retrofit
+<b>✗</b> paroi déperditive	<b>✗</b> high heat-loss wall
+paroi déperditive	high heat-loss wall
+<b>✓</b> maîtrisé ≤ {0} %	<b>✓</b> controlled ≤ {0}%
+maîtrisé ≤ {0} %	controlled ≤ {0}%
+<b>!</b> significatif	<b>!</b> significant
+significatif	significant
+<b>✗</b> > {0} % déperd.	<b>✗</b> > {0}% losses
+> {0} % déperd.	> {0}% losses
+<b>✓</b> classe A-B	<b>✓</b> EPC class A-B
+classe A-B	EPC class A-B
+<b>!</b> classe C-D	<b>!</b> EPC class C-D
+classe C-D	EPC class C-D
+<b>✗</b> passoire E-G	<b>✗</b> poor EPC E-G
+passoire E-G	poor EPC E-G
+<b>✓</b> cible {0}-{1} s	<b>✓</b> target {0}-{1} s
+cible {0}-{1} s	target {0}-{1} s
+<b>!</b> un peu réverb.	<b>!</b> slightly echoey
+un peu réverb.	slightly echoey
+<b>✗</b> brouhaha > {0} s	<b>✗</b> echoey > {0} s
+brouhaha > {0} s	echoey > {0} s
+<b>✓</b> ≥ {0} h (nuit)	<b>✓</b> ≥ {0} h (night)
+≥ {0} h (nuit)	≥ {0} h (night)
+<b>!</b> {0}-{1} h moyen	<b>!</b> {0}-{1} h moderate
+{0}-{1} h moyen	{0}-{1} h moderate
+<b>✗</b> < {0} h (surchauffe)	<b>✗</b> < {0} h (overheating)
+< {0} h (surchauffe)	< {0} h (overheating)
+<b>✓</b> calme ≤ {0} dB	<b>✓</b> quiet ≤ {0} dB
+calme ≤ {0} dB	quiet ≤ {0} dB
+<b>!</b> gênant	<b>!</b> intrusive
+gênant	intrusive
+<b>✗</b> fort > {0} dB	<b>✗</b> loud > {0} dB
+fort > {0} dB	loud > {0} dB
+<b>✓</b> précis ≤ {0} %	<b>✓</b> precise ≤ {0}%
+précis ≤ {0} %	precise ≤ {0}%
+<b>!</b> modéré	<b>!</b> moderate
+modéré	moderate
+<b>✗</b> > {0} % imprécis	<b>✗</b> > {0}% imprecise
+> {0} % imprécis	> {0}% imprecise
+: glisser vers la droite ou la gauche pour modifier l’épaisseur e de la paroi	: drag left or right to change wall thickness e
+Lancer la capsule vidéo commentée sur YouTube ↗	Watch the narrated video clip on YouTube ↗
+Ouverture locale hors serveur web : cliquez pour ouvrir directement la vidéo sans erreur de lecteur intégré.	Local file mode (outside a web server): click to open the video directly without an embedded player error.
+Capsule vidéo commentée du cours (lecteur sans traceur).	Narrated course video clip (privacy-enhanced player).
+Capsule vidéo commentée du cours.	Narrated course video clip.
+Regarder sur YouTube ↗	Watch on YouTube ↗
+Pas encore fait	Not started yet
+Rang	Rank
+Barre de formule · C{0}	Formula bar · C{0}
+Barre de formule · D{0}	Formula bar · D{0}
+Barre de formule · F{0}	Formula bar · F{0}
+Testez votre écriture tableur	Test your spreadsheet formula
+Le bloc de charge cinétique v²/({0}g)	The kinetic head block v²/({0}g)
+glisser vers le haut ou le bas pour modifier la vitesse d’écoulement v	drag up or down to change flow velocity v
+: glisser vers le haut ou le bas pour modifier la vitesse d’écoulement v	: drag up or down to change flow velocity v
+Le nez de dalle / voile béton	The slab edge / concrete wall
+glisser vers le haut ou le bas pour régler le pont thermique linéique HL	drag up or down to adjust linear thermal bridge HL
+: glisser vers le haut ou le bas pour régler le pont thermique linéique HL	: drag up or down to adjust linear thermal bridge HL
+L’isolant	The insulation
+glisser sa face libre pour changer son épaisseur	drag its free face to change its thickness
+: glisser sa face libre pour changer son épaisseur	: drag its free face to change its thickness
+<b>Glisser l’isolant</b><br>pour changer son épaisseur	<b>Drag the insulation</b><br>to change its thickness
+<b>Pont thermique de plancher</b><br>En ITI, le plancher traverse l’isolant : fuite de chaleur concentrée.	<b>Floor thermal bridge</b><br>With internal insulation (IWI), the slab cuts through the insulation: concentrated heat leak.
+<b>Béton</b><br>En ITE, sa masse reste côté chaud : utile pour le confort d’été.	<b>Concrete</b><br>With external insulation (EWI), its thermal mass stays on the warm side: helpful for summer comfort.
+U mur	Wall U
+U mur courant	Main wall U
+{0} W/(m²·K) · R iso {1}	{0} W/(m²·K) · R insul. {1}
+Jonction	Junction
+Jonction protégée	Protected junction
+Pont de plancher	Floor thermal bridge
+isolant dehors, béton côté chaud	insulation outside, concrete on warm side
+isolant dedans, béton côté froid	insulation inside, concrete on cold side
+Zoom sur la jonction mur / plancher	Zoom on wall / floor junction
+<a>Ouvrir l’image en plein onglet ↗</a>	<a>Open image in new tab ↗</a>
+<a>Regarder sur YouTube ↗</a>	<a>Watch on YouTube ↗</a>
+<a>Regarder sur YouTube ↗</a><a>Ouvrir l’image en plein onglet ↗</a>	<a>Watch on YouTube ↗</a><a>Open image in new tab ↗</a>
+Aucune erreur marquée jusqu’ici : voici {0} questions de synthèse pour ancrer vos réflexes métiers.	No errors flagged so far: here are {0} synthesis questions to lock in your engineering reflexes.
+<span>Le Plateau</span><em>{0}.{1} bar</em>	<span>Le Plateau</span><em>{0}.{1} bar</em>

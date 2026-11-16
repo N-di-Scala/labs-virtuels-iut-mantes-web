@@ -1,0 +1,386 @@
+# English translations for portal upgrades (P1-P4: Charte BET, personal progress, Studio semester cards, Lightbox, Hero3D)
+Tous semestres · B.U.T. Génie civil - Construction durable	All semesters · B.U.T. Civil Engineering - Sustainable Construction
+en mode bureau d’études	in engineering consultancy mode
+Charte du projet	Project Charter
+Charte du projet <em>en mode bureau d’études</em>	Project Charter <em>in engineering consultancy mode</em>
+Pendant vos séances de projet à l’IUT, vous ne faites pas une suite d’exercices scolaires isolés : vous travaillez en équipe de techniciens-conseils sur un dossier complet, du premier métré jusqu’à la soutenance devant le maître d’ouvrage.	During your project sessions at the IUT, you are not completing isolated classroom exercises: you work as a team of consulting engineers on a full project file, from initial quantity take-off to the final defense before the project owner.
+Équipes de ≈ {0} techniciens-conseils	Teams of ≈ {0} consulting technicians
+Étapes chaînées N → N+{0}	Chained stages N → N+{0}
+{0} piliers d’évaluation	{0} assessment pillars
+Interlocuteur mystère & droit de rachat	Mystery spokesperson & second-chance rule
+<a>← Retour à l’accueil des laboratoires</a>	<a>← Back to virtual labs home</a>
+bureau d’études (BET)	engineering office (BET)
+Vos rôles en	Your roles in an
+Vos rôles en <em>bureau d’études (BET)</em>	Your roles in an <em>engineering office (BET)</em>
+Votre équipe	Your team
+Techniciens-conseils	Consulting technicians
+{0} étudiants	{0} students
+Vous êtes regroupés en équipes d’environ	You work in teams of around
+. Vous organisez la répartition des calculs, la vérification croisée des formules, la tenue du classeur commun et la clarté des livrables remis à chaque jalon.	. Together you organize calculation sharing, cross-checking of formulas, maintenance of the shared workbook, and the clarity of deliverables at each milestone.
+Vous êtes regroupés en équipes d’environ <b>{0} étudiants</b>. Vous organisez la répartition des calculs, la vérification croisée des formules, la tenue du classeur commun et la clarté des livrables remis à chaque jalon.	You work in teams of around <b>{0} students</b>. Together you organize calculation sharing, cross-checking of formulas, maintenance of the shared workbook, and the clarity of deliverables at each milestone.
+Votre enseignant	Your instructor
+Directeur Technique, puis Client final	Technical Director, then Final Client
+Directeur Technique	Technical Director
+Client / Maître d’Ouvrage	Client / Project Owner
+Pendant toutes les séances de travail, l’enseignant agit comme votre	Throughout working sessions, your instructor acts as your
+: il guide, débloque les points durs et valide vos étapes. Le jour de la soutenance finale, il endosse le rôle du	: guiding you, unblocking tough points, and validating milestones. On final defense day, they step into the role of the
+devant qui vous défendez vos choix.	before whom you defend your technical choices.
+Pendant toutes les séances de travail, l’enseignant agit comme votre <b>Directeur Technique</b> : il guide, débloque les points durs et valide vos étapes. Le jour de la soutenance finale, il endosse le rôle du <b>Client / Maître d’Ouvrage</b> devant qui vous défendez vos choix.	Throughout working sessions, your instructor acts as your <b>Technical Director</b>: guiding you, unblocking tough points, and validating milestones. On final defense day, they step into the role of the <b>Client / Project Owner</b> before whom you defend your technical choices.
+le rituel d’une séance	session workflow
+La chaîne du projet &	Project chain &
+La chaîne du projet & <em>le rituel d’une séance</em>	Project chain & <em>session workflow</em>
+les résultats de l’étape N nourrissent directement l’étape N+{0}	stage N results directly feed stage N+{0}
+Dans un vrai dossier d’ingénierie,	In a real engineering file,
+(un métré ou une déperdition erronés faussent le dimensionnement et le chiffrage qui suivent). Un chronogramme précis, indiquant le budget de séances par étape, vous est remis dès la séance {0}.	(an inaccurate quantity take-off or heat-loss figure distorts subsequent sizing and costing). A clear schedule showing the session budget per stage is provided in session {0}.
+Dans un vrai dossier d’ingénierie, <b>les résultats de l’étape N nourrissent directement l’étape N+{0}</b> (un métré ou une déperdition erronés faussent le dimensionnement et le chiffrage qui suivent). Un chronogramme précis, indiquant le budget de séances par étape, vous est remis dès la séance {1}.	In a real engineering file, <b>stage N results directly feed stage N+{0}</b> (an inaccurate quantity take-off or heat-loss figure distorts subsequent sizing and costing). A clear schedule showing the session budget per stage is provided in session {1}.
+(≈ {0} min / groupe)	(≈ {0} min / team)
+Top départ · Brief d’équipe	Kick-off · Team brief
+Top départ · Brief d’équipe <em>(≈ {0} min / groupe)</em>	Kick-off · Team brief <em>(≈ {0} min / team)</em>
+Où en êtes-vous ? Qu’est-ce qui vous bloque ? Quel est votre objectif précis d’ici la fin de la séance ?	Where do you stand? What is blocking you? What is your exact target by the end of this session?
+Point rapide en début de séance avec le Directeur Technique autour de trois questions :	Quick check-in at the start of the session with the Technical Director around three questions:
+Point rapide en début de séance avec le Directeur Technique autour de trois questions : <b>Où en êtes-vous ? Qu’est-ce qui vous bloque ? Quel est votre objectif précis d’ici la fin de la séance ?</b>	Quick check-in at the start of the session with the Technical Director around three questions: <b>Where do you stand? What is blocking you? What is your exact target by the end of this session?</b>
+Production en autonomie supervisée	Supervised autonomous engineering work
+Calculs physiques, schémas de principe, structuration du classeur de calcul, contrôles d’ordres de grandeur et rédaction progressive des notes justificatives.	Physical calculations, schematic diagrams, structuring the calculation workbook, order-of-magnitude checks, and progressive drafting of technical notes.
+(≈ {0} min / groupe en fin d’étape)	(≈ {0} min / team at stage end)
+Revue de projet & validation	Project review & milestone sign-off
+Revue de projet & validation <em>(≈ {0} min / groupe en fin d’étape)</em>	Project review & milestone sign-off <em>(≈ {0} min / team at stage end)</em>
+Vérification du livrable de l’étape, contrôle de la maîtrise collective et saisie de l’avancement sur la fiche de suivi de chantier avant de débloquer l’étape suivante.	Checking the stage deliverable, verifying collective mastery, and recording progress on the project tracking sheet before unlocking the next stage.
+de l’évaluation	of assessment
+Les trois piliers	The three pillars
+Les trois piliers <em>de l’évaluation</em>	The three pillars <em>of assessment</em>
+Pilier {0}	Pillar {0}
+Rapport & livrable écrit	Written report & deliverable
+Notes de calcul structurées, hypothèses explicites, unités systématiques, schémas lisibles, classeurs propres et conclusions argumentées pour le maître d’ouvrage.	Structured calculation notes, explicit assumptions, consistent units, legible diagrams, clean spreadsheets, and reasoned conclusions for the project owner.
+Soutenance orale finale	Final oral defense
+{0} h {1} par groupe	{0} h {1} per team
+{0} minutes de présentation	{0}-minute presentation
+{0} heure de questions	{0} hour of Q&A
+Créneau maximal d’	Maximum slot of
+structurée en équipe, suivies d’environ	as a structured team pitch, followed by around
+techniques et d’arbitrages avec le Client.	on technical trade-offs with the Client.
+Créneau maximal d’<b>{0} h {1} par groupe</b> : environ <b>{2} minutes de présentation</b> structurée en équipe, suivies d’environ <b>{3} heure de questions</b> techniques et d’arbitrages avec le Client.	Maximum slot of <b>{0} h {1} per team</b>: around a <b>{2}-minute presentation</b> as a structured team pitch, followed by around <b>{3} hour of Q&A</b> on technical trade-offs with the Client.
+Participation « suivi de chantier »	Continuous "site-log" participation
+Évaluation continue au fil des validations d’étapes collectives en séance : régularité, implication dans le groupe, rigueur technique et capacité à justifier le travail produit.	Continuous evaluation across milestone reviews in class: consistency, team engagement, technical rigor, and ability to justify the work produced.
+interlocuteur mystère & rachat	mystery spokesperson & second chance
+Responsabilité collective :	Collective accountability:
+Responsabilité collective : <em>interlocuteur mystère & rachat</em>	Collective accountability: <em>mystery spokesperson & second chance</em>
+Anti-passager clandestin	No free-riding
+La règle de l’interlocuteur mystère	The mystery spokesperson rule
+désigne aléatoirement un membre du groupe	randomly picks one team member
+Lors de chaque validation d’étape, le Directeur Technique	At each milestone review, the Technical Director
+pour expliquer un calcul, une formule de tableur ou un graphique du livrable.	to explain a calculation, a spreadsheet formula, or a chart from the deliverable.
+Lors de chaque validation d’étape, le Directeur Technique <b>désigne aléatoirement un membre du groupe</b> pour expliquer un calcul, une formule de tableur ou un graphique du livrable.	At each milestone review, the Technical Director <b>randomly picks one team member</b> to explain a calculation, a spreadsheet formula, or a chart from the deliverable.
+l’étape n’est pas validée et toute l’équipe est solidaire	the milestone is not validated and the whole team shares responsibility
+Si la personne désignée est incapable d’expliquer ce que le groupe présente (travail découpé en silos sans relecture croisée, ou sortie d’IA recopiée sans recul),	If the selected member cannot explain what the team is presenting (siloed work without peer review, or copy-pasted AI output without understanding),
+Si la personne désignée est incapable d’expliquer ce que le groupe présente (travail découpé en silos sans relecture croisée, ou sortie d’IA recopiée sans recul), <b>l’étape n’est pas validée et toute l’équipe est solidaire</b>.	If the selected member cannot explain what the team is presenting (siloed work without peer review, or copy-pasted AI output without understanding), <b>the milestone is not validated and the whole team shares responsibility</b>.
+Droit à l’erreur formatif	Formative right to improve
+Le droit de rachat à l’étape suivante	Second-chance recovery at the next milestone
+note provisoire basse	provisional low score
+Une non-validation n’est jamais une sanction définitive : elle ouvre une	A non-validation is never a final penalty: it records a
+sans bloquer l’avancement matériel du projet.	without blocking your physical progress on the project.
+Une non-validation n’est jamais une sanction définitive : elle ouvre une <b>note provisoire basse</b> sans bloquer l’avancement matériel du projet.	A non-validation is never a final penalty: it records a <b>provisional low score</b> without blocking your physical progress on the project.
+réexpliquer les notions au camarade concerné	re-explain the concepts to that teammate
+cette même personne sera réinterrogée	that same teammate will be questioned again
+La mission de l’équipe consiste alors à	The team’s mission is then to
+d’ici le jalon suivant, où	before the next milestone, where
+afin de revaloriser la note de toute l’équipe.	so the entire team’s grade is upgraded.
+La mission de l’équipe consiste alors à <b>réexpliquer les notions au camarade concerné</b> d’ici le jalon suivant, où <b>cette même personne sera réinterrogée</b> afin de revaloriser la note de toute l’équipe.	The team’s mission is then to <b>re-explain the concepts to that teammate</b> before the next milestone, where <b>that same teammate will be questioned again</b> so the entire team’s grade is upgraded.
+& laboratoires virtuels	& virtual labs
+Outils numériques, IA	Digital tools, AI
+Outils numériques, IA <em>& laboratoires virtuels</em>	Digital tools, AI <em>& virtual labs</em>
+La règle d’or sur les outils numériques et l’intelligence artificielle	The golden rule on digital tools and artificial intelligence
+autorisés	allowed
+une condition absolue	one absolute condition
+{0} % des membres du groupe doivent maîtriser et savoir démontrer chaque chiffre, chaque formule et chaque graphique à tout instant	{0}% of team members must understand and be able to prove every figure, every formula, and every chart at any time
+Tableur, outils numériques, infographies, vidéos de cours et assistants d’IA sont	Spreadsheets, digital tools, infographics, course videos, and AI assistants are
+pour comprendre une notion, vérifier une cohérence ou soigner une mise en page, à	to grasp a concept, check consistency, or polish layout, under
+Tableur, outils numériques, infographies, vidéos de cours et assistants d’IA sont <b>autorisés</b> pour comprendre une notion, vérifier une cohérence ou soigner une mise en page, à <b>une condition absolue</b> : <b>{0} % des membres du groupe doivent maîtriser et savoir démontrer chaque chiffre, chaque formule et chaque graphique à tout instant</b>.	Spreadsheets, digital tools, infographics, course videos, and AI assistants are <b>allowed</b> to grasp a concept, check consistency, or polish layout, under <b>one absolute condition</b>: <b>{0}% of team members must understand and be able to prove every figure, every formula, and every chart at any time</b>.
+missions fictives	fictional engineering missions
+Les six laboratoires virtuels de ce portail sont conçus exactement dans cet esprit : vous permettre de vous entraîner individuellement, chez vous et à votre rythme, sur des	The six virtual labs on this portal are built in that exact spirit: letting you practice individually, from home and at your own pace, on
+avant d’appliquer les méthodes aux données réelles de votre projet.	before applying the methods to your real project data.
+Les six laboratoires virtuels de ce portail sont conçus exactement dans cet esprit : vous permettre de vous entraîner individuellement, chez vous et à votre rythme, sur des <b>missions fictives</b> avant d’appliquer les méthodes aux données réelles de votre projet.	The six virtual labs on this portal are built in that exact spirit: letting you practice individually, from home and at your own pace, on <b>fictional engineering missions</b> before applying the methods to your real project data.
+Ressource	Course unit
+Thématique travaillée	Core engineering topics
+Semestre	Semester
+Entraînement interactif	Interactive training
+<b>Méthode de travail universitaire</b><small>Tableur, références, logique de classeur</small>	<b>Academic & spreadsheet methods</b><small>Spreadsheets, cell references, workbook logic</small>
+<b>Réseaux secs et humides</b><small>Hydraulique AEP, charges, pertes, pompe</small>	<b>Dry and wet utility networks</b><small>Water supply hydraulics, heads, losses, pump</small>
+<b>Fonctions des composants des bâtiments</b><small>Métrologie, incertitudes, conformité</small>	<b>Building component functions</b><small>Metrology, uncertainties, conformity</small>
+<b>Transferts thermiques et hydriques</b><small>Parois, confort, Glaser, ITI / ITE</small>	<b>Heat and moisture transfer</b><small>Walls, comfort, Glaser, internal vs external insulation</small>
+<b>Physique et énergétique du bâtiment {0}</b><small>Transmission, DJU, DPE, rénovation</small>	<b>Building physics & energy {0}</b><small>Transmission, degree-days, EPC, retrofit</small>
+<b>Physique et énergétique du bâtiment {0}</b><small>Été, inertie, BEPOS, aéraulique, acoustique</small>	<b>Building physics & energy {0}</b><small>Summer comfort, thermal mass, positive-energy, HVAC, acoustics</small>
+<a>Entraînement : Gymnase de Clairmont →</a>	<a>Practice: Clairmont Gymnasium →</a>
+<a>Entraînement : Valdeau →</a>	<a>Practice: Valdeau →</a>
+<a>Entraînement : Pierreclaire →</a>	<a>Practice: Pierreclaire →</a>
+<a>Entraînement : Halle de Valvert →</a>	<a>Practice: Valvert Hall →</a>
+<a>Entraînement : Pavillon des Aulnes →</a>	<a>Practice: Les Aulnes House →</a>
+<a>Entraînement : Maison de santé de Lironde →</a>	<a>Practice: Lironde Health Center →</a>
+Charte du projet - IUT Mantes · GC-CD	Project Charter - IUT Mantes · GC-CD
+Charte du projet (mode BET)	Project Charter (BET mode)
+← Accueil du quartier {0}D	← Back to {0}D campus
+Accès direct aux ateliers	Direct access to workshops
+Ouvrir directement cet atelier	Open this workshop directly
+Atelier terminé	Workshop completed
+Atelier terminé · Étoile obtenue	Workshop completed · Star earned
+En cours ({0}/{1} étapes)	In progress ({0}/{1} steps)
+✓ Parcours terminé ({0}/{1}) · ★ {2}	✓ Course completed ({0}/{1}) · ★ {2}
+✓ Parcours terminé ({0}/{1})	✓ Course completed ({0}/{1})
+◐ Progression : {0}/{1} · ★ {2}	◐ Progress: {0}/{1} · ★ {2}
+◐ Progression : {0}/{1}	◐ Progress: {0}/{1}
+R {0}-{1} · {2} ateliers guidés · ≈ {3} h {4}	R {0}-{1} · {2} guided workshops · ≈ {3} h {4}
+R {0}-{1} · {2} ateliers guidés · ≈ {3} h	R {0}-{1} · {2} guided workshops · ≈ {3} h
+Manipuler en {0}D →	Explore in {0}D →
+Cliquez une fiche pour l’ouvrir dans la visionneuse interactive (zoom, navigation ←/→, vidéo intégrée et lien direct vers l’atelier {0}D).	Click any sheet to open it in the interactive viewer (zoom, ←/→ navigation, embedded video, and direct link to the {0}D workshop).
+▶ Vidéo	▶ Video
+▶ Voir la vidéo	▶ Watch video
+Visionneuse d’infographies et vidéos	Infographics & video viewer
+Infographie HD	HD Infographic
+▶ Vidéo expliquée	▶ Explained video
+Zoomer / dézoomer sur l’infographie	Zoom in / out on infographic
+🔍 Loupe	🔍 Zoom
+Fermer la visionneuse	Close viewer
+Fiche précédente	Previous sheet
+Fiche suivante	Next sheet
+Manipuler cette notion dans l’atelier {0}D →	Practice this concept in the {0}D workshop →
+Ouvrir l’image seule ↗	Open full image ↗
+Ouvrir sur YouTube ↗	Open on YouTube ↗
+R{0}-{1} · Fiche {2} / {3}	R{0}-{1} · Sheet {2} / {3}
+Mission d’entraînement : Gymnase de Clairmont	Training mission: Clairmont Gymnasium
+Mission d’entraînement : Valdeau	Training mission: Valdeau
+Mission d’entraînement : Pierreclaire	Training mission: Pierreclaire
+Mission d’entraînement : Halle de Valvert	Training mission: Valvert Hall
+Mission d’entraînement : Pavillon des Aulnes	Training mission: Les Aulnes House
+Mission d’entraînement : Maison de santé de Lironde	Training mission: Lironde Health Center
+Méthode de travail, réseaux, métrologie. Ouvrez directement un atelier en {0}D, reprenez votre progression ou parcourez les infographies et vidéos dans la visionneuse intégrée.	Spreadsheet methods, water networks, metrology. Jump straight into a {0}D workshop, resume your progress, or browse infographics and videos in the built-in viewer.
+Transferts thermiques et hydriques. Ouvrez directement un atelier en {0}D, reprenez votre progression ou parcourez les infographies et vidéos dans la visionneuse intégrée.	Heat and moisture transfer. Jump straight into a {0}D workshop, resume your progress, or browse infographics and videos in the built-in viewer.
+Physique et énergétique du bâtiment {0}. Ouvrez directement un atelier en {1}D, reprenez votre progression ou parcourez les infographies et vidéos dans la visionneuse intégrée.	Building physics and energy {0}. Jump straight into a {1}D workshop, resume your progress, or browse infographics and videos in the built-in viewer.
+Ma progression personnelle	My personal progress
+Suivi individuel local :	Local individual tracking:
+votre avancement s’enregistrera automatiquement sur votre navigateur (invisible des autres étudiants).	your progress is saved automatically in your own browser (invisible to other students).
+<b>Suivi individuel local :</b> votre avancement s’enregistrera automatiquement sur votre navigateur (invisible des autres étudiants).	<b>Local individual tracking:</b> your progress is saved automatically in your own browser (invisible to other students).
+Reprendre depuis un fichier .json →	Restore from a .json file →
+Ma progression personnelle sur cet appareil	My personal progress on this device
+<b>{0} / {1}</b> ateliers terminés	<b>{0} / {1}</b> workshops completed
+<b>{0}</b> en cours	<b>{0}</b> in progress
+étoiles	stars
+<b>★ {0}</b> étoiles	<b>★ {0}</b> stars
+Enregistré uniquement dans le stockage local de votre navigateur : aucun autre étudiant ne voit votre avancement.	Saved strictly in your browser’s local storage: no other student can see your progress.
+Revoir R {0}-{1} →	Review R {0}-{1} →
+Choisir un atelier →	Choose a workshop →
+Sauvegarder (.json)	Backup (.json)
+Importer (.json)	Import (.json)
+Poste partagé : effacer	Shared PC: clear
+Ce fichier n’est pas un fichier de progression des laboratoires virtuels.	This file is not a valid virtual-labs progress backup.
+Charger la progression contenue dans ce fichier sur ce navigateur ?	Load the progress from this file into this browser?
+Effacer toute la progression enregistrée sur ce navigateur (utile en fin de séance sur un PC partagé) ?	Clear all progress saved in this browser (useful at the end of a session on a shared PC)?
+Toujours le même rythme : les trois premières étapes font l’essentiel, les deux dernières approfondissent. Le carnet de l’atelier (questions flash, à retenir, fiche infographique et vidéo) s’ouvre au fil du parcours, et un bilan fait le point à la fin du lab.	Always the same five-step rhythm: the first three steps cover the core concepts, the last two go deeper. The workshop notebook (flash questions, key takeaways, infographic sheet, and video) unlocks as you go, ending with a final synthesis.
+Site public pédagogique : pas de sujets notés, pas de corrigés, pas de chiffres des dossiers. Les questions des labs sont formatives (missions fictives), et votre progression reste enregistrée localement sur votre propre navigateur.	Public educational portal: no graded assignments, no answer keys, no real project figures. Lab questions are formative (fictional missions), and your progress stays strictly in your own browser’s local storage.
+Laboratoires virtuels - IUT Mantes · GC-CD	Virtual Labs - IUT Mantes · GC-CD
+Station précédente	Previous station
+Station suivante	Next station
+Visiter les stations	Browse stations
+Parois	Walls
+Été/Son	Summer/Sound
+Eau	Water
+Essais	Testing
+Tableur	Sheets
+<i></i><b>R{0}-{1}</b><em>Parois</em><span>Parois et isolation</span>	<i></i><b>R{0}-{1}</b><em>Walls</em><span>Walls and insulation</span>
+<i></i><b>R{0}-{1}</b><em>Été/Son</em><span>Confort d’été, air, son</span>	<i></i><b>R{0}-{1}</b><em>Summer/Sound</em><span>Summer comfort, air, sound</span>
+<i></i><b>R{0}-{1}</b><em>DPE</em><span>Énergétique, DPE, PAC</span>	<i></i><b>R{0}-{1}</b><em>EPC</em><span>Energy, EPC, heat pump</span>
+<i></i><b>R{0}-{1}</b><em>Eau</em><span>Réseaux d’eau</span>	<i></i><b>R{0}-{1}</b><em>Water</em><span>Water networks</span>
+<i></i><b>R{0}-{1}</b><em>Essais</em><span>Mesures et incertitudes</span>	<i></i><b>R{0}-{1}</b><em>Testing</em><span>Measurements & uncertainties</span>
+<i></i><b>R{0}-{1}</b><em>Tableur</em><span>Tableur et données</span>	<i></i><b>R{0}-{1}</b><em>Sheets</em><span>Spreadsheets & data</span>
+<i></i><b>R{0}-{1}</b><em>Parois</em><span>Parois et isolation</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>Walls</em><span>Walls and insulation</span><u>✓</u>
+<i></i><b>R{0}-{1}</b><em>Été/Son</em><span>Confort d’été, air, son</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>Summer/Sound</em><span>Summer comfort, air, sound</span><u>✓</u>
+<i></i><b>R{0}-{1}</b><em>DPE</em><span>Énergétique, DPE, PAC</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>EPC</em><span>Energy, EPC, heat pump</span><u>✓</u>
+<i></i><b>R{0}-{1}</b><em>Eau</em><span>Réseaux d’eau</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>Water</em><span>Water networks</span><u>✓</u>
+<i></i><b>R{0}-{1}</b><em>Essais</em><span>Mesures et incertitudes</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>Testing</em><span>Measurements & uncertainties</span><u>✓</u>
+<i></i><b>R{0}-{1}</b><em>Tableur</em><span>Tableur et données</span><u>✓</u>	<i></i><b>R{0}-{1}</b><em>Sheets</em><span>Spreadsheets & data</span><u>✓</u>
+<i></i><span><b>R {0}-{1} · Méthode de travail universitaire</b><small>Tableur, références, logique de classeur</small></span><em>✓ {2}/{3} · ★ {4}</em>	<i></i><span><b>R {0}-{1} · Academic & spreadsheet methods</b><small>Spreadsheets, references, workbook logic</small></span><em>✓ {2}/{3} · ★ {4}</em>
+<i></i><span><b>R {0}-{1} · Réseaux secs et humides</b><small>Hydraulique AEP, charges, pertes, pompe</small></span><em>✓ {2}/{3} · ★ {4}</em>	<i></i><span><b>R {0}-{1} · Dry and wet utility networks</b><small>Water hydraulics, heads, losses, pump</small></span><em>✓ {2}/{3} · ★ {4}</em>
+<i></i><span><b>R {0}-{1} · Fonctions des composants des bâtiments</b><small>Métrologie, incertitudes, conformité</small></span><em>✓ {2}/{3} · ★ {4}</em>	<i></i><span><b>R {0}-{1} · Building component functions</b><small>Metrology, uncertainties, conformity</small></span><em>✓ {2}/{3} · ★ {4}</em>
+<a><i></i><span><b>R {0}-{1} · Transferts thermiques et hydriques</b><small>Parois, confort, Glaser, ITI / ITE</small></span><em>✓ {2}/{3} · ★ {4}</em></a>	<a><i></i><span><b>R {0}-{1} · Heat and moisture transfer</b><small>Walls, comfort, Glaser, ITI / ITE</small></span><em>✓ {2}/{3} · ★ {4}</em></a>
+<a><i></i><span><b>R {0}-{1} · Physique et énergétique du bâtiment {2}</b><small>Transmission, DJU, DPE, rénovation</small></span><em>✓ {3}/{4} · ★ {5}</em></a>	<a><i></i><span><b>R {0}-{1} · Building physics & energy {2}</b><small>Transmission, degree-days, EPC, retrofit</small></span><em>✓ {3}/{4} · ★ {5}</em></a>
+<a><i></i><span><b>R {0}-{1} · Physique et énergétique du bâtiment {2}</b><small>Été, inertie, BEPOS, aéraulique, acoustique</small></span><em>✓ {3}/{4} · ★ {5}</em></a>	<a><i></i><span><b>R {0}-{1} · Building physics & energy {2}</b><small>Summer, thermal mass, BEPOS, HVAC, acoustics</small></span><em>✓ {3}/{4} · ★ {5}</em></a>
+Ouvrir R {0}-{1} - Méthode de travail universitaire	Open R {0}-{1} - Academic & spreadsheet methods
+Ouvrir R {0}-{1} - Réseaux secs et humides	Open R {0}-{1} - Dry and wet utility networks
+Ouvrir R {0}-{1} - Fonctions des composants des bâtiments	Open R {0}-{1} - Building component functions
+Ouvrir R {0}-{1} - Transferts thermiques et hydriques	Open R {0}-{1} - Heat and moisture transfer
+Ouvrir R {0}-{1} - Physique et énergétique du bâtiment {2}	Open R {0}-{1} - Building physics & energy {2}
+Maîtriser le dollar références relatives et absolues	Mastering $: relative vs absolute references
+Logique SI et cascade HT TVA TTC en BTP	IF logic and Excl./Incl. VAT cascade in construction
+Fiabiliser un classeur SIERREUR et contrôles croisés	Bulletproof workbooks: IFERROR & cross-checks
+Arbitrage réseau gravitaire ou surpresseur	Gravity network vs booster pump trade-off
+Composition quadratique le Pythagore des incertitudes	Root-sum-of-squares: Pythagoras of uncertainties
+Des DJU au besoin annuel de chauffage	From heating degree-days to annual heating demand
+{0} · Références $	{0} · $ References
+{0} · Unités & formats	{0} · Units & formats
+{0} · Logique SI	{0} · IF logic
+{0} · HT, TVA & TTC	{0} · Excl. & incl. VAT
+{0} · SOMME.SI & TCD	{0} · SUMIF & pivot
+{0} · Graphiques	{0} · Honest charts
+{0} · Qualité & SIERREUR	{0} · Quality & IFERROR
+{0} · Débit & continuité	{0} · Flow & continuity
+{0} · Viscosité & Reynolds	{0} · Viscosity & Reynolds
+{0} · Hydrostatique	{0} · Hydrostatics
+{0} · Bernoulli & Venturi	{0} · Bernoulli & Venturi
+{0} · Pertes linéaires	{0} · Linear head losses
+{0} · Pertes singulières	{0} · Minor head losses
+{0} · Sélection pompe	{0} · Pump selection
+{0} · Réseau du Plateau	{0} · Plateau network
+{0} · Type A & Type B	{0} · Type A & Type B
+{0} · Composition quadratique	{0} · Combined uncertainty
+{0} · Propagation	{0} · Uncertainty propagation
+{0} · Conformité	{0} · Conformity guard band
+{0} · Contrôle de lot	{0} · Batch acceptance
+{0} · Budget d'incertitude	{0} · Uncertainty budget
+{0} · Paroi & résistance R	{0} · Wall & R-value
+{0} · Confort & T_si	{0} · Comfort & T_si
+{0} · Ponts thermiques	{0} · Thermal bridges
+{0} · Vapeur & Glaser	{0} · Vapor & Glaser
+{0} · Déphasage & inertie	{0} · Time lag & inertia
+{0} · ITI vs ITE	{0} · Internal vs external insul.
+{0} · Déperditions U·A	{0} · U·A heat losses
+{0} · Ventilation & H_bât	{0} · Ventilation & H_bât
+{0} · DJU & besoin annuel	{0} · HDD & annual need
+{0} · Double seuil DPE	{0} · Dual EPC threshold
+{0} · Scénario rénovation	{0} · Retrofit scenario
+{0} · VMC & PAC	{0} · MVHR & heat pump
+{0} · Bilan carbone & TRI	{0} · Carbon & payback
+{0} · Apports d'été & Fs	{0} · Summer gains & Fs
+{0} · Inertie estivale	{0} · Summer inertia
+{0} · Solaire & BEPOS	{0} · Solar & positive-energy
+{0} · Réseau aéraulique	{0} · Air duct network
+{0} · Acoustique & T_r	{0} · Acoustics & T_r
+<i></i><span>{0} · Références $</span>	<i></i><span>{0} · $ References</span>
+<i></i><span>{0} · Unités & formats</span>	<i></i><span>{0} · Units & formats</span>
+<i></i><span>{0} · Logique SI</span>	<i></i><span>{0} · IF logic</span>
+<i></i><span>{0} · HT, TVA & TTC</span>	<i></i><span>{0} · Excl. & incl. VAT</span>
+<i></i><span>{0} · SOMME.SI & TCD</span>	<i></i><span>{0} · SUMIF & pivot</span>
+<i></i><span>{0} · Graphiques</span>	<i></i><span>{0} · Honest charts</span>
+<i></i><span>{0} · Qualité & SIERREUR</span>	<i></i><span>{0} · Quality & IFERROR</span>
+<i></i><span>{0} · Débit & continuité</span>	<i></i><span>{0} · Flow & continuity</span>
+<i></i><span>{0} · Viscosité & Reynolds</span>	<i></i><span>{0} · Viscosity & Reynolds</span>
+<i></i><span>{0} · Hydrostatique</span>	<i></i><span>{0} · Hydrostatics</span>
+<i></i><span>{0} · Bernoulli & Venturi</span>	<i></i><span>{0} · Bernoulli & Venturi</span>
+<i></i><span>{0} · Pertes linéaires</span>	<i></i><span>{0} · Linear head losses</span>
+<i></i><span>{0} · Pertes singulières</span>	<i></i><span>{0} · Minor head losses</span>
+<i></i><span>{0} · Sélection pompe</span>	<i></i><span>{0} · Pump selection</span>
+<i></i><span>{0} · Réseau du Plateau</span>	<i></i><span>{0} · Plateau network</span>
+<i></i><span>{0} · Type A & Type B</span>	<i></i><span>{0} · Type A & Type B</span>
+<i></i><span>{0} · Composition quadratique</span>	<i></i><span>{0} · Combined uncertainty</span>
+<i></i><span>{0} · Propagation</span>	<i></i><span>{0} · Uncertainty propagation</span>
+<i></i><span>{0} · Conformité</span>	<i></i><span>{0} · Conformity guard band</span>
+<i></i><span>{0} · Contrôle de lot</span>	<i></i><span>{0} · Batch acceptance</span>
+<i></i><span>{0} · Budget d'incertitude</span>	<i></i><span>{0} · Uncertainty budget</span>
+<i></i><span>{0} · Paroi & résistance R</span>	<i></i><span>{0} · Wall & R-value</span>
+<i></i><span>{0} · Confort & T_si</span>	<i></i><span>{0} · Comfort & T_si</span>
+<i></i><span>{0} · Ponts thermiques</span>	<i></i><span>{0} · Thermal bridges</span>
+<i></i><span>{0} · Vapeur & Glaser</span>	<i></i><span>{0} · Vapor & Glaser</span>
+<i></i><span>{0} · Déphasage & inertie</span>	<i></i><span>{0} · Time lag & inertia</span>
+<i></i><span>{0} · ITI vs ITE</span>	<i></i><span>{0} · Internal vs external insul.</span>
+<i></i><span>{0} · Déperditions U·A</span>	<i></i><span>{0} · U·A heat losses</span>
+<i></i><span>{0} · Ventilation & H_bât</span>	<i></i><span>{0} · Ventilation & H_bât</span>
+<i></i><span>{0} · DJU & besoin annuel</span>	<i></i><span>{0} · HDD & annual need</span>
+<i></i><span>{0} · Double seuil DPE</span>	<i></i><span>{0} · Dual EPC threshold</span>
+<i></i><span>{0} · Scénario rénovation</span>	<i></i><span>{0} · Retrofit scenario</span>
+<i></i><span>{0} · VMC & PAC</span>	<i></i><span>{0} · MVHR & heat pump</span>
+<i></i><span>{0} · Bilan carbone & TRI</span>	<i></i><span>{0} · Carbon & payback</span>
+<i></i><span>{0} · Apports d'été & Fs</span>	<i></i><span>{0} · Summer gains & Fs</span>
+<i></i><span>{0} · Inertie estivale</span>	<i></i><span>{0} · Summer inertia</span>
+<i></i><span>{0} · Solaire & BEPOS</span>	<i></i><span>{0} · Solar & positive-energy</span>
+<i></i><span>{0} · Réseau aéraulique</span>	<i></i><span>{0} · Air duct network</span>
+<i></i><span>{0} · Acoustique & T_r</span>	<i></i><span>{0} · Acoustics & T_r</span>
+Atelier {0} · Références $ →	Workshop {0} · $ References →
+Atelier {0} · Unités & formats →	Workshop {0} · Units & formats →
+Atelier {0} · Logique SI →	Workshop {0} · IF logic →
+Atelier {0} · HT, TVA & TTC →	Workshop {0} · Excl. & incl. VAT →
+Atelier {0} · SOMME.SI & TCD →	Workshop {0} · SUMIF & pivot →
+Atelier {0} · Graphiques →	Workshop {0} · Honest charts →
+Atelier {0} · Qualité & SIERREUR →	Workshop {0} · Quality & IFERROR →
+Atelier {0} · Débit & continuité →	Workshop {0} · Flow & continuity →
+Atelier {0} · Viscosité & Reynolds →	Workshop {0} · Viscosity & Reynolds →
+Atelier {0} · Hydrostatique →	Workshop {0} · Hydrostatics →
+Atelier {0} · Bernoulli & Venturi →	Workshop {0} · Bernoulli & Venturi →
+Atelier {0} · Pertes linéaires →	Workshop {0} · Linear head losses →
+Atelier {0} · Pertes singulières →	Workshop {0} · Minor head losses →
+Atelier {0} · Sélection pompe →	Workshop {0} · Pump selection →
+Atelier {0} · Réseau du Plateau →	Workshop {0} · Plateau network →
+Atelier {0} · Type A & Type B →	Workshop {0} · Type A & Type B →
+Atelier {0} · Composition quadratique →	Workshop {0} · Combined uncertainty →
+Atelier {0} · Propagation →	Workshop {0} · Uncertainty propagation →
+Atelier {0} · Conformité →	Workshop {0} · Conformity guard band →
+Atelier {0} · Contrôle de lot →	Workshop {0} · Batch acceptance →
+Atelier {0} · Budget d'incertitude →	Workshop {0} · Uncertainty budget →
+Atelier {0} · Restitution & bilan →	Workshop {0} · Reporting & synthesis →
+Atelier {0} · Paroi & résistance R →	Workshop {0} · Wall & R-value →
+Atelier {0} · Confort & T_si →	Workshop {0} · Comfort & T_si →
+Atelier {0} · Ponts thermiques →	Workshop {0} · Thermal bridges →
+Atelier {0} · Vapeur & Glaser →	Workshop {0} · Vapor & Glaser →
+Atelier {0} · Déphasage & inertie →	Workshop {0} · Time lag & inertia →
+Atelier {0} · ITI vs ITE →	Workshop {0} · Internal vs external insul. →
+Atelier {0} · Déperditions U·A →	Workshop {0} · U·A heat losses →
+Atelier {0} · Ventilation & H_bât →	Workshop {0} · Ventilation & H_bât →
+Atelier {0} · DJU & besoin annuel →	Workshop {0} · HDD & annual need →
+Atelier {0} · Double seuil DPE →	Workshop {0} · Dual EPC threshold →
+Atelier {0} · Scénario rénovation →	Workshop {0} · Retrofit scenario →
+Atelier {0} · VMC & PAC →	Workshop {0} · MVHR & heat pump →
+Atelier {0} · Bilan carbone & TRI →	Workshop {0} · Carbon & payback →
+Atelier {0} · Apports d'été & Fs →	Workshop {0} · Summer gains & Fs →
+Atelier {0} · Inertie estivale →	Workshop {0} · Summer inertia →
+Atelier {0} · Solaire & BEPOS →	Workshop {0} · Solar & positive-energy →
+Atelier {0} · Réseau aéraulique →	Workshop {0} · Air duct network →
+Atelier {0} · Acoustique & T_r →	Workshop {0} · Acoustics & T_r →
+Techniciens-conseils solidaires	Mutually accountable consulting technicians
+Lire la charte du projet	Read the project charter
+S{0} - <em>Semestre {1}</em>	S{0} - <em>Semester {1}</em>
+S{0} Semestre {1} - Laboratoires virtuels · IUT Mantes	S{0} Semester {1} - Virtual Labs · IUT Mantes
+Page introuvable - IUT Mantes · GC-CD	Page not found - IUT Mantes · GC-CD
+{0} · HT / TVA / TTC	{0} · Excl. & incl. VAT
+<i></i><span>{0} · HT / TVA / TTC</span>	<i></i><span>{0} · Excl. & incl. VAT</span>
+Atelier {0} · HT / TVA / TTC →	Workshop {0} · Excl. & incl. VAT →
+Playlist YouTube ↗	YouTube Playlist ↗
+Agrandir	Enlarge
+Manipuler cette notion dans l’atelier	Practice this concept in the workshop
+dehors -{0} °C	outside -{0} °C
+Ouvrir la fiche Automatisation du suivi de chantier dans la visionneuse	Open sheet Automating site monitoring in viewer
+Ouvrir la fiche Budget de chantier avec SOMME.SI dans la visionneuse	Open sheet Site budget with SUMIF in viewer
+Ouvrir la fiche Guide du pilotage par TCD dans la visionneuse	Open sheet Guide to managing with pivot tables in viewer
+Ouvrir la fiche Concevoir un tableau de bord dans la visionneuse	Open sheet Designing a dashboard in viewer
+Ouvrir la fiche Les fondamentaux d un tableur professionnel dans la visionneuse	Open sheet The fundamentals of a professional spreadsheet in viewer
+Ouvrir la fiche Maîtriser le dollar références relatives et absolues dans la visionneuse	Open sheet Mastering $: relative vs absolute references in viewer
+Ouvrir la fiche Logique SI et cascade HT TVA TTC en BTP dans la visionneuse	Open sheet IF logic and Excl./Incl. VAT cascade in construction in viewer
+Ouvrir la fiche Fiabiliser un classeur SIERREUR et contrôles croisés dans la visionneuse	Open sheet Bulletproof workbooks: IFERROR & cross-checks in viewer
+Ouvrir la fiche Les fondamentaux de l AEP dans la visionneuse	Open sheet The fundamentals of water supply in viewer
+Ouvrir la fiche Masse Volumique versus Viscosité dans la visionneuse	Open sheet Density versus viscosity in viewer
+Ouvrir la fiche Comprendre la Pression Hydrostatique dans la visionneuse	Open sheet Understanding hydrostatic pressure in viewer
+Ouvrir la fiche Comprendre la charge hydraulique Bernoulli dans la visionneuse	Open sheet Understanding hydraulic head and Bernoulli in viewer
+Ouvrir la fiche Les pertes de charge linéaires dans la visionneuse	Open sheet Linear head losses in viewer
+Ouvrir la fiche Pertes de charge en AEP dans la visionneuse	Open sheet Head losses in water supply in viewer
+Ouvrir la fiche Guide de sélection de pompe dans la visionneuse	Open sheet Guide to pump selection in viewer
+Ouvrir la fiche Arbitrage réseau gravitaire ou surpresseur dans la visionneuse	Open sheet Gravity network vs booster pump trade-off in viewer
+Ouvrir la fiche Comprendre les incertitudes de mesure dans la visionneuse	Open sheet Understanding measurement uncertainties in viewer
+Ouvrir la fiche La propagation des incertitudes dans la visionneuse	Open sheet The propagation of uncertainties in viewer
+Ouvrir la fiche Incertitude et conformité décisionnelle dans la visionneuse	Open sheet Uncertainty and compliance decisions in viewer
+Ouvrir la fiche Guide de conformité des lots dans la visionneuse	Open sheet Guide to batch compliance in viewer
+Ouvrir la fiche Le Budget d Incertitudes en BTP dans la visionneuse	Open sheet The uncertainty budget in construction in viewer
+Ouvrir la fiche L Art de la Restitution dans la visionneuse	Open sheet The art of reporting in viewer
+Ouvrir la fiche Composition quadratique le Pythagore des incertitudes dans la visionneuse	Open sheet Root-sum-of-squares: Pythagoras of uncertainties in viewer
+Ouvrir la fiche Anatomie d une paroi isolée dans la visionneuse	Open sheet Anatomy of an insulated wall in viewer
+Ouvrir la fiche La physique du confort thermique dans la visionneuse	Open sheet The physics of thermal comfort in viewer
+Ouvrir la fiche Comprendre les ponts thermiques dans la visionneuse	Open sheet Understanding thermal bridges in viewer
+Ouvrir la fiche Comprendre la méthode Glaser dans la visionneuse	Open sheet Understanding the Glaser method in viewer
+Ouvrir la fiche Maîtriser déphasage et inertie thermique dans la visionneuse	Open sheet Mastering time lag and thermal mass in viewer
+Ouvrir la fiche Stratégies de réhabilitation thermique dans la visionneuse	Open sheet Thermal rehabilitation strategies in viewer
+Ouvrir la fiche Guide d analyse des déperditions thermiques dans la visionneuse	Open sheet Guide to analysing heat losses in viewer
+Ouvrir la fiche Comprendre l indicateur thermique Hbat dans la visionneuse	Open sheet Understanding the Hbat thermal indicator in viewer
+Ouvrir la fiche Comprendre le processus du DPE dans la visionneuse	Open sheet Understanding the EPC process in viewer
+Ouvrir la fiche Rénover l enveloppe stratégie cohérente dans la visionneuse	Open sheet Renovating the envelope: a coherent strategy in viewer
+Ouvrir la fiche Dimensionnement VMC et PAC dans la visionneuse	Open sheet Sizing MVHR and heat pumps in viewer
+Ouvrir la fiche Réussir son bilan énergétique dans la visionneuse	Open sheet Getting your energy balance right in viewer
+Ouvrir la fiche Des DJU au besoin annuel de chauffage dans la visionneuse	Open sheet From heating degree-days to annual heating demand in viewer
+Ouvrir la fiche Bilan thermique d été passif dans la visionneuse	Open sheet Passive summer heat balance in viewer
+Ouvrir la fiche Maîtriser le confort thermique estival dans la visionneuse	Open sheet Mastering summer thermal comfort in viewer
+Ouvrir la fiche Philosophie BEPOS et systèmes actifs dans la visionneuse	Open sheet Positive-energy philosophy and active systems in viewer
+Ouvrir la fiche L aéraulique, poumon du bâtiment dans la visionneuse	Open sheet Air distribution, the building's lungs in viewer
+Ouvrir la fiche Identifier le bon levier acoustique dans la visionneuse	Open sheet Identifying the right acoustic lever in viewer

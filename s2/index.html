@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="color-scheme" content="dark light" />
 <meta name="theme-color" content="#07131d" />
 <title>S2 Semestre 2 - Laboratoires virtuels · IUT Mantes</title>
@@ -11,6 +12,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="stylesheet" href="../assets/site.css" />
 <script>(function(){try{var t=localStorage.getItem("iut_mantes_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}catch(e){}})();</script>
+<script src="../assets/i18n.js"></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -19,84 +21,137 @@
     <a class="home" href="../index.html">IUT Mantes · GC-CD</a>
     <span class="crumb"> · S2 Semestre 2</span>
   </div>
+  <div class="top-tools">
+  <a class="top-charter" href="../charte.html" title="Charte du projet (mode BET)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg><span>Charte du projet</span></a>
+  <span data-i18n-mount></span>
   <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Activer le mode clair">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
     <span data-theme-label>Mode clair</span>
   </button>
+  </div>
 </header>
 
 <main class="wrap" id="contenu">
   <p class="eyebrow">1re année · BUT GC-CD</p>
-  <h1>S2 - Semestre 2</h1>
-  <p class="lede">Transferts thermiques et hydriques. Ouvrez un laboratoire, consultez les infographies, ou lancez les vidéos lorsqu’un lien est proposé.</p>
-  <p><a class="btn ghost" href="../charte.html">Charte du projet</a></p>
+  <h1>S2 - <em>Semestre 2</em></h1>
+  <p class="lede">Transferts thermiques et hydriques. Ouvrez directement un atelier en 3D, reprenez votre progression ou parcourez les infographies et vidéos dans la visionneuse intégrée.</p>
+  <p class="sem-top-actions"><a class="btn ghost" href="../index.html">← Accueil du quartier 3D</a><a class="btn ghost" href="../charte.html">Charte du projet (mode BET)</a></p>
   <section class="labs stack" aria-label="Ressources du semestre">
-        <article class="lab-card" data-lab="r2-9" style="--accent:#e08a5a">
-          <p class="code">R 2-9</p>
-          <h2>Transferts thermiques et hydriques</h2>
-          <p class="sub">Parois, confort, Glaser, ITI / ITE</p>
-          <p class="mission">Entraînement : Halle de Valvert</p>
-          <div class="actions">
-            <a class="btn primary" href="../labs/r2-9/index.html">Ouvrir le laboratoire virtuel</a>
-            <button type="button" class="btn ghost" data-toggle-gallery="r2-9" aria-expanded="false" aria-controls="g-r2-9">Infographies et vidéos (6)</button>
-            <a class="btn ghost" href="https://www.youtube.com/playlist?list=PLJQ4kWqmCdVI" target="_blank" rel="noopener">Vidéos</a>
+        <article class="lab-card" data-lab="r2-9" style="--accent:#ff8a4c">
+          <div class="lab-card-grid">
+            <div class="lab-card-main">
+              <div class="lab-card-top">
+                <p class="code">R 2-9 · 6 ateliers guidés · ≈ 1 h 15</p>
+                <span class="lab-prog-pill" data-lab-prog="r2-9" hidden></span>
+              </div>
+              <h2>Transferts thermiques et hydriques</h2>
+              <p class="sub">Parois, confort, Glaser, ITI / ITE</p>
+              <p class="mission">Mission d’entraînement : Halle de Valvert</p>
+              <div class="ws-chips" aria-label="Accès direct aux ateliers"><a class="ws-chip" data-ws-chip="r2-9:cond" href="../labs/r2-9/index.html#atelier=cond"><i></i><span>01 · Paroi & résistance R</span></a><a class="ws-chip" data-ws-chip="r2-9:surf" href="../labs/r2-9/index.html#atelier=surf"><i></i><span>02 · Confort & T_si</span></a><a class="ws-chip" data-ws-chip="r2-9:bilan" href="../labs/r2-9/index.html#atelier=bilan"><i></i><span>03 · Ponts thermiques</span></a><a class="ws-chip" data-ws-chip="r2-9:glaser" href="../labs/r2-9/index.html#atelier=glaser"><i></i><span>04 · Vapeur & Glaser</span></a><a class="ws-chip" data-ws-chip="r2-9:dyn" href="../labs/r2-9/index.html#atelier=dyn"><i></i><span>05 · Déphasage & inertie</span></a><a class="ws-chip" data-ws-chip="r2-9:rehab" href="../labs/r2-9/index.html#atelier=rehab"><i></i><span>06 · ITI vs ITE</span></a></div>
+              <div class="actions">
+                <a class="btn primary" data-lab-cta="r2-9" href="../labs/r2-9/index.html">Ouvrir le laboratoire virtuel</a>
+                <button type="button" class="btn ghost" data-toggle-gallery="r2-9" aria-expanded="false" aria-controls="g-r2-9">Infographies et vidéos (6)</button>
+                <a class="btn ghost" href="https://www.youtube.com/playlist?list=PLJQ4kWqmCdVI" target="_blank" rel="noopener">Playlist YouTube ↗</a>
+              </div>
+            </div>
+            <a class="lab-illus" href="../labs/r2-9/index.html" aria-label="Ouvrir R 2-9 - Transferts thermiques et hydriques">
+              <svg viewBox="0 0 260 150" aria-hidden="true">
+      <rect x="58" y="18" width="22" height="114" rx="4" fill="#f8fafc" fill-opacity="0.25"/>
+      <rect x="82" y="18" width="46" height="114" rx="4" fill="#fbbf24" fill-opacity="0.34" stroke="#fbbf24" stroke-opacity="0.7"/>
+      <rect x="130" y="18" width="48" height="114" rx="4" fill="#94a3b8" fill-opacity="0.3"/>
+      <path d="M26 42 L188 42 L208 92 L236 106" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+      <text x="26" y="33" font-size="11" font-family="monospace" fill="#ff8a4c">20°C</text>
+      <text x="206" y="124" font-size="11" font-family="monospace" fill="#7fe3ff">0°C</text>
+    </svg>
+              <span class="lab-illus-cap">Manipuler en 3D →</span>
+            </a>
           </div>
           
           <section class="gallery" id="g-r2-9" hidden>
-            <p class="hint">Cliquez une image pour l’ouvrir en grand.</p>
+            <p class="hint">Cliquez une fiche pour l’ouvrir dans la visionneuse interactive (zoom, navigation ←/→, vidéo intégrée et lien direct vers l’atelier 3D).</p>
             <div class="grid-figs">
-            <figure class="fig" data-key="r2-9/1-anatomie-d-une-paroi-isolee.png">
-              <a href="../infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/1-anatomie-d-une-paroi-isolee.png" data-lab="r2-9" data-idx="0" data-img="../infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" data-title="Anatomie d une paroi isolée" data-ws="../labs/r2-9/index.html#atelier=cond" data-ws-label="01 · Paroi & résistance R">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/1-anatomie-d-une-paroi-isolee.png" aria-label="Ouvrir la fiche Anatomie d une paroi isolée dans la visionneuse">
                 <img src="../infographies/r2-9/1-anatomie-d-une-paroi-isolee.png" alt="Anatomie d une paroi isolée" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>Anatomie d une paroi isolée</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/1-anatomie-d-une-paroi-isolee.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=cond">Atelier 01 · Paroi & résistance R →</a>
+                </div>
               </figcaption>
             </figure>
-            <figure class="fig" data-key="r2-9/2-la-physique-du-confort-thermique.png">
-              <a href="../infographies/r2-9/2-la-physique-du-confort-thermique.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/2-la-physique-du-confort-thermique.png" data-lab="r2-9" data-idx="1" data-img="../infographies/r2-9/2-la-physique-du-confort-thermique.png" data-title="La physique du confort thermique" data-ws="../labs/r2-9/index.html#atelier=surf" data-ws-label="02 · Confort & T_si">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/2-la-physique-du-confort-thermique.png" aria-label="Ouvrir la fiche La physique du confort thermique dans la visionneuse">
                 <img src="../infographies/r2-9/2-la-physique-du-confort-thermique.png" alt="La physique du confort thermique" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>La physique du confort thermique</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/2-la-physique-du-confort-thermique.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=surf">Atelier 02 · Confort & T_si →</a>
+                </div>
               </figcaption>
             </figure>
-            <figure class="fig" data-key="r2-9/3-comprendre-les-ponts-thermiques.png">
-              <a href="../infographies/r2-9/3-comprendre-les-ponts-thermiques.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/3-comprendre-les-ponts-thermiques.png" data-lab="r2-9" data-idx="2" data-img="../infographies/r2-9/3-comprendre-les-ponts-thermiques.png" data-title="Comprendre les ponts thermiques" data-ws="../labs/r2-9/index.html#atelier=bilan" data-ws-label="03 · Ponts thermiques">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/3-comprendre-les-ponts-thermiques.png" aria-label="Ouvrir la fiche Comprendre les ponts thermiques dans la visionneuse">
                 <img src="../infographies/r2-9/3-comprendre-les-ponts-thermiques.png" alt="Comprendre les ponts thermiques" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>Comprendre les ponts thermiques</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/3-comprendre-les-ponts-thermiques.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=bilan">Atelier 03 · Ponts thermiques →</a>
+                </div>
               </figcaption>
             </figure>
-            <figure class="fig" data-key="r2-9/4-comprendre-la-methode-glaser.png">
-              <a href="../infographies/r2-9/4-comprendre-la-methode-glaser.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/4-comprendre-la-methode-glaser.png" data-lab="r2-9" data-idx="3" data-img="../infographies/r2-9/4-comprendre-la-methode-glaser.png" data-title="Comprendre la méthode Glaser" data-ws="../labs/r2-9/index.html#atelier=glaser" data-ws-label="04 · Vapeur & Glaser">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/4-comprendre-la-methode-glaser.png" aria-label="Ouvrir la fiche Comprendre la méthode Glaser dans la visionneuse">
                 <img src="../infographies/r2-9/4-comprendre-la-methode-glaser.png" alt="Comprendre la méthode Glaser" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>Comprendre la méthode Glaser</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/4-comprendre-la-methode-glaser.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=glaser">Atelier 04 · Vapeur & Glaser →</a>
+                </div>
               </figcaption>
             </figure>
-            <figure class="fig" data-key="r2-9/5-maitriser-dephasage-et-inertie-thermique.png">
-              <a href="../infographies/r2-9/5-maitriser-dephasage-et-inertie-thermique.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/5-maitriser-dephasage-et-inertie-thermique.png" data-lab="r2-9" data-idx="4" data-img="../infographies/r2-9/5-maitriser-dephasage-et-inertie-thermique.png" data-title="Maîtriser déphasage et inertie thermique" data-ws="../labs/r2-9/index.html#atelier=dyn" data-ws-label="05 · Déphasage & inertie">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/5-maitriser-dephasage-et-inertie-thermique.png" aria-label="Ouvrir la fiche Maîtriser déphasage et inertie thermique dans la visionneuse">
                 <img src="../infographies/r2-9/5-maitriser-dephasage-et-inertie-thermique.png" alt="Maîtriser déphasage et inertie thermique" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>Maîtriser déphasage et inertie thermique</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/5-maitriser-dephasage-et-inertie-thermique.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=dyn">Atelier 05 · Déphasage & inertie →</a>
+                </div>
               </figcaption>
             </figure>
-            <figure class="fig" data-key="r2-9/6-strategies-de-rehabilitation-thermique.png">
-              <a href="../infographies/r2-9/6-strategies-de-rehabilitation-thermique.png" target="_blank" rel="noopener">
+            <figure class="fig" data-key="r2-9/6-strategies-de-rehabilitation-thermique.png" data-lab="r2-9" data-idx="5" data-img="../infographies/r2-9/6-strategies-de-rehabilitation-thermique.png" data-title="Stratégies de réhabilitation thermique" data-ws="../labs/r2-9/index.html#atelier=rehab" data-ws-label="06 · ITI vs ITE">
+              <button type="button" class="fig-open" data-open-lightbox="r2-9/6-strategies-de-rehabilitation-thermique.png" aria-label="Ouvrir la fiche Stratégies de réhabilitation thermique dans la visionneuse">
                 <img src="../infographies/r2-9/6-strategies-de-rehabilitation-thermique.png" alt="Stratégies de réhabilitation thermique" loading="lazy" />
-              </a>
+                <span class="fig-badges"><span class="fig-pill">Infographie HD</span><span class="fig-pill vid" data-vid-pill hidden>▶ Vidéo</span></span>
+              </button>
               <figcaption>
                 <strong>Stratégies de réhabilitation thermique</strong>
-                <span class="yt" hidden></span>
+                <div class="fig-links">
+                  <button type="button" class="fig-act" data-open-lightbox="r2-9/6-strategies-de-rehabilitation-thermique.png">Agrandir</button>
+                  <span class="yt" hidden></span>
+                  <a class="fig-ws" href="../labs/r2-9/index.html#atelier=rehab">Atelier 06 · ITI vs ITE →</a>
+                </div>
               </figcaption>
             </figure></div>
           </section>

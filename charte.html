@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="color-scheme" content="dark light" />
 <meta name="theme-color" content="#07131d" />
 <title>Charte du projet - IUT Mantes · GC-CD</title>
@@ -11,6 +12,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="stylesheet" href="assets/site.css" />
 <script>(function(){try{var t=localStorage.getItem("iut_mantes_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}catch(e){}})();</script>
+<script src="assets/i18n.js"></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -19,18 +21,160 @@
     <a class="home" href="index.html">IUT Mantes · GC-CD</a>
     <span class="crumb"> · Charte du projet</span>
   </div>
+  <div class="top-tools">
+  <a class="top-charter" href="charte.html" title="Charte du projet (mode BET)" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg><span>Charte du projet</span></a>
+  <span data-i18n-mount></span>
   <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Activer le mode clair">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
     <span data-theme-label>Mode clair</span>
   </button>
+  </div>
 </header>
 
 <main class="wrap charte-page" id="contenu">
-  <p class="eyebrow">Tous semestres</p>
-  <h1>Charte du projet - mode BET</h1>
-  <p class="lede">Déroulé des séances à l’IUT : rôles, chaîne du projet, rituel, notation, interlocuteur mystère et outils.</p>
-  <p><a class="btn ghost" href="index.html">Retour à l’accueil</a></p>
-  <p><img src="infographies/consignes-etudiants.png" alt="Charte du projet – mode BET : vous êtes des techniciens-conseils en équipe" /></p>
+  <section class="ch-hero">
+    <p class="eyebrow">Tous semestres · B.U.T. Génie civil - Construction durable</p>
+    <h1>Charte du projet <em>en mode bureau d’études</em></h1>
+    <p class="lede">Pendant vos séances de projet à l’IUT, vous ne faites pas une suite d’exercices scolaires isolés : vous travaillez en équipe de techniciens-conseils sur un dossier complet, du premier métré jusqu’à la soutenance devant le maître d’ouvrage.</p>
+    <div class="ch-pills">
+      <span>Équipes de ≈ 5 techniciens-conseils</span>
+      <span>Étapes chaînées N → N+1</span>
+      <span>3 piliers d’évaluation</span>
+      <span>Interlocuteur mystère &amp; droit de rachat</span>
+    </div>
+    <p class="ch-back"><a class="btn ghost" href="index.html">← Retour à l’accueil des laboratoires</a></p>
+  </section>
+
+  <section class="ch-sec">
+    <div class="ch-sec-hd"><span class="ch-num">01</span><h2>Vos rôles en <em>bureau d’études (BET)</em></h2></div>
+    <div class="ch-grid-2">
+      <article class="ch-card">
+        <p class="ch-kicker">Votre équipe</p>
+        <h3>Techniciens-conseils solidaires</h3>
+        <p>Vous êtes regroupés en équipes d’environ <b>5 étudiants</b>. Vous organisez la répartition des calculs, la vérification croisée des formules, la tenue du classeur commun et la clarté des livrables remis à chaque jalon.</p>
+      </article>
+      <article class="ch-card ch-accent">
+        <p class="ch-kicker">Votre enseignant</p>
+        <h3>Directeur Technique, puis Client final</h3>
+        <p>Pendant toutes les séances de travail, l’enseignant agit comme votre <b>Directeur Technique</b> : il guide, débloque les points durs et valide vos étapes. Le jour de la soutenance finale, il endosse le rôle du <b>Client / Maître d’Ouvrage</b> devant qui vous défendez vos choix.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="ch-sec">
+    <div class="ch-sec-hd"><span class="ch-num">02</span><h2>La chaîne du projet &amp; <em>le rituel d’une séance</em></h2></div>
+    <p class="ch-intro">Dans un vrai dossier d’ingénierie, <b>les résultats de l’étape N nourrissent directement l’étape N+1</b> (un métré ou une déperdition erronés faussent le dimensionnement et le chiffrage qui suivent). Un chronogramme précis, indiquant le budget de séances par étape, vous est remis dès la séance 1.</p>
+    <div class="ch-timeline">
+      <article class="ch-step">
+        <span class="ch-step-n">1</span>
+        <div>
+          <h3>Top départ · Brief d’équipe <em>(≈ 3 min / groupe)</em></h3>
+          <p>Point rapide en début de séance avec le Directeur Technique autour de trois questions : <b>Où en êtes-vous ? Qu’est-ce qui vous bloque ? Quel est votre objectif précis d’ici la fin de la séance ?</b></p>
+        </div>
+      </article>
+      <article class="ch-step">
+        <span class="ch-step-n">2</span>
+        <div>
+          <h3>Production en autonomie supervisée</h3>
+          <p>Calculs physiques, schémas de principe, structuration du classeur de calcul, contrôles d’ordres de grandeur et rédaction progressive des notes justificatives.</p>
+        </div>
+      </article>
+      <article class="ch-step">
+        <span class="ch-step-n">3</span>
+        <div>
+          <h3>Revue de projet &amp; validation <em>(≈ 5 min / groupe en fin d’étape)</em></h3>
+          <p>Vérification du livrable de l’étape, contrôle de la maîtrise collective et saisie de l’avancement sur la fiche de suivi de chantier avant de débloquer l’étape suivante.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="ch-sec">
+    <div class="ch-sec-hd"><span class="ch-num">03</span><h2>Les trois piliers <em>de l’évaluation</em></h2></div>
+    <div class="ch-grid-3">
+      <article class="ch-card">
+        <span class="ch-badge">Pilier 1</span>
+        <h3>Rapport &amp; livrable écrit</h3>
+        <p>Notes de calcul structurées, hypothèses explicites, unités systématiques, schémas lisibles, classeurs propres et conclusions argumentées pour le maître d’ouvrage.</p>
+      </article>
+      <article class="ch-card">
+        <span class="ch-badge">Pilier 2</span>
+        <h3>Soutenance orale finale</h3>
+        <p>Créneau maximal d’<b>1 h 30 par groupe</b> : environ <b>30 minutes de présentation</b> structurée en équipe, suivies d’environ <b>1 heure de questions</b> techniques et d’arbitrages avec le Client.</p>
+      </article>
+      <article class="ch-card">
+        <span class="ch-badge">Pilier 3</span>
+        <h3>Participation « suivi de chantier »</h3>
+        <p>Évaluation continue au fil des validations d’étapes collectives en séance : régularité, implication dans le groupe, rigueur technique et capacité à justifier le travail produit.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="ch-sec">
+    <div class="ch-sec-hd"><span class="ch-num">04</span><h2>Responsabilité collective : <em>interlocuteur mystère &amp; rachat</em></h2></div>
+    <div class="ch-grid-2">
+      <article class="ch-card ch-warn">
+        <p class="ch-kicker">Anti-passager clandestin</p>
+        <h3>La règle de l’interlocuteur mystère</h3>
+        <p>Lors de chaque validation d’étape, le Directeur Technique <b>désigne aléatoirement un membre du groupe</b> pour expliquer un calcul, une formule de tableur ou un graphique du livrable.</p>
+        <p>Si la personne désignée est incapable d’expliquer ce que le groupe présente (travail découpé en silos sans relecture croisée, ou sortie d’IA recopiée sans recul), <b>l’étape n’est pas validée et toute l’équipe est solidaire</b>.</p>
+      </article>
+      <article class="ch-card ch-ok">
+        <p class="ch-kicker">Droit à l’erreur formatif</p>
+        <h3>Le droit de rachat à l’étape suivante</h3>
+        <p>Une non-validation n’est jamais une sanction définitive : elle ouvre une <b>note provisoire basse</b> sans bloquer l’avancement matériel du projet.</p>
+        <p>La mission de l’équipe consiste alors à <b>réexpliquer les notions au camarade concerné</b> d’ici le jalon suivant, où <b>cette même personne sera réinterrogée</b> afin de revaloriser la note de toute l’équipe.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="ch-sec">
+    <div class="ch-sec-hd"><span class="ch-num">05</span><h2>Outils numériques, IA <em>&amp; laboratoires virtuels</em></h2></div>
+    <div class="ch-ai-rule">
+      <h3>La règle d’or sur les outils numériques et l’intelligence artificielle</h3>
+      <p>Tableur, outils numériques, infographies, vidéos de cours et assistants d’IA sont <b>autorisés</b> pour comprendre une notion, vérifier une cohérence ou soigner une mise en page, à <b>une condition absolue</b> : <b>100 % des membres du groupe doivent maîtriser et savoir démontrer chaque chiffre, chaque formule et chaque graphique à tout instant</b>.</p>
+      <p>Les six laboratoires virtuels de ce portail sont conçus exactement dans cet esprit : vous permettre de vous entraîner individuellement, chez vous et à votre rythme, sur des <b>missions fictives</b> avant d’appliquer les méthodes aux données réelles de votre projet.</p>
+    </div>
+
+    <div class="ch-table-wrap">
+      <table class="ch-table">
+        <thead>
+          <tr><th>Ressource</th><th>Thématique travaillée</th><th>Semestre</th><th>Entraînement interactif</th></tr>
+        </thead>
+        <tbody><tr>
+          <td><span class="ch-code" style="--c:#3ecf8e">R 1-1</span></td>
+          <td><b>Méthode de travail universitaire</b><small>Tableur, références, logique de classeur</small></td>
+          <td><a href="s1/index.html">S1</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r1-1/index.html">Entraînement : Gymnase de Clairmont →</a></td>
+        </tr><tr>
+          <td><span class="ch-code" style="--c:#41c7e4">R 1-10</span></td>
+          <td><b>Réseaux secs et humides</b><small>Hydraulique AEP, charges, pertes, pompe</small></td>
+          <td><a href="s1/index.html">S1</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r1-10/index.html">Entraînement : Valdeau →</a></td>
+        </tr><tr>
+          <td><span class="ch-code" style="--c:#b38cff">R 1-13</span></td>
+          <td><b>Fonctions des composants des bâtiments</b><small>Métrologie, incertitudes, conformité</small></td>
+          <td><a href="s1/index.html">S1</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r1-13/index.html">Entraînement : Pierreclaire →</a></td>
+        </tr><tr>
+          <td><span class="ch-code" style="--c:#ff8a4c">R 2-9</span></td>
+          <td><b>Transferts thermiques et hydriques</b><small>Parois, confort, Glaser, ITI / ITE</small></td>
+          <td><a href="s2/index.html">S2</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r2-9/index.html">Entraînement : Halle de Valvert →</a></td>
+        </tr><tr>
+          <td><span class="ch-code" style="--c:#ff5d8f">R 3-10</span></td>
+          <td><b>Physique et énergétique du bâtiment 1</b><small>Transmission, DJU, DPE, rénovation</small></td>
+          <td><a href="s3/index.html">S3</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r3-10/index.html">Entraînement : Pavillon des Aulnes →</a></td>
+        </tr><tr>
+          <td><span class="ch-code" style="--c:#f0c674">R 4-8</span></td>
+          <td><b>Physique et énergétique du bâtiment 2</b><small>Été, inertie, BEPOS, aéraulique, acoustique</small></td>
+          <td><a href="s4/index.html">S4</a></td>
+          <td><a class="btn ghost ch-go" href="labs/r4-8/index.html">Entraînement : Maison de santé de Lironde →</a></td>
+        </tr></tbody>
+      </table>
+    </div>
+  </section>
 </main>
 
 <footer class="credit" aria-label="Crédit">

@@ -1,0 +1,25 @@
+# English translations for R1-10 upgrades (3D handles, media titles, replay variants)
+Les fondamentaux de l AEP	Water supply fundamentals
+{0} · Débit & continuité · Atelier	{0} · Flow & continuity · Workshop
+Lignes de courant · Transition (Re ≈ {0})	Streamlines · Transition (Re ≈ {0})
+Rugosité absolue <span></span> <strong>{0} mm (PVC)</strong>	Absolute roughness <span></span> <strong>{0} mm (PVC)</strong>
+Rugosité absolue <span></span> <strong>PVC · ε = {0}.{1} mm</strong>	Absolute roughness <span></span> <strong>PVC · ε = {0}.{1} mm</strong>
+Diamètre intérieur <span></span> <strong></strong>	Internal diameter <span></span> <strong></strong>
+Débit de pointe <span></span> <strong></strong>	Peak flow rate <span></span> <strong></strong>
+Singularités <span></span> <strong></strong>	Minor fittings <span></span> <strong></strong>
+Dénivelé A → Plateau <span></span> <strong></strong>	Elevation gain A → Plateau <span></span> <strong></strong>
+Pression disponible en A <span></span> <strong></strong>	Available pressure at A <span></span> <strong></strong>
+HMT du surpresseur <strong></strong>	Booster pump TDH <strong></strong>
+Prix de l’électricité <strong></strong>	Electricity price <strong></strong>
+<b>Le cube témoin ({0} kg/m³)</b> : glisser vers le haut ou le bas pour modifier la masse volumique ρ du liquide	<b>Reference cube ({0} kg/m³)</b>: drag up or down to change liquid density ρ
+<b>La plaque mobile de cisaillement</b> : glisser vers la droite ou la gauche pour régler la viscosité dynamique μ	<b>Moving shear plate</b>: drag left or right to adjust dynamic viscosity μ
+<b>La colonne rouge des pertes singulières</b> : glisser vers le haut ou le bas pour faire varier la vitesse v	<b>Red minor-loss column</b>: drag up or down to vary flow velocity v
+<b>Le serpentin et ses coudes</b> : glisser vers la droite ou la gauche pour ajouter ou retirer des coudes à {0}°	<b>Pipe loop and elbows</b>: drag left or right to add or remove {0}° elbows
+Variante terrain : la conduite DN {0} est bien posée, mais un poteau incendie resté ouvert en aval tire {1} L/s au lieu du débit nominal de {2} L/s.	Field variant: the DN {0} main is properly laid, but an open downstream fire hydrant draws {1} L/s instead of the {2} L/s design flow.
+Variante terrain : le réseau d’eau glycolée a bien la bonne masse volumique, mais le fluide froid non réchauffé présente une viscosité dynamique trop élevée ({0} mPa·s au lieu de ≤ {1} mPa·s).	Field variant: the glycol loop has the right density, but the cold unheated fluid has excessive dynamic viscosity ({0} mPa·s instead of ≤ {1} mPa·s).
+Variante terrain : la pression au départ est bien réglée à {0} bar, mais une erreur de nivellement a fait saisir un dénivelé de +{1} m au lieu des +{2} m réels du relevé topographique.	Field variant: supply pressure is set to {0} bar, but a leveling error entered an elevation gain of +{1} m instead of the actual +{2} m survey value.
+Variante terrain : la vitesse ({0} m/s) et la cote ({1} m) sont exactes, mais la prise manométrique encrassée affiche {2} bar au lieu de la pression réelle (~{3} bar, charge totale visée : {4} à {5} m).	Field variant: velocity ({0} m/s) and elevation ({1} m) are accurate, but a clogged pressure tap reads {2} bar instead of true pressure (~{3} bar, target total head: {4} to {5} m).
+Variante terrain : le diamètre DN {0} et le débit de {1} L/s (sur {2} m) sont imposés, mais l’ancienne fonte entartrée (`ε = {3} mm`) double la perte linéaire : passez en tube PEHD/PVC lisse.	Field variant: diameter DN {0} and flow {1} L/s (over {2} m) are fixed, but scaled cast iron (`ε = {3} mm`) doubles friction loss: switch to smooth HDPE/PVC pipe.
+Variante terrain : le tracé ({0} coudes, {1} tés, {2} vannes) est figé par la galerie technique, mais la vitesse d’écoulement a été poussée à {3} m/s : ramenez-la à ≤ {4} m/s.	Field variant: routing ({0} elbows, {1} tees, {2} valves) is fixed by the service gallery, but velocity was pushed to {3} m/s: bring it back to ≤ {4} m/s.
+Variante terrain : le groupe de pompage a un bon rendement ({0} %), mais une vanne de refoulement restée à moitié fermée crée {1} m de pertes totales au lieu des {2} m du réseau ouvert.	Field variant: pump efficiency is good ({0}%), but a half-closed discharge valve creates {1} m of total head loss instead of {2} m with an open line.
+Variante terrain : sur l’antenne existante conservée en DN {0} (`Q = {1} L/s`, `L = {2} m`, `h = {3} m`), le surpresseur en pied de côte est tombé à l’arrêt (`HMT = {4} m`). Réglez sa HMT juste assez pour rétablir ≥ {5} bar sans dépasser {6} bar.	Field variant: on the existing DN {0} branch (`Q = {1} L/s`, `L = {2} m`, `h = {3} m`), the hillside booster pump tripped off (`TDH = {4} m`). Set its TDH just enough to restore ≥ {5} bar without exceeding {6} bar.
